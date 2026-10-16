@@ -24,12 +24,10 @@
       {% if slide.subtitle %}<p>{{ slide.subtitle }}</p>{% endif %}
       <div class="hero-actions">
         {% if slide.primary_button_label %}
-        <a class="btn btn-accent btn-lg" href="{{ slide.primary_button_url|default:'/classes/' }}">{{
-          slide.primary_button_label }}</a>
+        <a class="btn btn-accent btn-lg" href="{{ slide.primary_button_url|default:'/classes/' }}">{{ slide.primary_button_label }}</a>
         {% endif %}
         {% if slide.secondary_button_label %}
-        <a class="btn btn-ghost-light btn-lg" href="{{ slide.secondary_button_url|default:'/admission/' }}">{{
-          slide.secondary_button_label }}</a>
+        <a class="btn btn-ghost-light btn-lg" href="{{ slide.secondary_button_url|default:'/admission/' }}">{{ slide.secondary_button_label }}</a>
         {% endif %}
       </div>
     </div>
@@ -38,8 +36,7 @@
     <div class="hero-caption">
       <span class="hero-label">WELCOME TO {{ school.school_name|upper|default:"EBENEZER EDUCATIONAL CENTRE" }}</span>
       <h1 data-typewriter>A Bright Beginning for a Brighter Future</h1>
-      <p>{{ school.full_description|default:"A welcoming place where young learners explore, discover, grow and build
-        the foundations for lifelong learning." }}</p>
+      <p>{{ school.full_description|default:"A welcoming place where young learners explore, discover, grow and build the foundations for lifelong learning." }}</p>
       <div class="hero-actions">
         <a class="btn btn-accent btn-lg" href="{% url 'academics:class_list' %}">Explore Our Classes</a>
         <a class="btn btn-ghost-light btn-lg" href="{% url 'admissions:admission' %}">Enquire About Admission</a>
@@ -121,9 +118,7 @@
         <span class="eyebrow">Welcome</span>
         <h2>A caring start to your child&rsquo;s learning journey</h2>
         <p class="text-muted-ec">
-          {{ school.full_description|default:"Ebenezer Educational Centre is a preschool and primary school in Jukwa,
-          Cape Coast. We provide a safe, happy and stimulating environment where children are encouraged to explore, ask
-          questions and grow in confidence." }}
+          {{ school.full_description|default:"Ebenezer Educational Centre is a preschool and primary school in Jukwa,Cape Coast. We provide a safe, happy and stimulating environment where children are encouraged to explore, ask questions and grow in confidence." }}
         </p>
         <div class="row g-3 mt-2">
           <div class="col-6 col-sm-4">
@@ -304,8 +299,7 @@
           <div class="ec-card-body">
             <h3 class="h5">{{ album.title }}</h3>
             <p class="text-muted-ec mb-2">{{ album.description|truncatewords:14 }}</p>
-            <a href="{{ album.get_absolute_url }}" class="fw-semibold">{{ album.image_count }} photo{{
-              album.image_count|pluralize }} <i class="bi bi-arrow-right"></i></a>
+            <a href="{{ album.get_absolute_url }}" class="fw-semibold">{{ album.image_count }} photo{{album.image_count|pluralize }} <i class="bi bi-arrow-right"></i></a>
           </div>
         </div>
       </div>
@@ -345,17 +339,13 @@
         <h2>Visit our school</h2>
         <p class="text-muted-ec">{{ school.full_address|default:"Jukwa, Cape Coast, Central Region, Ghana" }}</p>
         <ul class="list-unstyled">
-          {% if school.phone_primary %}<li class="mb-2"><i class="bi bi-telephone-fill text-danger me-2"></i>{{
-            school.phone_primary }}</li>{% endif %}
-          {% if school.email_primary %}<li class="mb-2"><i class="bi bi-envelope-fill text-danger me-2"></i>{{
-            school.email_primary }}</li>{% endif %}
-          {% if school.opening_hours %}<li class="mb-2"><i class="bi bi-clock-fill text-danger me-2"></i>{{
-            school.opening_hours }}</li>{% endif %}
+          {% if school.phone_primary %}<li class="mb-2"><i class="bi bi-telephone-fill text-danger me-2"></i>{{school.phone_primary }}</li>{% endif %}
+          {% if school.email_primary %}<li class="mb-2"><i class="bi bi-envelope-fill text-danger me-2"></i>{{school.email_primary }}</li>{% endif %}
+          {% if school.opening_hours %}<li class="mb-2"><i class="bi bi-clock-fill text-danger me-2"></i>{{school.opening_hours }}</li>{% endif %}
         </ul>
         <div class="d-flex flex-wrap gap-2">
           <a class="btn btn-brand" href="{% url 'admissions:contact' %}">Contact us</a>
-          {% if school.directions_url %}<a class="btn btn-outline-brand" href="{{ school.directions_url }}"
-            target="_blank" rel="noopener">Get directions</a>{% endif %}
+          {% if school.directions_url %}<a class="btn btn-outline-brand" href="{{ school.directions_url }}" target="_blank" rel="noopener">Get directions</a>{% endif %}
         </div>
       </div>
       <div class="col-lg-7 reveal reveal-right">
