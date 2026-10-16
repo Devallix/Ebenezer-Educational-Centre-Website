@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static page_heroes %}
+{% block title %}Gallery | {{ school.school_name }}{% endblock %}
+
+{% block content %}
+{% get_page_hero "gallery" as hero %}
+<section class="page-hero"{% if hero.image %} style="background:linear-gradient(120deg,rgba(74,2,9,.85),rgba(158,7,25,.75)),url('{{ hero.image.url }}') center/cover"{% endif %}>
+  <div class="container-ec">
+    <nav class="breadcrumb-ec mb-2" aria-label="Breadcrumb">
+      <a href="{% url 'core:home' %}">Home</a> <span class="mx-1">/</span> Gallery
+    </nav>
+    {% if hero.label %}<span class="hero-label">{{ hero.label }}</span>{% endif %}
+    <h1>{{ hero.title|default:"Photo Gallery" }}</h1>
+    <p>{{ hero.subtitle|default:"A glimpse into everyday life at our school — learning, play and celebration." }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container-ec">
+    <div class="d-flex flex-wrap gap-2 mb-4">
+      <a class="btn btn-sm {% if not active_category %}btn-brand{% else %}btn-outline-brand{% endif %}" href="{% url 'gallery:album_list' %}">All</a>
+      {% for value, label in categories %}
+        <a class="btn btn-sm {% if active_category == value %}btn-brand{% else %}btn-outline-brand{% endif %}"
+           href="?category={{ value }}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="row g-4">
+      {% for album in albums %}
+        <div class="col-md-6 col-lg-4">
+          <div class="ec-card reveal h-100">
+            <a href="{{ album.get_absolute_url }}" class="d-block ec-card-media" aria-label="{{ album.title }} album">
+              {% if album.cover_url %}<img src="{{ album.cover_url }}" alt="{{ album.title }}" loading="lazy">
+              {% else %}<img src="{% static 'images/placeholder.svg' %}" alt="{{ album.title }} placeholder" loading="lazy">{% endif %}
+            </a>
+            <div class="ec-card-body">
+              <span class="badge-soft mb-2">{{ album.get_category_display }}</span>
+              <h2 class="h5">{{ album.title }}</h2>
+              <p class="text-muted-ec">{{ album.description|truncatewords:16 }}</p>
+              <a href="{{ album.get_absolute_url }}" class="fw-semibold">{{ album.image_count }} photo{{ album.image_count|pluralize }} <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12"><div class="empty-state"><i class="bi bi-images"></i><p>No albums are published yet. Please check back soon.</p></div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

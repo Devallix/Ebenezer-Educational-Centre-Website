@@ -1,0 +1,36 @@
+{% extends "dashboard/base.html" %}
+{% block content %}
+<div class="dash-card">
+  <div class="dash-card-head">
+    <div>
+      <h2 class="h6 mb-0">Programmes &amp; curriculum</h2>
+      <span class="text-muted small">Learning areas taught across the school.</span>
+    </div>
+    <a href="{% url 'dashboard:programme_create' %}" class="dash-btn dash-btn-primary"><i class="bi bi-plus-lg"></i> Add learning area</a>
+  </div>
+  <div class="table-responsive">
+    <table class="dash-table">
+      <thead><tr><th>Icon</th><th>Name</th><th>Order</th><th>Status</th><th class="text-end">Actions</th></tr></thead>
+      <tbody>
+        {% for a in areas %}
+          <tr>
+            <td><i class="bi {{ a.icon|default:'bi-book' }} fs-4 text-primary"></i></td>
+            <td>
+              <div class="fw-semibold">{{ a.name }}</div>
+              <div class="text-muted small">{{ a.description|truncatechars:80 }}</div>
+            </td>
+            <td>{{ a.display_order }}</td>
+            <td>{% if a.is_published %}<span class="pill pill-active">Published</span>{% else %}<span class="pill pill-inactive">Draft</span>{% endif %}</td>
+            <td class="text-end text-nowrap">
+              <a class="dash-btn dash-btn-light dash-btn-sm" href="{% url 'dashboard:programme_update' a.pk %}"><i class="bi bi-pencil"></i></a>
+              <a class="dash-btn dash-btn-danger dash-btn-sm" href="{% url 'dashboard:programme_delete' a.pk %}"><i class="bi bi-trash"></i></a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-center text-muted py-5">No learning areas yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

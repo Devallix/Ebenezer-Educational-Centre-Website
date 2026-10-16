@@ -1,0 +1,44 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="dash-card">
+      <div class="dash-card-head"><h2 class="h6 mb-0">Global SEO</h2></div>
+      <div class="dash-card-body">
+        <form method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="dash-btn dash-btn-primary"><i class="bi bi-check2"></i> Save SEO settings</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="dash-card">
+      <div class="dash-card-head"><h2 class="h6 mb-0">Per-page SEO</h2></div>
+      <div class="table-responsive">
+        <table class="dash-table">
+          <thead><tr><th>Page</th><th>Title set</th><th class="text-end">Edit</th></tr></thead>
+          <tbody>
+            {% for p in pages %}
+              <tr>
+                <td>{{ p.get_key_display }}</td>
+                <td>{% if p.title %}<span class="pill pill-active">Yes</span>{% else %}<span class="pill pill-archived">Default</span>{% endif %}</td>
+                <td class="text-end"><a class="dash-btn dash-btn-light dash-btn-sm" href="{% url 'dashboard:seo_page' p.key %}"><i class="bi bi-pencil"></i></a></td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="3" class="text-center text-muted py-4">No page overrides yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="dash-card-body pt-0">
+        <p class="text-muted small mb-0">Open any page to add a custom title, meta description and social sharing image.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

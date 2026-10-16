@@ -1,0 +1,48 @@
+{% extends "dashboard/base.html" %}
+{% block content %}
+<div class="dash-card">
+  <div class="dash-card-head">
+    <div>
+      <h2 class="h6 mb-0">Homepage slideshow</h2>
+      <span class="text-muted small">Images shown in the hero section of the home page.</span>
+    </div>
+    <a href="{% url 'dashboard:slide_create' %}" class="dash-btn dash-btn-primary"><i class="bi bi-plus-lg"></i> Add slide</a>
+  </div>
+  <div class="table-responsive">
+    <table class="dash-table">
+      <thead>
+        <tr><th>Image</th><th>Title</th><th>Order</th><th>Status</th><th class="text-end">Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for slide in slides %}
+          <tr>
+            <td>
+              {% if slide.image %}<img src="{{ slide.image.url }}" alt="" class="thumb">
+              {% else %}<span class="thumb d-inline-grid place-items-center text-muted"><i class="bi bi-image"></i></span>{% endif %}
+            </td>
+            <td>
+              <div class="fw-semibold">{{ slide.title|default:"(untitled)" }}</div>
+              <div class="text-muted small">{{ slide.subtitle|truncatechars:70 }}</div>
+            </td>
+            <td>{{ slide.display_order }}</td>
+            <td>
+              {% if slide.is_active %}<span class="pill pill-active">Active</span>
+              {% else %}<span class="pill pill-inactive">Hidden</span>{% endif %}
+            </td>
+            <td class="text-end text-nowrap">
+              <form method="post" action="{% url 'dashboard:slide_toggle' slide.pk %}" class="d-inline">
+                {% csrf_token %}
+                <button class="dash-btn dash-btn-light dash-btn-sm" title="Toggle visibility"><i class="bi bi-toggle-{% if slide.is_active %}on{% else %}off{% endif %}"></i></button>
+              </form>
+              <a class="dash-btn dash-btn-light dash-btn-sm" href="{% url 'dashboard:slide_update' slide.pk %}"><i class="bi bi-pencil"></i></a>
+              <a class="dash-btn dash-btn-danger dash-btn-sm" href="{% url 'dashboard:slide_delete' slide.pk %}"><i class="bi bi-trash"></i></a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-center text-muted py-5">No slides yet. Add your first slide to bring the homepage to life.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

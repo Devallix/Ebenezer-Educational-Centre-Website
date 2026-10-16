@@ -1,0 +1,36 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="dash-card">
+      <div class="dash-card-head"><h2 class="h6 mb-0">School profile</h2></div>
+      <div class="dash-card-body">
+        <form method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="dash-btn dash-btn-primary"><i class="bi bi-check2"></i> Save school information</button>
+            <a href="{% url 'dashboard:overview' %}" class="dash-btn dash-btn-light">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="dash-card">
+      <div class="dash-card-head"><h2 class="h6 mb-0">Brand assets</h2></div>
+      <div class="dash-card-body">
+        {% if school.logo %}<div class="text-center mb-3"><img src="{{ school.logo.url }}" alt="" class="img-fluid rounded border p-2"><div class="small text-muted">Logo</div></div>{% endif %}
+        {% if school.logo_light %}<div class="text-center mb-3"><img src="{{ school.logo_light.url }}" alt="" class="img-fluid rounded border p-2" style="background:#241417"><div class="small text-muted">Logo (dark background)</div></div>{% endif %}
+        {% if school.headmistress_image %}<div class="text-center mb-3"><img src="{{ school.headmistress_image.url }}" alt="" class="img-fluid rounded border p-2" style="max-width:170px"><div class="small text-muted">Headmistress</div></div>{% endif %}
+        {% if school.favicon %}<div class="text-center mb-3"><img src="{{ school.favicon.url }}" alt="" class="rounded border" width="32" height="32"><div class="small text-muted">Favicon</div></div>{% endif %}
+        {% if school.default_image %}<div class="text-center"><img src="{{ school.default_image.url }}" alt="" class="img-fluid rounded border p-2"><div class="small text-muted">Default / fallback image</div></div>{% endif %}
+        {% if not school.logo and not school.default_image %}
+          <p class="text-muted small mb-0">No brand assets uploaded yet. Until a logo is set, the site uses an SVG placeholder.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

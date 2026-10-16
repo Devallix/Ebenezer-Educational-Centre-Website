@@ -1,0 +1,92 @@
+{% load static %}
+<footer class="ec-footer">
+  <div class="footer-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 180" preserveAspectRatio="none" focusable="false">
+      <path class="wave-primary" d="M0,0 H1440 V150 C1270,174 1110,130 950,144 C790,158 640,178 480,156 C330,134 160,132 0,152 Z"></path>
+      <path class="wave-accent" d="M0,0 H1440 V112 C1270,142 1110,92 950,106 C790,120 640,150 480,126 C330,102 160,100 0,120 Z"></path>
+      <path class="wave-cut" d="M0,0 H1440 V66 C1270,96 1110,44 950,58 C790,72 640,104 480,80 C330,58 160,56 0,78 Z"></path>
+    </svg>
+  </div>
+  <div class="container-ec">
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-brand">
+          <span class="brand-mark" style="width:30px;height:30px;background:rgba(255,255,255,.15)">
+            {% if school.logo_light %}<img src="{{ school.logo_light.url }}" alt="{{ school.school_name }} logo">
+            {% elif school.logo %}<img src="{{ school.logo.url }}" alt="{{ school.school_name }} logo">
+            {% else %}<i class="bi bi-mortarboard-fill"></i>{% endif %}
+          </span>
+          <span class="fw-bold" style="color:#D5720A">{{ school.school_name|default:"Ebenezer Educational Centre" }}</span>
+        </div>
+        <p style="color:#fff">{{ school.footer_intro|default:school.short_description|default:"A warm and welcoming preschool and primary school in Jukwa, Cape Coast, where young learners explore, discover and grow." }}</p>
+        {% if school.social_links %}
+          <div class="social-links">
+            {% for link in school.social_links %}
+              <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ link.label }}">
+                <i class="bi {{ link.icon }}"></i></a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="col-lg-2 col-6">
+        <h5 style="color:#D5720A">Quick Links</h5>
+        <ul>
+          <li><a href="{% url 'core:home' %}">Home</a></li>
+          <li><a href="{% url 'core:about' %}">About Us</a></li>
+          <li><a href="{% url 'academics:programme_list' %}">Programmes</a></li>
+          <li><a href="{% url 'gallery:album_list' %}">Gallery</a></li>
+          <li><a href="{% url 'admissions:admission' %}">Admission</a></li>
+          <li><a href="{% url 'admissions:contact' %}">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-3 col-6">
+        <h5 style="color:#D5720A">Our Classes</h5>
+        <ul>
+          {% for class in nav_classes %}
+            <li><a href="{{ class.get_absolute_url }}">{{ class.name }}</a></li>
+          {% empty %}
+            <li><span>Classes are being updated.</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <h5 style="color:#D5720A">Get in Touch</h5>
+        <ul>
+          {% if school.full_address %}
+            <li><i class="bi bi-geo-alt me-2"></i>{{ school.full_address }}</li>
+          {% endif %}
+          {% if school.phone_primary %}
+            <li><i class="bi bi-telephone me-2"></i><a href="tel:{{ school.phone_primary }}">{{ school.phone_primary }}</a></li>
+          {% endif %}
+          {% if school.phone_secondary %}
+            <li><i class="bi bi-telephone me-2"></i><a href="tel:{{ school.phone_secondary }}">{{ school.phone_secondary }}</a></li>
+          {% endif %}
+          {% if school.email_primary %}
+            <li><i class="bi bi-envelope me-2"></i><a href="mailto:{{ school.email_primary }}">{{ school.email_primary }}</a></li>
+          {% endif %}
+          {% if school.opening_hours %}
+            <li><i class="bi bi-clock me-2"></i>{{ school.opening_hours }}</li>
+          {% endif %}
+        </ul>
+        <a class="btn btn-send-message btn-sm mt-2" href="{% url 'admissions:contact' %}">
+          <i class="bi bi-chat-dots"></i> Send a message
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-bottom d-flex flex-wrap justify-content-between gap-2">
+      <span>
+        {% if school.footer_copyright %}{{ school.footer_copyright }}
+        {% else %}&copy; {{ current_year }} {{ school.school_name|default:"Ebenezer Educational Centre" }}. All rights reserved.{% endif %}
+      </span>
+      <span>
+        <a href="{% url 'core:privacy' %}">Privacy Policy</a>
+        <span class="mx-2" style="color:rgba(255,255,255,0.5)">&middot;</span>
+        <span style="color:rgba(255,255,255,0.82)">Developed by Devallix</span>
+      </span>
+    </div>
+  </div>
+</footer>

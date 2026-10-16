@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="School photograph placeholder">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7e9e0"/>
+      <stop offset="1" stop-color="#f0d9cf"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#g)"/>
+  <g fill="none" stroke="#9E0719" stroke-width="6" opacity="0.5">
+    <path d="M150 330h500" />
+    <path d="M180 330V210a60 60 0 0 1 60-60h320a60 60 0 0 1 60 60v120" />
+  </g>
+  <circle cx="400" cy="200" r="52" fill="#D5720A" opacity="0.55"/>
+  <text x="400" y="430" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-size="30" fill="#9E0719" opacity="0.8">Photograph coming soon</text>
+</svg>

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ area.name }} | Programmes | {{ school.school_name }}{% endblock %}
+
+{% block content %}
+<section class="page-hero" {% if area.image %}style="background:linear-gradient(120deg,rgba(74,2,9,.85),rgba(158,7,25,.75)),url('{{ area.image.url }}') center/cover"{% endif %}>
+  <div class="container-ec">
+    <nav class="breadcrumb-ec mb-2" aria-label="Breadcrumb">
+      <a href="{% url 'core:home' %}">Home</a> <span class="mx-1">/</span>
+      <a href="{% url 'academics:programme_list' %}">Programmes</a> <span class="mx-1">/</span> {{ area.name }}
+    </nav>
+    <h1>{{ area.name }}</h1>
+    {% if area.description %}<p>{{ area.description|truncatewords:30 }}</p>{% endif %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="container-ec">
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <div class="reveal">
+          <div class="icon-badge"><i class="bi {{ area.icon|default:'bi-book' }}"></i></div>
+          <h2>About this learning area</h2>
+          <div class="text-muted-ec">{{ area.description|default:"Details about this learning area will be added by the school."|linebreaks }}</div>
+        </div>
+
+        {% if area.objective_list %}
+          <div class="mt-4 reveal">
+            <h3 class="h5">Learning objectives</h3>
+            <ul class="list-unstyled">
+              {% for objective in area.objective_list %}
+                <li class="d-flex gap-2 mb-2"><i class="bi bi-check-circle-fill" style="color:var(--ec-accent)"></i><span>{{ objective }}</span></li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if area.activity_list %}
+          <div class="mt-4 reveal">
+            <h3 class="h5">Example activities</h3>
+            <ul class="list-unstyled">
+              {% for activity in area.activity_list %}
+                <li class="d-flex gap-2 mb-2"><i class="bi bi-stars" style="color:var(--ec-primary)"></i><span>{{ activity }}</span></li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="col-lg-4">
+        <div class="field-card reveal">
+          <h3 class="h5">Offered in</h3>
+          {% if classes %}
+            <ul class="list-unstyled mb-0">
+              {% for class in classes %}
+                <li class="mb-2"><a href="{{ class.get_absolute_url }}"><i class="bi bi-mortarboard"></i> {{ class.name }}</a></li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted-ec small mb-0">The school assigns these learning areas to classes in the dashboard.</p>
+          {% endif %}
+        </div>
+
+        {% if other_areas %}
+          <div class="field-card reveal mt-4">
+            <h3 class="h5">Other learning areas</h3>
+            <ul class="list-unstyled mb-0">
+              {% for other in other_areas %}
+                <li class="mb-2"><a href="{% url 'academics:programme_detail' other.slug %}"><i class="bi {{ other.icon|default:'bi-book' }}"></i> {{ other.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        <div class="field-card reveal mt-4" style="background:var(--ec-primary);color:#fff;border:0">
+          <h3 class="h5" style="color:#fff">Interested in our programmes?</h3>
+          <a class="btn btn-accent w-100 mt-2" href="{% url 'admissions:admission' %}">Enquire about admission</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

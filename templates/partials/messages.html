@@ -1,0 +1,31 @@
+{% if messages %}
+  <div class="container-ec mt-3" aria-live="polite">
+    {% for message in messages %}
+      {% if message.tags == 'error' %}
+        <div class="alert alert-ec alert-danger alert-dismissible fade show d-flex align-items-start gap-2" role="alert">
+          <i class="bi bi-exclamation-triangle-fill mt-1"></i>
+          <div class="flex-grow-1">{{ message }}</div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% elif message.tags == 'success' %}
+        <div class="alert alert-ec alert-success alert-dismissible fade show d-flex align-items-start gap-2" role="alert" data-autodismiss>
+          <i class="bi bi-check-circle-fill mt-1"></i>
+          <div class="flex-grow-1">{{ message }}</div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% elif message.tags == 'warning' %}
+        <div class="alert alert-ec alert-warning alert-dismissible fade show d-flex align-items-start gap-2" role="alert">
+          <i class="bi bi-exclamation-circle-fill mt-1"></i>
+          <div class="flex-grow-1">{{ message }}</div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% else %}
+        <div class="alert alert-ec alert-info alert-dismissible fade show d-flex align-items-start gap-2" role="alert">
+          <i class="bi bi-info-circle-fill mt-1"></i>
+          <div class="flex-grow-1">{{ message }}</div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

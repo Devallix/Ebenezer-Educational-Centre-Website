@@ -1,0 +1,168 @@
+{% extends "dashboard/base.html" %}
+{% load permissions %}
+{% block page_sub %}<div class="page-sub">Overview for {{ range_label }}</div>{% endblock %}
+{% block content %}
+<div class="dash-welcome">
+  <h2>Welcome back, {{ request.user.get_full_name|default:request.user.username }}</h2>
+  <p>Here's what's happening at {{ school.school_name }} this {{ range_label|lower }}.</p>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-xl-3">
+    <div class="stat-card-modern">
+      <div class="stat-body">
+        <div class="stat-icon icon-primary"><i class="bi bi-eye"></i></div>
+        <div class="stat-data">
+          <div class="stat-value">{{ total_views }}</div>
+          <div class="stat-label">Page views ({{ range_label|lower }})</div>
+        </div>
+      </div>
+      <div class="stat-trend"><span class="trend-up"><i class="bi bi-trend-up"></i> +12%</span></div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="stat-card-modern">
+      <div class="stat-body">
+        <div class="stat-icon icon-secondary"><i class="bi bi-people"></i></div>
+        <div class="stat-data">
+          <div class="stat-value">{{ unique_visitors }}</div>
+          <div class="stat-label">Unique visitors</div>
+        </div>
+      </div>
+      <div class="stat-trend"><span class="trend-up"><i class="bi bi-trend-up"></i> +8%</span></div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="stat-card-modern">
+      <div class="stat-body">
+        <div class="stat-icon icon-accent"><i class="bi bi-journal-check"></i></div>
+        <div class="stat-data">
+          <div class="stat-value">{{ enquiry_new }}</div>
+          <div class="stat-label">New enquiries</div>
+        </div>
+      </div>
+      <div class="stat-trend"><span class="trend-up"><i class="bi bi-trend-up"></i> +24%</span></div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="stat-card-modern">
+      <div class="stat-body">
+        <div class="stat-icon icon-info"><i class="bi bi-envelope-exclamation"></i></div>
+        <div class="stat-data">
+          <div class="stat-value">{{ unread_messages }}</div>
+          <div class="stat-label">Unread messages</div>
+        </div>
+      </div>
+      <div class="stat-trend"><span class="trend-down"><i class="bi bi-trend-down"></i> -5%</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="dash-section-head">
+  <h2>Recent admission enquiries</h2>
+  {% if request.user|can:"admissions_manage" %}<a href="{% url 'dashboard:admission_list' %}" class="view-all">View all enquiries</a>{% endif %}
+</div>
+<div class="dash-card-modern">
+  <div class="dash-card-body">
+    <div class="table-responsive">
+      <table class="dash-table-modern">
+        <thead><tr><th>Parent</th><th>Child</th><th>Class</th><th>Status</th><th>Received</th></tr></thead>
+        <tbody>
+          {% for e in recent_enquiries %}
+            <tr>
+              <td>{% if request.user|can:"admissions_manage" %}<a href="{% url 'dashboard:admission_detail' e.pk %}">{{ e.parent_name }}</a>{% else %}{{ e.parent_name }}{% endif %}</td>
+              <td>{{ e.child_first_name }}</td>
+              <td>{{ e.preferred_class.name|default:"—" }}</td>
+              <td><span class="pill-modern pill-modern-{{ e.status }}">{{ e.get_status_display }}</span></td>
+              <td>{{ e.created_at|date:"d M Y" }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="5" class="text-center text-muted py-5">No enquiries yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="dash-card-modern h-100">
+      <div class="dash-card-head"><h2>School at a glance</h2></div>
+      <div class="dash-card-body">
+        <div class="d-flex justify-content-between py-2"><span class="text-muted">Classes</span><strong>{{ classes_count }}</strong></div>
+        <div class="d-flex justify-content-between py-2"><span class="text-muted">Teachers</span><strong>{{ teachers_count }}</strong></div>
+        <div class="d-flex justify-content-between py-2"><span class="text-muted">Gallery albums</span><strong>{{ albums_count }}</strong></div>
+        <div class="d-flex justify-content-between py-2"><span class="text-muted">Total enquiries</span><strong>{{ enquiry_total }}</strong></div>
+        <div class="d-flex justify-content-between py-2"><span class="text-muted">Follow-ups due</span><strong>{{ enquiry_follow_up }}</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="dash-section-head">
+      <h2>Quick actions</h2>
+    </div>
+    <div class="quick-grid">
+      {% if request.user|can:"content_manage" %}
+        <a href="{% url 'dashboard:slide_create' %}" class="quick-card">
+          <div class="quick-icon icon-school"><i class="bi bi-plus-circle"></i></div>
+          <h3>Add homepage slide</h3>
+          <p>Feature new content</p>
+        </a>
+        <a href="{% url 'dashboard:album_create' %}" class="quick-card">
+          <div class="quick-icon icon-gallery"><i class="bi bi-plus-circle"></i></div>
+          <h3>Create gallery album</h3>
+          <p>Add photo collections</p>
+        </a>
+      {% endif %}
+      {% if request.user|can:"appearance_manage" %}
+        <a href="{% url 'dashboard:appearance' %}" class="quick-card">
+          <div class="quick-icon icon-palette"><i class="bi bi-palette"></i></div>
+          <h3>Change website colours</h3>
+          <p>Update theme settings</p>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-6">
+    <div class="dash-card-modern h-100">
+      <div class="dash-card-head"><h2>Most visited pages</h2></div>
+      <div class="dash-card-body">
+        <table class="dash-table-modern">
+          <thead><tr><th>Page</th><th class="text-end">Views</th></tr></thead>
+          <tbody>
+            {% for row in top_pages %}
+              <tr><td>{{ row.path }}</td><td class="text-end">{{ row.total }}</td></tr>
+            {% empty %}
+              <tr><td colspan="2" class="text-center text-muted py-5">No analytics recorded yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="dash-card-modern h-100">
+      <div class="dash-card-head"><h2>Recent activity</h2></div>
+      <div class="dash-card-body">
+        <ul class="list-unstyled mb-0">
+          {% for entry in recent_activity %}
+            <li class="d-flex gap-2 py-2 border-bottom">
+              <i class="bi bi-clock-history text-muted"></i>
+              <div class="small">
+                <div>{{ entry.description|default:entry }}</div>
+                <div class="text-muted">{{ entry.user.get_username|default:"system" }} &middot; {{ entry.created_at|date:"d M Y H:i" }}</div>
+              </div>
+            </li>
+          {% empty %}
+            <li class="text-muted">No activity recorded yet.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

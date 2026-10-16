@@ -1,0 +1,21 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="dash-card">
+      <div class="dash-card-body">
+        <h2 class="h5 mb-3">{{ page_title }}</h2>
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="dash-btn dash-btn-primary"><i class="bi bi-check2"></i> Save user</button>
+            <a href="{% url 'dashboard:user_list' %}" class="dash-btn dash-btn-light">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

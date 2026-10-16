@@ -1,0 +1,109 @@
+{% extends "dashboard/base.html" %}
+{% block page_sub %}<div class="page-sub">{{ range_label }}</div>{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+  <div class="btn-group" role="group" aria-label="Date range">
+    <a class="dash-btn {% if range_key == '7' %}dash-btn-primary{% else %}dash-btn-light{% endif %}" href="?range=7">7 days</a>
+    <a class="dash-btn {% if range_key == '30' %}dash-btn-primary{% else %}dash-btn-light{% endif %}" href="?range=30">30 days</a>
+    <a class="dash-btn {% if range_key == '90' %}dash-btn-primary{% else %}dash-btn-light{% endif %}" href="?range=90">90 days</a>
+  </div>
+  <form class="d-flex gap-2 ms-auto" method="get">
+    <input type="hidden" name="range" value="custom">
+    <input type="date" name="start" value="{{ start_date }}" class="form-control form-control-sm">
+    <input type="date" name="end" value="{{ end_date }}" class="form-control form-control-sm">
+    <button class="dash-btn dash-btn-light" type="submit">Apply</button>
+  </form>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-xl-3"><div class="stat-card"><div class="stat-icon"><i class="bi bi-eye"></i></div><div><div class="stat-value">{{ total_views }}</div><div class="stat-label">Page views</div></div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="stat-card plain"><div class="stat-icon"><i class="bi bi-people"></i></div><div><div class="stat-value">{{ unique_visitors }}</div><div class="stat-label">Unique visitors</div></div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="stat-card accent"><div class="stat-icon"><i class="bi bi-journal-check"></i></div><div><div class="stat-value">{{ conversions.admission_submits }}</div><div class="stat-label">Admission submissions</div></div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="stat-card"><div class="stat-icon"><i class="bi bi-envelope"></i></div><div><div class="stat-value">{{ conversions.contact_submits }}</div><div class="stat-label">Contact submissions</div></div></div></div>
+</div>
+
+<div class="row g-3 mb-3">
+  <div class="col-lg-8">
+    <div class="dash-card h-100">
+      <div class="dash-card-head"><h2 class="h6 mb-0">Page views over time</h2></div>
+      <div class="dash-card-body">
+        {% if has_data %}<canvas id="viewsChart" height="120"></canvas>{% else %}<p class="text-muted text-center py-5 mb-0">No analytics recorded for this period.</p>{% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="dash-card h-100">
+      <div class="dash-card-head"><h2 class="h6 mb-0">Devices</h2></div>
+      <div class="dash-card-body">
+        {% if has_data %}<canvas id="deviceChart" height="200"></canvas>{% else %}<p class="text-muted text-center py-5 mb-0">No data yet.</p>{% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="dash-card h-100">
+      <div class="dash-card-head"><h2 class="h6 mb-0">Section interest</h2></div>
+      <div class="dash-card-body">
+        {% for key, value in section_totals.items %}
+          <div class="d-flex justify-content-between py-1 border-bottom"><span class="text-capitalize text-muted">{{ key }}</span><strong>{{ value }}</strong></div>
+        {% endfor %}
+        <div class="d-flex justify-content-between py-1"><span class="text-muted">Enquiries in period</span><strong>{{ enquiries_in_range }}</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="dash-card h-100">
+      <div class="dash-card-head"><h2 class="h6 mb-0">Top pages</h2></div>
+      <div class="table-responsive">
+        <table class="dash-table">
+          <thead><tr><th>Path</th><th class="text-end">Views</th></tr></thead>
+          <tbody>
+            {% for row in top_pages %}<tr><td class="text-truncate" style="max-width:220px">{{ row.path }}</td><td class="text-end">{{ row.total }}</td></tr>
+            {% empty %}<tr><td colspan="2" class="text-center text-muted py-4">No data.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="dash-card h-100">
+      <div class="dash-card-head"><h2 class="h6 mb-0">Referrers</h2></div>
+      <div class="dash-card-body">
+        {% for domain, total in referrers %}
+          <div class="d-flex justify-content-between py-1 border-bottom"><span class="text-truncate">{{ domain }}</span><strong>{{ total }}</strong></div>
+        {% empty %}
+          <p class="text-muted mb-0">Direct traffic only.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if has_data %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  (function () {
+    var labels = {{ chart_labels|safe }};
+    var values = {{ chart_values|safe }};
+    var primary = getComputedStyle(document.documentElement).getPropertyValue("--ec-primary").trim() || "#9E0719";
+    new Chart(document.getElementById("viewsChart"), {
+      type: "line",
+      data: { labels: labels, datasets: [{ label: "Page views", data: values, borderColor: primary,
+        backgroundColor: "rgba(158,7,25,.12)", fill: true, tension: .35, pointRadius: 2 }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+    });
+    new Chart(document.getElementById("deviceChart"), {
+      type: "doughnut",
+      data: { labels: {{ device_labels|safe }}, datasets: [{ data: {{ device_values|safe }},
+        backgroundColor: ["#9E0719", "#D5720A", "#BD0116", "#7A6B6E"] }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } }
+    });
+  })();
+</script>
+{% endif %}
+{% endblock %}

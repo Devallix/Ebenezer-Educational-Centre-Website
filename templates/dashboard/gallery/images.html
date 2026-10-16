@@ -1,0 +1,70 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="dash-card mb-3">
+  <div class="dash-card-head">
+    <div>
+      <h2 class="h6 mb-0">{{ album.title }}</h2>
+      <span class="text-muted small">{{ album.image_count }} image{{ album.image_count|pluralize }}</span>
+    </div>
+    <div class="d-flex gap-2">
+      <a href="{% url 'dashboard:album_list' %}" class="dash-btn dash-btn-light"><i class="bi bi-arrow-left"></i> Back to albums</a>
+      <a href="{% url 'dashboard:album_update' album.pk %}" class="dash-btn dash-btn-light"><i class="bi bi-pencil"></i> Edit album</a>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-5">
+    <div class="dash-card">
+      <div class="dash-card-body">
+        <h3 class="h6 mb-3">Upload images</h3>
+        <form method="post" action="{% url 'dashboard:image_upload' album.pk %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label">Images</label>
+            <input type="file" name="images" class="form-control" accept="image/*" multiple required>
+            <div class="form-text">You can select multiple images at once. Max upload size respected.</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Caption (applied to all new images)</label>
+            <input type="text" name="caption" class="form-control" maxlength="200">
+          </div>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="pubAll" name="is_published" checked>
+            <label class="form-check-label" for="pubAll">Publish immediately</label>
+          </div>
+          <button type="submit" class="dash-btn dash-btn-primary"><i class="bi bi-cloud-upload"></i> Upload</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-7">
+    <div class="dash-card">
+      <div class="table-responsive">
+        <table class="dash-table">
+          <thead><tr><th>Image</th><th>Caption</th><th>Order</th><th>Status</th><th class="text-end">Actions</th></tr></thead>
+          <tbody>
+            {% for img in images %}
+              <tr>
+                <td><img src="{{ img.url }}" alt="" class="thumb"></td>
+                <td>{{ img.caption|default:"—" }}<div class="text-muted small">Alt: {{ img.effective_alt|default:"—" }}</div></td>
+                <td>{{ img.display_order }}</td>
+                <td>{% if img.is_published %}<span class="pill pill-active">Published</span>{% else %}<span class="pill pill-inactive">Hidden</span>{% endif %}</td>
+                <td class="text-end text-nowrap">
+                  <form method="post" action="{% url 'dashboard:image_move' img.pk 'up' %}" class="d-inline">{% csrf_token %}<button class="dash-btn dash-btn-light dash-btn-sm"><i class="bi bi-arrow-up"></i></button></form>
+                  <form method="post" action="{% url 'dashboard:image_move' img.pk 'down' %}" class="d-inline">{% csrf_token %}<button class="dash-btn dash-btn-light dash-btn-sm"><i class="bi bi-arrow-down"></i></button></form>
+                  <a class="dash-btn dash-btn-light dash-btn-sm" href="{% url 'dashboard:image_update' img.pk %}"><i class="bi bi-pencil"></i></a>
+                  <a class="dash-btn dash-btn-danger dash-btn-sm" href="{% url 'dashboard:image_delete' img.pk %}"><i class="bi bi-trash"></i></a>
+                </td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="5" class="text-center text-muted py-4">No images uploaded yet. Upload your first images using the form.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% load static %}
+<div class="ec-card reveal">
+  <a href="{{ class.get_absolute_url }}" class="d-block ec-card-media" aria-label="{{ class.name }}">
+    {% if class.image %}
+      <img src="{{ class.image.url }}" alt="{{ class.name }} at {{ school.school_name }}" loading="lazy">
+    {% else %}
+      <img src="{% static 'images/placeholder.svg' %}" alt="{{ class.name }} photograph placeholder" loading="lazy">
+    {% endif %}
+  </a>
+  <div class="ec-card-body">
+    <div class="d-flex justify-content-between align-items-start mb-2">
+      <h3 class="h5 mb-0">{{ class.name }}</h3>
+      {% if class.published_age_range %}<span class="badge-soft">{{ class.published_age_range }}</span>{% endif %}
+    </div>
+    {% if class.short_introduction %}<p class="text-muted-ec mb-3">{{ class.short_introduction|truncatewords:18 }}</p>{% endif %}
+    <a href="{{ class.get_absolute_url }}" class="btn btn-class-view btn-sm">View Class Details <i class="bi bi-arrow-right"></i></a>
+  </div>
+</div>

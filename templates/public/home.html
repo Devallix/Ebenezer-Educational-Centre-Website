@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ seo.title }}{% endblock %}
+{% block body_class %}page-home{% endblock %}
+
+{% block content %}
+<!-- Hero slideshow -->
+<section class="hero {% if not slides %}hero-fallback{% endif %}" data-hero data-interval="6500"
+         aria-roledescription="carousel" aria-label="Welcome">
+  {% static 'images/placeholder.svg' as placeholder_img %}
+  {% for slide in slides %}
+    <div class="hero-slide {% if forloop.first %}active{% endif %}"
+         style="background-image:url('{% if slide.image %}{{ slide.image.url }}{% else %}{{ placeholder_img }}{% endif %}')"
+         role="group" aria-roledescription="slide" aria-label="Slide {{ forloop.counter }} of {{ slides|length }}"></div>
+  {% endfor %}
+  <div class="hero-overlay"></div>
+
+  <div class="container-ec hero-content">
+    {% if slides %}
+      {% for slide in slides %}
+        <div class="hero-caption" data-slide-index="{{ forloop.counter0 }}" {% if not forloop.first %}hidden{% endif %}>
+          {% if slide.label %}<span class="hero-label">{{ slide.label }}</span>{% endif %}
+          <h1 data-typewriter>{{ slide.title }}</h1>
+          {% if slide.subtitle %}<p>{{ slide.subtitle }}</p>{% endif %}
+          <div class="hero-actions">
+            {% if slide.primary_button_label %}
+              <a class="btn btn-accent btn-lg" href="{{ slide.primary_button_url|default:'/classes/' }}">{{ slide.primary_button_label }}</a>
+            {% endif %}
+            {% if slide.secondary_button_label %}
+              <a class="btn btn-ghost-light btn-lg" href="{{ slide.secondary_button_url|default:'/admission/' }}">{{ slide.secondary_button_label }}</a>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="hero-caption">
+        <span class="hero-label">WELCOME TO {{ school.school_name|upper|default:"EBENEZER EDUCATIONAL CENTRE" }}</span>
+        <h1 data-typewriter>A Bright Beginning for a Brighter Future</h1>
+        <p>{{ school.full_description|default:"A welcoming place where young learners explore, discover, grow and build the foundations for lifelong learning." }}</p>
+        <div class="hero-actions">
+          <a class="btn btn-accent btn-lg" href="{% url 'academics:class_list' %}">Explore Our Classes</a>
+          <a class="btn btn-ghost-light btn-lg" href="{% url 'admissions:admission' %}">Enquire About Admission</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if slides|length > 1 %}
+    <div class="hero-controls">
+      <button type="button" data-hero-prev aria-label="Previous slide"><i class="bi bi-arrow-left"></i></button>
+      <button type="button" data-hero-next aria-label="Next slide"><i class="bi bi-arrow-right"></i></button>
+    </div>
+    <div class="hero-dots" role="tablist" aria-label="Choose slide">
+      {% for slide in slides %}
+        <button type="button" class="{% if forloop.first %}active{% endif %}" role="tab"
+                aria-label="Go to slide {{ forloop.counter }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"></button>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <canvas class="hero-particles" data-hero-particles aria-hidden="true"></canvas>
+
+  <div class="hero-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 180" preserveAspectRatio="none" focusable="false">
+      <path class="wave-accent" d="M0,70 C160,20 320,100 480,78 C640,56 800,10 960,38 C1120,66 1280,110 1440,72 L1440,180 L0,180 Z"></path>
+      <path class="wave-primary" d="M0,118 C180,78 360,132 540,112 C720,92 900,60 1080,88 C1260,116 1350,140 1440,118 L1440,180 L0,180 Z"></path>
+      <path class="wave-cut" d="M0,152 C200,128 400,168 600,152 C800,136 1000,120 1200,146 C1320,162 1380,158 1440,150 L1440,180 L0,180 Z"></path>
+    </svg>
+  </div>
+</section>
+
+<!-- Highlights -->
+<section class="section bg-surface section-highlights">
+  <div class="container-ec">
+    <div class="row g-4 text-center">
+      <div class="col-md-3 col-sm-6">
+        <div class="feature-item reveal">
+          <div class="icon-badge" style="background:var(--ec-accent-tint);color:var(--ec-accent)"><i class="bi bi-award"></i></div>
+          <h3 class="h5">Quality Education</h3>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="feature-item reveal">
+          <div class="icon-badge" style="background:var(--ec-primary-tint);color:var(--ec-primary)"><i class="bi bi-people-fill"></i></div>
+          <h3 class="h5">Experienced Teachers</h3>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="feature-item reveal">
+          <div class="icon-badge" style="background:var(--ec-secondary-tint);color:var(--ec-secondary)"><i class="bi bi-shield-check"></i></div>
+          <h3 class="h5">Safe &amp; Friendly Environment</h3>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="feature-item reveal">
+          <div class="icon-badge" style="background:var(--ec-accent-tint);color:var(--ec-accent)"><i class="bi bi-star-fill"></i></div>
+          <h3 class="h5">Nurturing Future Leaders</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Welcome -->
+<section class="section">
+  <div class="container-ec">
+    <div class="media-split">
+      <div class="reveal">
+        <span class="eyebrow">Welcome</span>
+        <h2>A caring start to your child&rsquo;s learning journey</h2>
+        <p class="text-muted-ec">
+          {{ school.full_description|default:"Ebenezer Educational Centre is a preschool and primary school in Jukwa, Cape Coast. We provide a safe, happy and stimulating environment where children are encouraged to explore, ask questions and grow in confidence." }}
+        </p>
+        <div class="row g-3 mt-2">
+          <div class="col-6 col-sm-4"><div class="stat-badge"><div class="stat-value">{{ classes|length }}</div><div class="stat-label">Class levels</div></div></div>
+          <div class="col-6 col-sm-4"><div class="stat-badge" style="background:var(--ec-accent)"><div class="stat-value">Creche</div><div class="stat-label">to Primary 3</div></div></div>
+          <div class="col-12 col-sm-4"><div class="stat-badge" style="background:var(--ec-secondary)"><div class="stat-value">Jukwa</div><div class="stat-label">Cape Coast</div></div></div>
+        </div>
+        <a class="btn btn-brand mt-4" href="{% url 'core:about' %}">Learn more about us</a>
+      </div>
+      <div class="reveal reveal-right">
+        {% if school.default_image %}
+          <img src="{{ school.default_image.url }}" alt="{{ school.school_name }}">
+        {% else %}
+          <img src="{% static 'images/placeholder.svg' %}" alt="School photograph placeholder">
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Benefits -->
+{% if benefits %}
+<section class="section bg-surface">
+  <div class="container-ec">
+    <div class="section-head center">
+      <span class="eyebrow">Why Ebenezer</span>
+      <h2>What families value about our school</h2>
+    </div>
+    <div class="row g-4">
+      {% for benefit in benefits %}
+        <div class="col-md-6 col-lg-4">
+          <div class="ec-card reveal h-100">
+            <div class="ec-card-body">
+              <div class="icon-badge"><i class="bi {{ benefit.icon|default:'bi-star' }}"></i></div>
+              <h3 class="h5">{{ benefit.title }}</h3>
+              <p class="text-muted-ec mb-0">{{ benefit.description }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Classes preview -->
+<section class="section">
+  <div class="container-ec">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2">
+      <div class="section-head mb-0">
+        <span class="eyebrow">Our Classes</span>
+        <h2>From Creche to Primary 3</h2>
+      </div>
+      <a class="btn btn-outline-brand" href="{% url 'academics:class_list' %}">All classes</a>
+    </div>
+    <div class="row g-4">
+      {% for class in classes %}
+        <div class="col-sm-6 col-lg-3">{% include "partials/class_card.html" with class=class %}</div>
+      {% empty %}
+        <div class="col-12"><div class="empty-state"><i class="bi bi-journal-x"></i><p>Classes will be listed here soon.</p></div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Programmes preview -->
+{% if learning_areas %}
+<section class="section bg-tint">
+  <div class="container-ec">
+    <div class="section-head center">
+      <span class="eyebrow">Programmes</span>
+      <h2>Learning areas that build strong foundations</h2>
+      <p class="text-muted-ec">Children learn through play, exploration and guided activities across a broad range of areas.</p>
+    </div>
+    <div class="row g-4">
+      {% for area in learning_areas %}
+        <div class="col-md-6 col-lg-4">
+          <div class="ec-card reveal h-100">
+            <div class="ec-card-body">
+              <div class="icon-badge" style="background:var(--ec-accent-tint);color:var(--ec-accent)">
+                <i class="bi {{ area.icon|default:'bi-book' }}"></i></div>
+              <h3 class="h5">{{ area.name }}</h3>
+              <p class="text-muted-ec mb-0">{{ area.description|truncatewords:18 }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+      <a class="btn btn-brand" href="{% url 'academics:programme_list' %}">View all programmes</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Teachers preview -->
+{% if teachers %}
+<section class="section">
+  <div class="container-ec">
+    <div class="section-head center">
+      <span class="eyebrow">Our Teachers</span>
+      <h2>Talented minds nurturing future leaders</h2>
+    </div>
+    <div class="carousel slide" id="teachersCarousel">
+      <div class="carousel-inner">
+        {% for chunk in teacher_chunks %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <div class="d-flex justify-content-center gap-4 gap-md-3">
+              {% for teacher in chunk %}
+                <div class="teacher-card text-center" style="min-width: 150px; max-width: 170px;">
+                  {% if teacher.photo %}
+                    <img class="teacher-photo" src="{{ teacher.photo.url }}" alt="{{ teacher.full_name }}" loading="lazy">
+                  {% else %}
+                    <div class="teacher-photo d-grid" style="place-items:center"><i class="bi bi-person-fill fs-1 text-muted-ec"></i></div>
+                  {% endif %}
+                  <h3 class="h6 mb-1">{{ teacher.full_name }}</h3>
+                  <p class="text-muted-ec small mb-0">{{ teacher.role }}</p>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#teachersCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#teachersCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Gallery preview -->
+{% if albums %}
+<section class="section bg-surface">
+  <div class="container-ec">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2">
+      <div class="section-head mb-0">
+        <span class="eyebrow">Gallery</span>
+        <h2>Moments from our school</h2>
+      </div>
+      <a class="btn btn-outline-brand" href="{% url 'gallery:album_list' %}">Visit gallery</a>
+    </div>
+    <div class="row g-4">
+      {% for album in albums %}
+        <div class="col-md-6 col-lg-4">
+          <div class="ec-card reveal h-100">
+            <a href="{{ album.get_absolute_url }}" class="d-block ec-card-media" aria-label="{{ album.title }}">
+              {% if album.cover_url %}<img src="{{ album.cover_url }}" alt="{{ album.title }}" loading="lazy">
+              {% else %}<img src="{% static 'images/placeholder.svg' %}" alt="{{ album.title }} placeholder" loading="lazy">{% endif %}
+            </a>
+            <div class="ec-card-body">
+              <h3 class="h5">{{ album.title }}</h3>
+              <p class="text-muted-ec mb-2">{{ album.description|truncatewords:14 }}</p>
+              <a href="{{ album.get_absolute_url }}" class="fw-semibold">{{ album.image_count }} photo{{ album.image_count|pluralize }} <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Admission CTA -->
+<section class="section">
+  <div class="container-ec">
+    <div class="field-card reveal reveal-zoom" style="background:linear-gradient(120deg,var(--ec-primary),var(--ec-secondary));border:0;color:#fff">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+          <h2 style="color:#fff">Ready to give your child a bright beginning?</h2>
+          <p class="mb-0" style="color:rgba(255,255,255,.9)">
+            Send us an admission enquiry and our team will guide you through class availability and the next steps.
+          </p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+          <a class="btn btn-accent btn-lg" href="{% url 'admissions:admission' %}"><i class="bi bi-journal-check"></i> Enquire about admission</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Location & contact -->
+<section class="section bg-surface">
+  <div class="container-ec">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-5 reveal reveal-left">
+        <span class="eyebrow">Find Us</span>
+        <h2>Visit our school</h2>
+        <p class="text-muted-ec">{{ school.full_address|default:"Jukwa, Cape Coast, Central Region, Ghana" }}</p>
+        <ul class="list-unstyled">
+          {% if school.phone_primary %}<li class="mb-2"><i class="bi bi-telephone-fill text-danger me-2"></i>{{ school.phone_primary }}</li>{% endif %}
+          {% if school.email_primary %}<li class="mb-2"><i class="bi bi-envelope-fill text-danger me-2"></i>{{ school.email_primary }}</li>{% endif %}
+          {% if school.opening_hours %}<li class="mb-2"><i class="bi bi-clock-fill text-danger me-2"></i>{{ school.opening_hours }}</li>{% endif %}
+        </ul>
+        <div class="d-flex flex-wrap gap-2">
+          <a class="btn btn-brand" href="{% url 'admissions:contact' %}">Contact us</a>
+          {% if school.directions_url %}<a class="btn btn-outline-brand" href="{{ school.directions_url }}" target="_blank" rel="noopener">Get directions</a>{% endif %}
+        </div>
+      </div>
+      <div class="col-lg-7 reveal reveal-right">
+        {% if school.map_url %}
+          <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow-sm">
+            <iframe src="{{ school.map_url }}" title="School location map" loading="lazy" style="border:0" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          </div>
+        {% else %}
+          <div class="aspect-placeholder" style="aspect-ratio:16/9;border-radius:var(--ec-radius)">
+            <i class="bi bi-geo-alt-fill"></i>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Keep hero captions in sync with the active slide.
+  document.addEventListener('DOMContentLoaded', function () {
+    var hero = document.querySelector('[data-hero]');
+    if (!hero) return;
+    var slides = hero.querySelectorAll('.hero-slide');
+    var captions = hero.querySelectorAll('.hero-caption[data-slide-index]');
+    if (!captions.length) return;
+    var observer = new MutationObserver(function () {
+      slides.forEach(function (slide, i) {
+        captions.forEach(function (cap, j) {
+          if (parseInt(cap.dataset.slideIndex, 10) === i) {
+            cap.hidden = !slide.classList.contains('active');
+          }
+        });
+      });
+    });
+    slides.forEach(function (s) { observer.observe(s, { attributes: true, attributeFilter: ['class'] }); });
+  });
+</script>
+{% endblock %}

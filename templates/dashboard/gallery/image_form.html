@@ -1,0 +1,30 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="dash-card">
+      <div class="dash-card-body">
+        <h2 class="h5 mb-3">{{ page_title }}</h2>
+        <form method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="dash-btn dash-btn-primary"><i class="bi bi-check2"></i> Save image</button>
+            <a href="{% url 'dashboard:album_images' image.album_id %}" class="dash-btn dash-btn-light">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="dash-card">
+      <div class="dash-card-head"><h2 class="h6 mb-0">Current image</h2></div>
+      <div class="dash-card-body text-center">
+        {% if image.image %}<img src="{{ image.url }}" alt="" class="img-fluid rounded-3">
+        {% else %}<p class="text-muted mb-0">No image file present.</p>{% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "dashboard/base.html" %}
+{% block content %}
+<div class="dash-card mb-3">
+  <div class="dash-card-body">
+    <form method="get" class="row g-2 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label">Search</label>
+        <input type="text" name="q" class="form-control" value="{{ query }}" placeholder="Name, email, subject">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Category</label>
+        <select name="category" class="form-select">
+          <option value="">All categories</option>
+          {% for code, label in categories %}<option value="{{ code }}" {% if current_category == code %}selected{% endif %}>{{ label }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Show</label>
+        <select name="show" class="form-select">
+          <option value="active" {% if show != 'archived' %}selected{% endif %}>Active</option>
+          <option value="archived" {% if show == 'archived' %}selected{% endif %}>Archived</option>
+        </select>
+      </div>
+      <div class="col-md-2 d-grid">
+        <button class="dash-btn dash-btn-primary" type="submit"><i class="bi bi-funnel"></i> Filter</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="dash-card">
+  <div class="table-responsive">
+    <table class="dash-table">
+      <thead><tr><th></th><th>From</th><th>Subject</th><th>Category</th><th>Received</th></tr></thead>
+      <tbody>
+        {% for m in page %}
+          <tr class="{% if not m.is_read %}row-unread{% endif %}">
+            <td>{% if not m.is_read %}<span class="d-inline-block" style="width:8px;height:8px;border-radius:50%;background:var(--ec-accent)"></span>{% endif %}</td>
+            <td>
+              <a href="{% url 'dashboard:message_detail' m.pk %}" class="fw-semibold">{{ m.name }}</a>
+              <div class="text-muted small">{{ m.email }}</div>
+            </td>
+            <td>{{ m.subject }}</td>
+            <td><span class="pill pill-archived">{{ m.get_category_display }}</span></td>
+            <td class="text-nowrap">{{ m.created_at|date:"d M Y" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-center text-muted py-5">No messages found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if page.paginator.num_pages > 1 %}
+  <div class="dash-card-body d-flex justify-content-between align-items-center">
+    <span class="text-muted small">Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+    <div class="d-flex gap-2">
+      {% if page.has_previous %}<a class="dash-btn dash-btn-light dash-btn-sm" href="?page={{ page.previous_page_number }}&q={{ query }}&category={{ current_category }}&show={{ show }}">Previous</a>{% endif %}
+      {% if page.has_next %}<a class="dash-btn dash-btn-light dash-btn-sm" href="?page={{ page.next_page_number }}&q={{ query }}&category={{ current_category }}&show={{ show }}">Next</a>{% endif %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

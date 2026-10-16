@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% load static page_heroes %}
+{% block title %}{{ seo.title }}{% endblock %}
+
+{% block content %}
+{% get_page_hero "about" as hero %}
+<section class="page-hero"{% if hero.image %} style="background:linear-gradient(120deg,rgba(74,2,9,.85),rgba(158,7,25,.75)),url('{{ hero.image.url }}') center/cover"{% endif %}>
+  <div class="container-ec">
+    <nav class="breadcrumb-ec mb-2" aria-label="Breadcrumb">
+      <a href="{% url 'core:home' %}">Home</a> <span class="mx-1">/</span> About
+    </nav>
+    {% if hero.label %}<span class="hero-label">{{ hero.label }}</span>{% endif %}
+    <h1>{{ hero.title|default:"About Us" }}</h1>
+    <p>{{ hero.subtitle|default:"Discover who we are, what we believe and how we help children take their first confident steps in learning." }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container-ec">
+    <div class="media-split">
+      <div class="reveal">
+        <span class="eyebrow">Our Story</span>
+        <h2>Nurturing young learners in Jukwa</h2>
+        <p class="text-muted-ec">
+          {{ school.full_description|default:"Ebenezer Educational Centre is a preschool and primary school located in Jukwa, Cape Coast. We welcome children from Creche through to Primary 3, providing a warm, safe and stimulating environment where every child is known, valued and encouraged to learn at their own pace." }}
+        </p>
+        <p class="text-muted-ec">
+          Our approach combines caring teaching with play, exploration and structured learning, so that children build strong foundations in literacy, numeracy and social skills while enjoying their early years.
+        </p>
+      </div>
+      <div class="reveal">
+        {% if school.default_image %}
+          <img src="{{ school.default_image.url }}" alt="{{ school.school_name }}">
+        {% else %}
+          <img src="{% static 'images/placeholder.svg' %}" alt="School photograph placeholder">
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-surface">
+  <div class="container-ec">
+    <div class="row g-4">
+      <div class="col-md-6 reveal">
+        <div class="ec-card h-100"><div class="ec-card-body">
+          <div class="icon-badge"><i class="bi bi-eye-fill"></i></div>
+          <h2 class="h4">Our Vision</h2>
+          <p class="text-muted-ec mb-0">{{ school.vision|default:"To be a trusted centre of early learning where every child grows into a confident, curious and caring individual." }}</p>
+        </div></div>
+      </div>
+      <div class="col-md-6 reveal">
+        <div class="ec-card h-100"><div class="ec-card-body">
+          <div class="icon-badge"><i class="bi bi-bullseye"></i></div>
+          <h2 class="h4">Our Mission</h2>
+          <p class="text-muted-ec mb-0">{{ school.mission|default:"To provide quality early childhood and primary education in a caring environment, helping children build strong academic foundations and positive character." }}</p>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if school.proprietress_message %}
+<section class="section">
+  <div class="container-ec">
+    <div class="field-card reveal">
+      <div class="row g-4 align-items-center">
+        <div class="col-md-3 text-center">
+          {% if school.headmistress_image %}
+            <img src="{{ school.headmistress_image.url }}" alt="{{ school.proprietress_name|default:'Headmistress' }}" class="teacher-photo rounded-circle" style="width:300px;max-width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:50%;display:block;margin:0 auto;">
+          {% else %}
+            <div class="teacher-photo d-grid" style="place-items:center"><i class="bi bi-person-fill fs-1 text-muted-ec"></i></div>
+          {% endif %}
+        </div>
+        <div class="col-md-9">
+          <span class="eyebrow">A Message from our {{ school.proprietress_title|default:"Proprietress" }}</span>
+          <blockquote class="quote-text">&ldquo;{{ school.proprietress_message }}&rdquo;</blockquote>
+          <p class="fw-semibold mb-0">{{ school.proprietress_name|default:"The Proprietress" }}</p>
+          <p class="text-muted-ec small">{{ school.proprietress_title|default:"Proprietress" }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section bg-tint">
+  <div class="container-ec">
+    <div class="section-head center">
+      <span class="eyebrow">Our Approach</span>
+      <h2>How children learn with us</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 reveal"><div class="ec-card h-100"><div class="ec-card-body">
+        <div class="icon-badge"><i class="bi bi-puzzle-fill"></i></div>
+        <h3 class="h5">Learning through play</h3>
+        <p class="text-muted-ec mb-0">Play is central to early learning. Through games, songs and hands-on activities, children develop language, number sense, motor skills and confidence.</p>
+      </div></div></div>
+      <div class="col-md-4 reveal"><div class="ec-card h-100"><div class="ec-card-body">
+        <div class="icon-badge"><i class="bi bi-heart-fill"></i></div>
+        <h3 class="h5">Care and attention</h3>
+        <p class="text-muted-ec mb-0">Small, caring classes mean each child receives the attention, encouragement and support they need to thrive.</p>
+      </div></div></div>
+      <div class="col-md-4 reveal"><div class="ec-card h-100"><div class="ec-card-body">
+        <div class="icon-badge"><i class="bi bi-graph-up-arrow"></i></div>
+        <h3 class="h5">Steady progression</h3>
+        <p class="text-muted-ec mb-0">Children progress from Creche to Primary 3 along a clear pathway, building skills step by step at a pace that suits them.</p>
+      </div></div></div>
+    </div>
+  </div>
+</section>
+
+{% if teachers %}
+<section class="section">
+  <div class="container-ec">
+    <div class="section-head center">
+      <span class="eyebrow">Our Team</span>
+      <h2>Meet our teachers</h2>
+    </div>
+    <div class="row g-4 justify-content-center">
+      {% for teacher in teachers %}
+        <div class="col-6 col-md-4 col-lg-3">
+          <div class="ec-card teacher-card reveal h-100"><div class="ec-card-body">
+            {% if teacher.photo %}
+              <img class="teacher-photo" src="{{ teacher.photo.url }}" alt="{{ teacher.full_name }}" loading="lazy">
+            {% else %}
+              <div class="teacher-photo d-grid" style="place-items:center"><i class="bi bi-person-fill fs-1 text-muted-ec"></i></div>
+            {% endif %}
+            <h3 class="h6 mb-0">{{ teacher.full_name }}</h3>
+            <p class="text-muted-ec small mb-2">{{ teacher.role }}</p>
+            {% if teacher.qualifications %}<p class="small text-muted-ec mb-1"><i class="bi bi-patch-check"></i> {{ teacher.qualifications }}</p>{% endif %}
+            {% if teacher.biography %}<p class="small mb-0">{{ teacher.biography|truncatewords:20 }}</p>{% endif %}
+          </div></div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section bg-surface">
+  <div class="container-ec">
+    <div class="section-head center">
+      <span class="eyebrow">Classes</span>
+      <h2>Our class levels</h2>
+    </div>
+    <div class="row g-4">
+      {% for class in classes %}
+        <div class="col-sm-6 col-lg-3">
+          <a class="ec-card d-block reveal h-100 text-decoration-none" href="{{ class.get_absolute_url }}">
+            <div class="ec-card-media position-relative overflow-hidden" style="height:160px;border-radius:var(--ec-radius-lg)var(--ec-radius-lg)0 0;">
+              {% if class.image %}
+                <img src="{{ class.image.url }}" alt="{{ class.name }} at {{ school.school_name }}" class="img-fluid w-100 h-100 object-fit-cover" loading="lazy">
+              {% else %}
+                <img src="{% static 'images/placeholder.svg' %}" alt="{{ class.name }} photograph placeholder" class="img-fluid w-100 h-100 object-fit-cover" loading="lazy">
+              {% endif %}
+            </div>
+            <div class="ec-card-body text-center">
+              <h3 class="h6 mb-1">{{ class.name }}</h3>
+              {% if class.published_age_range %}<span class="badge-soft">{{ class.published_age_range }}</span>{% endif %}
+              {% if class.short_introduction %}<p class="text-muted-ec small mt-2 mb-0">{{ class.short_introduction|truncatewords:16 }}</p>{% endif %}
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if learning_areas %}
+<section class="section">
+  <div class="container-ec">
+    <div class="section-head center">
+      <span class="eyebrow">Programmes</span>
+      <h2>What children learn</h2>
+    </div>
+    <div class="row g-3">
+      {% for area in learning_areas %}
+        <div class="col-md-6 col-lg-4">
+          <div class="d-flex gap-3 align-items-start reveal">
+            <div class="icon-badge mb-0" style="width:46px;height:46px;font-size:1.1rem"><i class="bi {{ area.icon|default:'bi-book' }}"></i></div>
+            <div>
+              <h3 class="h6 mb-1">{{ area.name }}</h3>
+              <p class="text-muted-ec small mb-0">{{ area.description|truncatewords:16 }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4"><a class="btn btn-outline-brand" href="{% url 'academics:programme_list' %}">Explore all programmes</a></div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section bg-surface">
+  <div class="container-ec">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-6 reveal">
+        <span class="eyebrow">Location</span>
+        <h2>Where to find us</h2>
+        <p class="text-muted-ec">{{ school.full_address|default:"Jukwa, Cape Coast, Central Region, Ghana" }}</p>
+        {% if school.directions_url %}<a class="btn btn-outline-brand" href="{{ school.directions_url }}" target="_blank" rel="noopener">Get directions</a>{% endif %}
+      </div>
+      <div class="col-lg-6 reveal">
+        {% if school.map_url %}
+          <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow-sm">
+            <iframe src="{{ school.map_url }}" title="School location map" loading="lazy" style="border:0" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          </div>
+        {% else %}
+          <div class="aspect-placeholder" style="aspect-ratio:16/9;border-radius:var(--ec-radius)"><i class="bi bi-map"></i></div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container-ec text-center">
+    <h2>Come and visit our school</h2>
+    <p class="text-muted-ec mb-4">We would love to welcome your family. Send an admission enquiry and we will be in touch.</p>
+    <a class="btn btn-brand btn-lg" href="{% url 'admissions:admission' %}"><i class="bi bi-journal-check"></i> Enquire about admission</a>
+  </div>
+</section>
+{% endblock %}

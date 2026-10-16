@@ -1,0 +1,36 @@
+{% extends "dashboard/base.html" %}
+{% block content %}
+<div class="dash-card">
+  <div class="dash-card-head">
+    <div>
+      <h2 class="h6 mb-0">School benefits</h2>
+      <span class="text-muted small">Short value points shown on the homepage.</span>
+    </div>
+    <a href="{% url 'dashboard:benefit_create' %}" class="dash-btn dash-btn-primary"><i class="bi bi-plus-lg"></i> Add benefit</a>
+  </div>
+  <div class="table-responsive">
+    <table class="dash-table">
+      <thead><tr><th>Icon</th><th>Title</th><th>Order</th><th>Status</th><th class="text-end">Actions</th></tr></thead>
+      <tbody>
+        {% for b in benefits %}
+          <tr>
+            <td><i class="bi {{ b.icon|default:'bi-stars' }} fs-4 text-primary"></i></td>
+            <td>
+              <div class="fw-semibold">{{ b.title }}</div>
+              <div class="text-muted small">{{ b.description|truncatechars:80 }}</div>
+            </td>
+            <td>{{ b.display_order }}</td>
+            <td>{% if b.is_published %}<span class="pill pill-active">Visible</span>{% else %}<span class="pill pill-inactive">Hidden</span>{% endif %}</td>
+            <td class="text-end text-nowrap">
+              <a class="dash-btn dash-btn-light dash-btn-sm" href="{% url 'dashboard:benefit_update' b.pk %}"><i class="bi bi-pencil"></i></a>
+              <a class="dash-btn dash-btn-danger dash-btn-sm" href="{% url 'dashboard:benefit_delete' b.pk %}"><i class="bi bi-trash"></i></a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-center text-muted py-5">No benefits yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

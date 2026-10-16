@@ -1,0 +1,21 @@
+{% extends "dashboard/base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-6">
+    <div class="dash-card">
+      <div class="dash-card-body text-center">
+        <div class="stat-icon mx-auto mb-3" style="background:rgba(176,42,55,.12);color:#b02a37"><i class="bi bi-exclamation-triangle"></i></div>
+        <h2 class="h4">Confirm deletion</h2>
+        <p class="text-muted mb-1">You are about to permanently delete:</p>
+        <p class="fw-semibold fs-5 mb-3">{{ object }}</p>
+        <p class="text-muted small">This action cannot be undone.</p>
+        <form method="post" class="d-flex justify-content-center gap-2 mt-4">
+          {% csrf_token %}
+          <a href="{{ cancel_url }}" class="dash-btn dash-btn-light"><i class="bi bi-arrow-left"></i> Cancel</a>
+          <button type="submit" class="dash-btn dash-btn-danger"><i class="bi bi-trash"></i> Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

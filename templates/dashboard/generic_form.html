@@ -1,0 +1,25 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-{% if wide %}10{% else %}7{% endif %}">
+    <div class="dash-card">
+      <div class="dash-card-body">
+        <h2 class="h5 mb-3">{{ page_title }}</h2>
+        <form method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="dash-btn dash-btn-primary"><i class="bi bi-check2"></i> Save</button>
+            {% if cancel_url %}
+              <a href="{{ cancel_url }}" class="dash-btn dash-btn-light">Cancel</a>
+            {% else %}
+              <a href="{% url 'dashboard:overview' %}" class="dash-btn dash-btn-light">Cancel</a>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

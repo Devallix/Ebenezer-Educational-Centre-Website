@@ -1,0 +1,42 @@
+{% extends "dashboard/base.html" %}
+{% load permissions %}
+{% block content %}
+<div class="dash-card">
+  <div class="dash-card-head">
+    <div>
+      <h2 class="h6 mb-0">Users &amp; permissions</h2>
+      <span class="text-muted small">Staff accounts that can sign in to this dashboard.</span>
+    </div>
+    <a href="{% url 'dashboard:user_create' %}" class="dash-btn dash-btn-primary"><i class="bi bi-person-plus"></i> Add user</a>
+  </div>
+  <div class="table-responsive">
+    <table class="dash-table">
+      <thead><tr><th>User</th><th>Email</th><th>Roles</th><th>Status</th><th class="text-end">Actions</th></tr></thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            <td>
+              <div class="fw-semibold">{{ row.user.get_full_name|default:row.user.username }}</div>
+              <div class="text-muted small">@{{ row.user.username }}{% if row.user.is_superuser %} &middot; superuser{% endif %}</div>
+            </td>
+            <td>{{ row.user.email|default:"—" }}</td>
+            <td>
+              {% for r in row.roles %}<span class="pill pill-contacted">{% role_label r %}</span> {% empty %}<span class="text-muted small">No role</span>{% endfor %}
+            </td>
+            <td>{% if row.user.is_active %}<span class="pill pill-active">Active</span>{% else %}<span class="pill pill-inactive">Disabled</span>{% endif %}</td>
+            <td class="text-end text-nowrap">
+              <a class="dash-btn dash-btn-light dash-btn-sm" href="{% url 'dashboard:user_update' row.user.pk %}"><i class="bi bi-pencil"></i></a>
+              <form method="post" action="{% url 'dashboard:user_toggle' row.user.pk %}" class="d-inline" data-confirm="Change the active status of this account?">
+                {% csrf_token %}
+                <button class="dash-btn dash-btn-light dash-btn-sm"><i class="bi bi-toggle-{% if row.user.is_active %}on{% else %}off{% endif %}"></i></button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-center text-muted py-5">No users yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

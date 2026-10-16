@@ -1,0 +1,33 @@
+{% extends "dashboard/base.html" %}
+{% block content %}
+<div class="dash-card">
+  <div class="dash-card-head"><h2 class="h6 mb-0">Audit log</h2></div>
+  <div class="table-responsive">
+    <table class="dash-table">
+      <thead><tr><th>When</th><th>User</th><th>Action</th><th>Description</th><th>IP</th></tr></thead>
+      <tbody>
+        {% for entry in logs %}
+          <tr>
+            <td class="text-nowrap">{{ entry.created_at|date:"d M Y H:i" }}</td>
+            <td>{{ entry.user.get_username|default:"system" }}</td>
+            <td><span class="pill pill-archived">{{ entry.get_action_display }}</span></td>
+            <td>{{ entry.description|default:entry }}</td>
+            <td class="text-muted small">{{ entry.ip_address|default:"—" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-center text-muted py-5">No audit records yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if logs.paginator.num_pages > 1 %}
+  <div class="dash-card-body d-flex justify-content-between align-items-center">
+    <span class="text-muted small">Page {{ logs.number }} of {{ logs.paginator.num_pages }}</span>
+    <div class="d-flex gap-2">
+      {% if logs.has_previous %}<a class="dash-btn dash-btn-light dash-btn-sm" href="?page={{ logs.previous_page_number }}"><i class="bi bi-chevron-left"></i> Previous</a>{% endif %}
+      {% if logs.has_next %}<a class="dash-btn dash-btn-light dash-btn-sm" href="?page={{ logs.next_page_number }}">Next <i class="bi bi-chevron-right"></i></a>{% endif %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

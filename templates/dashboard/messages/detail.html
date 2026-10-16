@@ -1,0 +1,56 @@
+{% extends "dashboard/base.html" %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="dash-card">
+      <div class="dash-card-head">
+        <h2 class="h6 mb-0">{{ message.subject }}</h2>
+        <span class="pill pill-archived">{{ message.get_category_display }}</span>
+      </div>
+      <div class="dash-card-body">
+        <dl class="row mb-0">
+          <dt class="col-sm-3">From</dt><dd class="col-sm-9">{{ message.name }}</dd>
+          <dt class="col-sm-3">Email</dt><dd class="col-sm-9"><a href="mailto:{{ message.email }}">{{ message.email }}</a></dd>
+          {% if message.phone %}<dt class="col-sm-3">Phone</dt><dd class="col-sm-9"><a href="tel:{{ message.phone }}">{{ message.phone }}</a></dd>{% endif %}
+          <dt class="col-sm-3">Received</dt><dd class="col-sm-9">{{ message.created_at|date:"d M Y H:i" }}</dd>
+          <dt class="col-sm-3">Consent</dt><dd class="col-sm-9">{% if message.consent_given %}Given{% else %}Not recorded{% endif %}</dd>
+        </dl>
+        <hr>
+        <p class="mb-0">{{ message.message|linebreaksbr }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="dash-card">
+      <div class="dash-card-head"><h2 class="h6 mb-0">Actions</h2></div>
+      <div class="dash-card-body d-grid gap-2">
+        <details class="d-grid gap-2" style="border:1px solid var(--ec-border);border-radius:.7rem;padding:.75rem 1rem;background:#fff">
+          <summary style="cursor:pointer;list-style:none;font-weight:600;color:var(--ec-primary);padding:0">
+            <i class="bi bi-reply me-1"></i> Reply by email
+          </summary>
+          <form method="post" action="{% url 'dashboard:message_reply' message.pk %}" class="mt-2">
+            {% csrf_token %}
+            <input type="hidden" name="subject" value="Re: {{ message.subject }}">
+            <textarea name="body" rows="4" class="form-control" placeholder="Type your reply..."></textarea>
+            <button class="dash-btn dash-btn-primary w-auto mt-2" type="submit"><i class="bi bi-send"></i> Send reply</button>
+          </form>
+        </details>
+        {% if not message.is_archived %}
+          <form method="post" data-confirm="Archive this message?">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="archive">
+            <button class="dash-btn dash-btn-light w-100"><i class="bi bi-archive"></i> Archive message</button>
+          </form>
+        {% else %}
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="restore">
+            <button class="dash-btn dash-btn-light w-100"><i class="bi bi-arrow-counterclockwise"></i> Restore message</button>
+          </form>
+        {% endif %}
+        <a class="dash-btn dash-btn-light" href="{% url 'dashboard:message_list' %}"><i class="bi bi-arrow-left"></i> Back to messages</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

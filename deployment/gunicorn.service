@@ -1,0 +1,25 @@
+[Unit]
+Description=Gunicorn service for the Ebenezer Educational Centre website
+After=network.target
+
+[Service]
+User=ebenezer
+Group=ebenezer
+WorkingDirectory=/opt/ebenezer/app
+EnvironmentFile=/opt/ebenezer/app/.env
+ExecStart=/opt/ebenezer/venv/bin/gunicorn config.wsgi:application \
+    --bind unix:/opt/ebenezer/run/gunicorn.sock \
+    --workers 3 \
+    --threads 2 \
+    --timeout 60 \
+    --access-logfile - \
+    --error-logfile -
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

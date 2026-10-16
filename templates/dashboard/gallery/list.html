@@ -1,0 +1,89 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="dash-card mb-4">
+  <div class="dash-card-head">
+    <div>
+      <h2 class="h6 mb-0">Page heroes</h2>
+      <span class="text-muted small">Edit the banner at the top of each public page.</span>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="dash-table">
+      <thead><tr><th>Page</th><th>Heading</th><th>Background</th><th class="text-end">Actions</th></tr></thead>
+      <tbody>
+        {% for hero in page_heroes %}
+          <tr>
+            <td class="fw-semibold">{{ hero.get_key_display }}</td>
+            <td>{{ hero.title }}</td>
+            <td>{% if hero.image %}<img src="{{ hero.image.url }}" alt="" class="thumb">{% else %}<span class="text-muted small">None</span>{% endif %}</td>
+            <td class="text-end">
+              <a class="dash-btn dash-btn-light dash-btn-sm" href="{% url 'dashboard:album_list' %}?edit={{ hero.key }}"><i class="bi bi-pencil"></i> Edit</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if hero_form %}
+    <div class="dash-card-body border-top">
+      <h3 class="h6 mb-3">Edit hero &mdash; {{ editing_hero.get_key_display }}</h3>
+      <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:page_hero_edit' editing_hero.key %}" novalidate>
+        {% csrf_token %}
+        {{ hero_form|crispy }}
+        <div class="d-flex gap-2 mt-3">
+          <button type="submit" class="dash-btn dash-btn-primary"><i class="bi bi-check2"></i> Save hero</button>
+          <a href="{% url 'dashboard:album_list' %}" class="dash-btn dash-btn-light">Cancel</a>
+        </div>
+      </form>
+    </div>
+  {% endif %}
+</div>
+
+<div class="dash-card">
+  <div class="dash-card-head">
+    <div>
+      <h2 class="h6 mb-0">Gallery &amp; albums</h2>
+      <span class="text-muted small">Albums with fewer than two images cannot be published.</span>
+    </div>
+    <a href="{% url 'dashboard:album_create' %}" class="dash-btn dash-btn-primary"><i class="bi bi-plus-lg"></i> Add album</a>
+  </div>
+  <div class="table-responsive">
+    <table class="dash-table">
+      <thead><tr><th>Cover</th><th>Title</th><th>Images</th><th>Status</th><th class="text-end">Actions</th></tr></thead>
+      <tbody>
+        {% for album in albums %}
+          <tr>
+            <td>
+              {% if album.cover_image %}<img src="{{ album.cover_image.url }}" alt="" class="thumb">
+              {% else %}<span class="thumb d-inline-grid place-items-center text-muted"><i class="bi bi-collection"></i></span>{% endif %}
+            </td>
+            <td>
+              <div class="fw-semibold">{{ album.title }}</div>
+              <div class="text-muted small">{{ album.get_category_display }} &middot; {{ album.description|truncatechars:50 }}</div>
+            </td>
+            <td>{{ album.num_images }}</td>
+            <td>
+              {% if album.is_published %}<span class="pill pill-active">Published</span>
+              {% elif not album.can_publish %}<span class="pill pill-archived">Needs 2 images</span>
+              {% else %}<span class="pill pill-inactive">Draft</span>{% endif %}
+            </td>
+            <td class="text-end text-nowrap">
+              <a class="dash-btn dash-btn-light dash-btn-sm" href="{% url 'dashboard:album_images' album.pk %}" title="Manage images"><i class="bi bi-images"></i></a>
+              <a class="dash-btn dash-btn-light dash-btn-sm" href="{% url 'dashboard:album_update' album.pk %}"><i class="bi bi-pencil"></i></a>
+              <form method="post" action="{% url 'dashboard:album_toggle_publish' album.pk %}" class="d-inline">
+                {% csrf_token %}
+                <button class="dash-btn dash-btn-light dash-btn-sm" title="{% if album.is_published %}Unpublish{% else %}Publish{% endif %}"><i class="bi bi-globe{% if not album.is_published %}-2{% endif %}"></i></button>
+              </form>
+              <a class="dash-btn dash-btn-danger dash-btn-sm" href="{% url 'dashboard:album_delete' album.pk %}"><i class="bi bi-trash"></i></a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-center text-muted py-5">No albums yet. Create one to start building your gallery.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

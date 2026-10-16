@@ -1,0 +1,44 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="dash-card">
+      <div class="dash-card-head"><h2 class="h6 mb-0">Notification settings</h2></div>
+      <div class="dash-card-body">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="dash-btn dash-btn-primary"><i class="bi bi-check2"></i> Save settings</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="dash-card">
+      <div class="dash-card-head"><h2 class="h6 mb-0">Recent email log</h2></div>
+      <div class="table-responsive">
+        <table class="dash-table">
+          <thead><tr><th>When</th><th>Kind</th><th>Status</th></tr></thead>
+          <tbody>
+            {% for log in logs %}
+              <tr>
+                <td>{{ log.created_at|date:"d M H:i" }}</td>
+                <td>{{ log.get_kind_display }}</td>
+                <td>{% if log.status == 'sent' %}<span class="pill pill-active">Sent</span>{% else %}<span class="pill pill-new">Failed</span>{% endif %}</td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="3" class="text-center text-muted py-4">No emails sent yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="dash-card-body pt-0">
+        <p class="text-muted small mb-0">Notifications are only sent when outgoing email is configured. In development, emails print to the console.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
