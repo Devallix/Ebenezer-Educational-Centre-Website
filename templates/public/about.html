@@ -29,7 +29,9 @@
         </p>
       </div>
       <div class="reveal">
-        {% if school.default_image %}
+        {% if school.about_story_image %}
+          <img src="{{ school.about_story_image.url }}" alt="{{ school.school_name }}">
+        {% elif school.default_image %}
           <img src="{{ school.default_image.url }}" alt="{{ school.school_name }}">
         {% else %}
           <img src="{% static 'images/placeholder.svg' %}" alt="School photograph placeholder">

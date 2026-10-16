@@ -46,7 +46,8 @@ class SchoolSettingsForm(forms.ModelForm):
             "logo",
             "logo_light",
             "favicon",
-            "default_image",
+            "home_welcome_image",
+            "about_story_image",
             "map_url",
             "directions_url",
         ]

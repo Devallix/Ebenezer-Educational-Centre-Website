@@ -560,7 +560,7 @@ p { color: var(--ec-text); }
 
 @media (min-width: 992px) {
   .hero-controls { top: auto; bottom: calc(var(--ec-wave-h) + 0.9rem); left: auto; right: 1.6rem; justify-content: flex-end; padding: 0; transform: none; }
-  .hero-content { text-align: left; padding-inline: 0; max-width: 720px; }
+  .hero-content { text-align: left; padding-inline: 1.25rem; max-width: 720px; }
   .hero-content .hero-label { text-align: left; }
   .hero-content h1 { text-align: left; }
   .hero-content p { text-align: left; }

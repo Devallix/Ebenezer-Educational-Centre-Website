@@ -24,9 +24,7 @@ def home(request):
     context = {
         "slides": slides,
         "benefits": SchoolBenefit.objects.filter(is_published=True)[:6],
-        "classes": ClassLevel.objects.filter(
-            is_published=True, name__in=["Creche", "Nursery 1", "Nursery 2", "Kindergarten 1"]
-        ).order_by("display_order", "name"),
+        "classes": ClassLevel.objects.filter(is_published=True).order_by("display_order", "name"),
         "learning_areas": LearningArea.objects.filter(is_published=True)[:6],
         "teachers": teachers_qs,
         "teacher_chunks": list(_chunked(teachers_qs, 3)),

@@ -104,6 +104,18 @@ class SchoolSettings(SingletonModel):
     default_image = models.ImageField(
         upload_to="branding/", blank=True, null=True
     )
+    home_welcome_image = models.ImageField(
+        upload_to="branding/",
+        blank=True,
+        null=True,
+        help_text="Photo shown in the Welcome section of the homepage.",
+    )
+    about_story_image = models.ImageField(
+        upload_to="branding/",
+        blank=True,
+        null=True,
+        help_text="Photo shown in the Our Story section of the About page.",
+    )
 
     map_url = models.URLField(
         blank=True,
