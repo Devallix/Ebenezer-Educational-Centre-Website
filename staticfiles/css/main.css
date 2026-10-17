@@ -452,7 +452,7 @@ p { color: var(--ec-text); }
   position: relative;
   min-height: min(70vh, 600px);
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   color: #fff;
   overflow: hidden;
   background: var(--ec-primary);
@@ -549,7 +549,7 @@ p { color: var(--ec-text); }
     transform: none;
   }
   .hero-slide.active { animation: none; }
-  .hero { min-height: min(60vh, 500px); align-items: flex-start !important; }
+  .hero { min-height: min(60vh, 500px); align-items: center !important; }
   .hero-content {
     padding-block: 0.5rem calc(var(--ec-wave-h) + 0.5rem);
     text-align: center;
@@ -577,7 +577,7 @@ p { color: var(--ec-text); }
 }
 
 @media (min-width: 992px) {
-  .hero { align-items: flex-start !important; min-height: min(85vh, 750px); }
+  .hero { align-items: center !important; min-height: min(85vh, 750px); }
   .hero-controls { top: auto; bottom: calc(var(--ec-wave-h) + 0.9rem); left: auto; right: 1.6rem; justify-content: flex-end; padding: 0; transform: none; }
   .hero-content { text-align: left; padding-inline: 1.25rem; max-width: 720px; padding-block: 1rem calc(var(--ec-wave-h) + 1rem); }
   .hero-content .hero-label { text-align: left; }
@@ -1128,7 +1128,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
 
 /* Large mobile / small tablet (576px to 767px) */
 @media (min-width: 576px) and (max-width: 767.98px) {
-  .hero { min-height: min(60vh, 520px); align-items: flex-start !important; }
+  .hero { min-height: min(60vh, 520px); align-items: center !important; }
   .hero-content {
     padding-block: 0.5rem calc(var(--ec-wave-h) + 0.5rem);
     text-align: center;
@@ -1153,7 +1153,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
 
 /* Tablet (768px to 991px) */
 @media (min-width: 768px) and (max-width: 991.98px) {
-  .hero { min-height: min(65vh, 560px); align-items: flex-start !important; }
+  .hero { min-height: min(65vh, 560px); align-items: center !important; }
   .hero-content { padding-block: 2rem calc(var(--ec-wave-h) + 1rem); }
 
   .media-split { grid-template-columns: 1fr; gap: clamp(1.5rem, 4vw, 3rem); }
