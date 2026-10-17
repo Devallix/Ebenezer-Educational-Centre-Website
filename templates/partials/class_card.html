@@ -1,5 +1,5 @@
 {% load static %}
-<div class="ec-card reveal">
+<div class="ec-card reveal classes-card">
   <a href="{{ class.get_absolute_url }}" class="d-block ec-card-media" aria-label="{{ class.name }}">
     {% if class.image %}
       <img src="{{ class.image.url }}" alt="{{ class.name }} at {{ school.school_name }}" loading="lazy">

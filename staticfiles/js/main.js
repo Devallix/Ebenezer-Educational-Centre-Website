@@ -3,6 +3,22 @@
   "use strict";
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var isMobile = window.matchMedia("(max-width: 991.98px)").matches;
+
+  /* Expose device class so CSS can scope desktop-only animations. */
+  if (isMobile) {
+    document.documentElement.classList.add("ec-mobile");
+  } else {
+    document.documentElement.classList.remove("ec-mobile");
+  }
+  window.matchMedia("(max-width: 991.98px)").addEventListener("change", function (e) {
+    isMobile = e.matches;
+    if (isMobile) {
+      document.documentElement.classList.add("ec-mobile");
+    } else {
+      document.documentElement.classList.remove("ec-mobile");
+    }
+  });
 
   /* Sticky navigation shadow */
   function initNav() {
@@ -87,7 +103,7 @@
 
     var els = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
     if (!els.length) return;
-    if (reduceMotion || !("IntersectionObserver" in window)) {
+    if (reduceMotion || isMobile || !("IntersectionObserver" in window)) {
       els.forEach(function (el) { el.classList.add("in"); });
       return;
     }
@@ -117,7 +133,7 @@
   function initHeroParticles() {
     var canvas = document.querySelector("[data-hero-particles]");
     var hero = canvas && canvas.closest("[data-hero]");
-    if (!canvas || !hero || reduceMotion) return;
+    if (!canvas || !hero || reduceMotion || isMobile) return;
     var ctx = canvas.getContext("2d");
     if (!ctx) return;
 

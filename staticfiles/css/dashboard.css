@@ -388,6 +388,18 @@ a { text-decoration: none; }
   .dash-welcome h2 { font-size: 1.25rem; }
 }
 
+/* Screens smaller than 500px: all dashboard cards stretch full width */
+@media (max-width: 499.98px) {
+  .dash-card,
+  .stat-card,
+  .stat-card-modern,
+  .dash-card-modern,
+  .quick-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
 }

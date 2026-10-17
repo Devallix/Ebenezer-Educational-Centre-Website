@@ -27,7 +27,7 @@ def home(request):
         "classes": ClassLevel.objects.filter(is_published=True).order_by("display_order", "name"),
         "learning_areas": LearningArea.objects.filter(is_published=True)[:6],
         "teachers": teachers_qs,
-        "teacher_chunks": list(_chunked(teachers_qs, 3)),
+        "teacher_chunks": list(_chunked(teachers_qs, 2)),
         "albums": GalleryAlbum.objects.filter(is_published=True)[:3],
     }
     return render(request, "public/home.html", context)

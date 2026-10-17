@@ -17,7 +17,7 @@
 
 <section class="section">
   <div class="container-ec">
-    <div class="media-split">
+    <div class="media-split about-our-story">
       <div class="reveal">
         <span class="eyebrow">Our Story</span>
         <h2>Nurturing young learners in Jukwa</h2>
@@ -45,14 +45,14 @@
   <div class="container-ec">
     <div class="row g-4">
       <div class="col-md-6 reveal">
-        <div class="ec-card h-100"><div class="ec-card-body">
+        <div class="ec-card h-100 card-vision"><div class="ec-card-body">
           <div class="icon-badge"><i class="bi bi-eye-fill"></i></div>
           <h2 class="h4">Our Vision</h2>
           <p class="text-muted-ec mb-0">{{ school.vision|default:"To be a trusted centre of early learning where every child grows into a confident, curious and caring individual." }}</p>
         </div></div>
       </div>
       <div class="col-md-6 reveal">
-        <div class="ec-card h-100"><div class="ec-card-body">
+        <div class="ec-card h-100 card-mission"><div class="ec-card-body">
           <div class="icon-badge"><i class="bi bi-bullseye"></i></div>
           <h2 class="h4">Our Mission</h2>
           <p class="text-muted-ec mb-0">{{ school.mission|default:"To provide quality early childhood and primary education in a caring environment, helping children build strong academic foundations and positive character." }}</p>
@@ -74,7 +74,7 @@
             <div class="teacher-photo d-grid" style="place-items:center"><i class="bi bi-person-fill fs-1 text-muted-ec"></i></div>
           {% endif %}
         </div>
-        <div class="col-md-9">
+        <div class="col-md-9 about-proprietress-text">
           <span class="eyebrow">A Message from our {{ school.proprietress_title|default:"Proprietress" }}</span>
           <blockquote class="quote-text">&ldquo;{{ school.proprietress_message }}&rdquo;</blockquote>
           <p class="fw-semibold mb-0">{{ school.proprietress_name|default:"The Proprietress" }}</p>
@@ -93,17 +93,17 @@
       <h2>How children learn with us</h2>
     </div>
     <div class="row g-4">
-      <div class="col-md-4 reveal"><div class="ec-card h-100"><div class="ec-card-body">
+      <div class="col-md-4 reveal"><div class="ec-card h-100 card-approach"><div class="ec-card-body">
         <div class="icon-badge"><i class="bi bi-puzzle-fill"></i></div>
         <h3 class="h5">Learning through play</h3>
         <p class="text-muted-ec mb-0">Play is central to early learning. Through games, songs and hands-on activities, children develop language, number sense, motor skills and confidence.</p>
       </div></div></div>
-      <div class="col-md-4 reveal"><div class="ec-card h-100"><div class="ec-card-body">
+      <div class="col-md-4 reveal"><div class="ec-card h-100 card-approach"><div class="ec-card-body">
         <div class="icon-badge"><i class="bi bi-heart-fill"></i></div>
         <h3 class="h5">Care and attention</h3>
         <p class="text-muted-ec mb-0">Small, caring classes mean each child receives the attention, encouragement and support they need to thrive.</p>
       </div></div></div>
-      <div class="col-md-4 reveal"><div class="ec-card h-100"><div class="ec-card-body">
+      <div class="col-md-4 reveal"><div class="ec-card h-100 card-approach"><div class="ec-card-body">
         <div class="icon-badge"><i class="bi bi-graph-up-arrow"></i></div>
         <h3 class="h5">Steady progression</h3>
         <p class="text-muted-ec mb-0">Children progress from Creche to Primary 3 along a clear pathway, building skills step by step at a pace that suits them.</p>
@@ -148,23 +148,13 @@
     </div>
     <div class="row g-4">
       {% for class in classes %}
-        <div class="col-sm-6 col-lg-3">
-          <a class="ec-card d-block reveal h-100 text-decoration-none" href="{{ class.get_absolute_url }}">
-            <div class="ec-card-media position-relative overflow-hidden" style="height:160px;border-radius:var(--ec-radius-lg)var(--ec-radius-lg)0 0;">
-              {% if class.image %}
-                <img src="{{ class.image.url }}" alt="{{ class.name }} at {{ school.school_name }}" class="img-fluid w-100 h-100 object-fit-cover" loading="lazy">
-              {% else %}
-                <img src="{% static 'images/placeholder.svg' %}" alt="{{ class.name }} photograph placeholder" class="img-fluid w-100 h-100 object-fit-cover" loading="lazy">
-              {% endif %}
-            </div>
-            <div class="ec-card-body text-center">
-              <h3 class="h6 mb-1">{{ class.name }}</h3>
-              {% if class.published_age_range %}<span class="badge-soft">{{ class.published_age_range }}</span>{% endif %}
-              {% if class.short_introduction %}<p class="text-muted-ec small mt-2 mb-0">{{ class.short_introduction|truncatewords:16 }}</p>{% endif %}
-            </div>
-          </a>
-        </div>
+        {% if forloop.counter <= 4 %}
+        <div class="col-sm-6 col-lg-3">{% include "partials/class_card.html" with class=class %}</div>
+        {% endif %}
       {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+      <a class="btn btn-brand" href="{% url 'academics:class_list' %}">Browse all classes</a>
     </div>
   </div>
 </section>
@@ -176,17 +166,21 @@
       <span class="eyebrow">Programmes</span>
       <h2>What children learn</h2>
     </div>
-    <div class="row g-3">
+    <div class="row g-4">
       {% for area in learning_areas %}
+        {% if forloop.counter <= 6 %}
         <div class="col-md-6 col-lg-4">
-          <div class="d-flex gap-3 align-items-start reveal">
-            <div class="icon-badge mb-0" style="width:46px;height:46px;font-size:1.1rem"><i class="bi {{ area.icon|default:'bi-book' }}"></i></div>
-            <div>
-              <h3 class="h6 mb-1">{{ area.name }}</h3>
-              <p class="text-muted-ec small mb-0">{{ area.description|truncatewords:16 }}</p>
+          <div class="ec-card reveal h-100">
+            <div class="ec-card-body d-flex gap-3 align-items-center">
+              <div class="icon-badge mb-0" style="width:44px;height:44px;font-size:1rem"><i class="bi {{ area.icon|default:'bi-book' }}"></i></div>
+              <div>
+                <h3 class="h6 mb-1">{{ area.name }}</h3>
+                <p class="text-muted-ec small mb-0">{{ area.description|truncatewords:16 }}</p>
+              </div>
             </div>
           </div>
         </div>
+        {% endif %}
       {% endfor %}
     </div>
     <div class="text-center mt-4"><a class="btn btn-outline-brand" href="{% url 'academics:programme_list' %}">Explore all programmes</a></div>
@@ -196,7 +190,7 @@
 
 <section class="section bg-surface">
   <div class="container-ec">
-    <div class="row g-4 align-items-center">
+    <div class="row g-4 align-items-center about-location">
       <div class="col-lg-6 reveal">
         <span class="eyebrow">Location</span>
         <h2>Where to find us</h2>

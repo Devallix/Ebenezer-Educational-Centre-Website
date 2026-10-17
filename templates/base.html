@@ -44,8 +44,10 @@
 </head>
 <body class="{% block body_class %}{% endblock %}">
   <a class="skip-link" href="#main-content">Skip to content</a>
-  {% include "partials/topbar.html" %}
-  {% include "partials/navbar.html" %}
+  <div class="ec-site-header">
+    {% include "partials/topbar.html" %}
+    {% include "partials/navbar.html" %}
+  </div>
 
   <main id="main-content">
     {% include "partials/messages.html" %}

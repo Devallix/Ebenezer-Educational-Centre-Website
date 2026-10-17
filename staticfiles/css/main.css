@@ -55,7 +55,8 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--ec-nav-height) + 1rem);
+  scroll-padding-top: 80px;
+  overflow-x: hidden;
 }
 
 body {
@@ -65,6 +66,7 @@ body {
   line-height: 1.65;
   margin: 0;
   overflow-x: hidden;
+  padding-top: 80px;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -226,7 +228,20 @@ p { color: var(--ec-text); }
 }
 
 /* --------------------------------------------------------------- navbar */
+/* Site header (topbar + navbar) - fixed to top of page on all devices */
+.ec-site-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  z-index: 1050 !important;
+}
+
 .ec-topbar {
+  margin: 0 !important;
+  padding: 0 !important;
   background: var(--ec-primary);
   color: rgba(255, 255, 255, 0.9);
   font-size: 0.82rem;
@@ -237,9 +252,10 @@ p { color: var(--ec-text); }
 .ec-topbar .topbar-item { display: inline-flex; align-items: center; gap: 0.4rem; }
 
 .ec-nav {
-  position: sticky;
-  top: 0;
-  z-index: 1040;
+  padding: 0 !important;
+  margin: 0 !important;
+  min-height: var(--ec-nav-height);
+  z-index: 1040 !important;
   background: var(--ec-surface);
   transition: box-shadow var(--ec-normal) var(--ec-ease),
     background-color var(--ec-normal) var(--ec-ease);
@@ -332,7 +348,7 @@ p { color: var(--ec-text); }
     position: fixed !important;
     top: var(--ec-nav-height) !important;
     right: 0 !important;
-    width: 100vw !important;
+    width: 100% !important;
     height: calc(100vh - var(--ec-nav-height)) !important;
     background: #140609 !important;
     backdrop-filter: blur(10px) !important;
@@ -434,12 +450,13 @@ p { color: var(--ec-text); }
 /* --------------------------------------------------------------- hero */
 .hero {
   position: relative;
-  min-height: min(88vh, 720px);
+  min-height: min(70vh, 600px);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   color: #fff;
   overflow: hidden;
   background: var(--ec-primary);
+  margin-top: 0;
 }
 .hero-slide {
   position: absolute;
@@ -464,7 +481,8 @@ p { color: var(--ec-text); }
   max-width: 720px;
   text-align: left;
   margin-inline: 0 auto;
-  padding-block: 5rem calc(var(--ec-wave-h) + 1rem);
+  margin-top: 0;
+  padding-block: 1rem calc(var(--ec-wave-h) + 1rem);
 }
 .hero-content .hero-label {
   display: inline-block;
@@ -531,9 +549,9 @@ p { color: var(--ec-text); }
     transform: none;
   }
   .hero-slide.active { animation: none; }
-  .hero { min-height: min(75vh, 600px); }
+  .hero { min-height: min(60vh, 500px); align-items: flex-start !important; }
   .hero-content {
-    padding-block: 3rem calc(var(--ec-wave-h) + 0.5rem);
+    padding-block: 0.5rem calc(var(--ec-wave-h) + 0.5rem);
     text-align: center;
     max-width: 100%;
     padding-inline: 1rem;
@@ -559,8 +577,9 @@ p { color: var(--ec-text); }
 }
 
 @media (min-width: 992px) {
+  .hero { align-items: flex-start !important; min-height: min(85vh, 750px); }
   .hero-controls { top: auto; bottom: calc(var(--ec-wave-h) + 0.9rem); left: auto; right: 1.6rem; justify-content: flex-end; padding: 0; transform: none; }
-  .hero-content { text-align: left; padding-inline: 0; max-width: 720px; }
+  .hero-content { text-align: left; padding-inline: 1.25rem; max-width: 720px; padding-block: 1rem calc(var(--ec-wave-h) + 1rem); }
   .hero-content .hero-label { text-align: left; }
   .hero-content h1 { text-align: left; }
   .hero-content p { text-align: left; }
@@ -633,10 +652,13 @@ p { color: var(--ec-text); }
   background: linear-gradient(135deg, var(--ec-primary-tint), var(--ec-accent-tint));
   overflow: hidden;
 }
-.ec-card .ec-card-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.ec-card .ec-card-media img,
+.ec-card .ec-card-media img.img-fluid {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: cover !important;
+  display: block !important;
   transition: transform var(--ec-slow) var(--ec-ease);
 }
 .ec-card:hover .ec-card-media img { transform: scale(1.06); }
@@ -1014,7 +1036,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
   .ec-nav .nav-cta { margin: 0.5rem 0 0; width: 100%; }
   .ec-nav .nav-cta .btn { width: 100%; }
   .media-split { grid-template-columns: 1fr; }
-  .hero-content { padding-block: 3.5rem calc(var(--ec-wave-h) + 1rem); }
+  .hero-content { padding-block: 2rem calc(var(--ec-wave-h) + 1rem); }
   .hero-controls { right: 1rem; }
 }
 
@@ -1035,9 +1057,9 @@ html.js .reveal.in { opacity: 1; transform: none; }
   .container-ec { padding-inline: 1rem; }
 
   /* Hero */
-  .hero { min-height: min(70vh, 560px); }
+  .hero { min-height: min(55vh, 480px); align-items: flex-start !important; }
   .hero-content {
-    padding-block: 2.5rem calc(var(--ec-wave-h) + 0.4rem);
+    padding-block: 0.5rem calc(var(--ec-wave-h) + 0.4rem);
     text-align: center;
   }
   .hero-content h1 { font-size: clamp(1.5rem, 8vw, 2.1rem); margin-bottom: 0.75rem; }
@@ -1106,9 +1128,9 @@ html.js .reveal.in { opacity: 1; transform: none; }
 
 /* Large mobile / small tablet (576px to 767px) */
 @media (min-width: 576px) and (max-width: 767.98px) {
-  .hero { min-height: min(75vh, 620px); }
+  .hero { min-height: min(60vh, 520px); align-items: flex-start !important; }
   .hero-content {
-    padding-block: 3rem calc(var(--ec-wave-h) + 0.5rem);
+    padding-block: 0.5rem calc(var(--ec-wave-h) + 0.5rem);
     text-align: center;
   }
   .hero-content h1 { font-size: clamp(1.8rem, 5vw, 2.4rem); }
@@ -1131,8 +1153,8 @@ html.js .reveal.in { opacity: 1; transform: none; }
 
 /* Tablet (768px to 991px) */
 @media (min-width: 768px) and (max-width: 991.98px) {
-  .hero { min-height: min(80vh, 660px); }
-  .hero-content { padding-block: 4rem calc(var(--ec-wave-h) + 1rem); }
+  .hero { min-height: min(65vh, 560px); align-items: flex-start !important; }
+  .hero-content { padding-block: 2rem calc(var(--ec-wave-h) + 1rem); }
 
   .media-split { grid-template-columns: 1fr; gap: clamp(1.5rem, 4vw, 3rem); }
 
@@ -1143,4 +1165,143 @@ html.js .reveal.in { opacity: 1; transform: none; }
 
   .floating-shapes { display: none; }
 }
+
+/* ----------------------------------------------- Disable motion on mobile & tablet */
+/* Keep all animations (hero zoom, wave bob, scroll-reveal, typewriter caret, hover
+   motion) on desktop/laptop only. On phones and tablets everything below is static. */
+@media (max-width: 991.98px) {
+  .hero-slide.active { animation: none !important; }
+  .hero-wave .wave-accent,
+  .hero-wave .wave-primary { animation: none !important; }
+  .floating-shapes { display: none !important; }
+
+  /* Scroll-reveal: show content instantly, no fade/slide/zoom */
+  .reveal,
+  html.js .reveal,
+  .reveal.in {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Typewriter caret blink */
+  .tw-caret { animation: none !important; }
+
+  /* Kill hover-triggered motion on touch devices */
+  .ec-card:hover { transform: none !important; }
+  .ec-card:hover .ec-card-media img { transform: none !important; }
+  .gallery-item:hover img { transform: none !important; }
+  .btn-accent:hover,
+  .btn-brand:hover,
+  .btn-ghost-light:hover,
+  .btn-programme:hover,
+  .btn-outline-brand:hover,
+  .btn-class-view:hover { transform: none !important; }
+  .nav-link:hover::after,
+  .nav-link.active::after { transform: none !important; }
+}
+
+/* Tiny phones: hide logo text, keep only the logo mark */
+@media (max-width: 418.98px) {
+  .ec-nav .brand-name,
+  .ec-nav .brand-sub {
+    display: none !important;
+  }
+}
+
+/* Screens smaller than 500px: all cards stretch full width with padding around them */
+@media (max-width: 499.98px) {
+  /* Force card columns to full width so cards stretch edge to edge */
+  .row > .col-sm-6,
+  .row > .col-md-6,
+  .row > .col-lg-3,
+  .row > .col-lg-4 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Cards: full width */
+  .ec-card,
+  .field-card,
+  .teacher-card,
+  .stat-badge {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Space between stacked cards */
+  .ec-card,
+  .field-card {
+    margin-bottom: 1rem !important;
+  }
+
+  /* Comfortable inner padding on cards */
+  .ec-card-body {
+    padding: 1rem !important;
+  }
+
+  /* Teacher cards: remove fixed inline width constraints (min-width/max-width) */
+  .teacher-card {
+    min-width: unset !important;
+    max-width: none !important;
+  }
+
+  /* Fix card image distortion: ensure media images cover their container without stretching */
+  .ec-card-media img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+
+  /* Remove forced equal heights that distort cards when stacked on mobile */
+  .ec-card,
+  .field-card {
+    height: auto !important;
+  }
+
+  /* About page programmes: stack icon + text vertically on narrow screens */
+  .row > .col-md-6 > .ec-card > .ec-card-body.d-flex.gap-3,
+  .row > .col-lg-4 > .ec-card > .ec-card-body.d-flex.gap-3 {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    text-align: center !important;
+  }
+  .row > .col-md-6 > .ec-card > .ec-card-body.d-flex.gap-3 .icon-badge,
+  .row > .col-lg-4 > .ec-card > .ec-card-body.d-flex.gap-3 .icon-badge {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 1rem !important;
+    margin-bottom: 0 !important;
+    margin-inline: auto !important;
+  }
+}
+
+/* Footer organization on small screens (< 500px) */
+@media (max-width: 499.98px) {
+  .ec-footer .container-ec .row > div {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .ec-footer .footer-brand { text-align: center; }
+  .ec-footer .footer-brand span { display: inline-block; }
+  .ec-footer .footer-brand + p { text-align: center; }
+
+  .ec-footer .social-links { justify-content: center; }
+
+  .ec-footer h5 { text-align: center; }
+  .ec-footer ul { text-align: center; padding-left: 0; }
+  .ec-footer ul li { list-style: none; margin-bottom: 0.5rem; }
+  .ec-footer ul li a { display: block; }
+
+  .ec-footer .btn-send-message { display: inline-block; }
+
+  .ec-footer .footer-bottom { flex-direction: column; gap: 0.75rem; text-align: center; }
+  .ec-footer .footer-bottom .mx-2 { display: none; }
+}
+
 .group-label { color: #D5720A; }

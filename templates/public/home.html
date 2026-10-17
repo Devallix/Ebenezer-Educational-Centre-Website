@@ -20,7 +20,7 @@
     {% for slide in slides %}
     <div class="hero-caption" data-slide-index="{{ forloop.counter0 }}" {% if not forloop.first %}hidden{% endif %}>
       {% if slide.label %}<span class="hero-label">{{ slide.label }}</span>{% endif %}
-      <h1 data-typewriter>{{ slide.title }}</h1>
+      <h1>{{ slide.title }}</h1>
       {% if slide.subtitle %}<p>{{ slide.subtitle }}</p>{% endif %}
       <div class="hero-actions">
         {% if slide.primary_button_label %}
@@ -113,7 +113,7 @@
 <!-- Welcome -->
 <section class="section">
   <div class="container-ec">
-    <div class="media-split">
+    <div class="media-split home-welcome">
       <div class="reveal">
         <span class="eyebrow">Welcome</span>
         <h2>A caring start to your child&rsquo;s learning journey</h2>
@@ -181,7 +181,7 @@
 <!-- Classes preview -->
 <section class="section">
   <div class="container-ec">
-    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2 home-classes-header">
       <div class="section-head mb-0">
         <span class="eyebrow">Our Classes</span>
         <h2>From Creche to Primary 3</h2>
@@ -190,7 +190,9 @@
     </div>
     <div class="row g-4">
       {% for class in classes %}
+        {% if forloop.counter <= 4 %}
       <div class="col-sm-6 col-lg-3">{% include "partials/class_card.html" with class=class %}</div>
+        {% endif %}
       {% empty %}
       <div class="col-12">
         <div class="empty-state"><i class="bi bi-journal-x"></i>
@@ -280,7 +282,7 @@
 {% if albums %}
 <section class="section bg-surface">
   <div class="container-ec">
-    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2 home-gallery-header">
       <div class="section-head mb-0">
         <span class="eyebrow">Gallery</span>
         <h2>Moments from our school</h2>
@@ -333,7 +335,7 @@
 <!-- Location & contact -->
 <section class="section bg-surface">
   <div class="container-ec">
-    <div class="row g-4 align-items-center">
+    <div class="row g-4 align-items-center home-visit-us">
       <div class="col-lg-5 reveal reveal-left">
         <span class="eyebrow">Find Us</span>
         <h2>Visit our school</h2>
