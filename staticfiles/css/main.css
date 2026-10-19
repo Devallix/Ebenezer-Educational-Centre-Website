@@ -473,7 +473,7 @@ p { color: var(--ec-text); }
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(100deg, rgba(110, 4, 17, 0.92) 0%, rgba(110, 4, 17, 0.72) 45%, rgba(36, 20, 23, 0.55) 100%);
+  background: linear-gradient(100deg, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.45) 45%, rgba(0, 0, 0, 0.25) 100%);
 }
 .hero-content {
   position: relative;
@@ -835,7 +835,8 @@ p { color: var(--ec-text); }
   padding: 4vw;
 }
 .lightbox.open { display: flex; }
-.lightbox img { max-width: 92vw; max-height: 82vh; border-radius: var(--ec-radius); box-shadow: var(--ec-shadow-lg); }
+.lightbox img,
+.lightbox video { max-width: 92vw; max-height: 82vh; border-radius: var(--ec-radius); box-shadow: var(--ec-shadow-lg); display: none; }
 .lightbox .lb-caption { color: #fff; text-align: center; margin-top: 1rem; }
 .lightbox button {
   position: absolute;

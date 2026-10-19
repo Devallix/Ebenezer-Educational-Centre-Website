@@ -23,11 +23,16 @@
           {% csrf_token %}
           <div class="mb-3">
             <label class="form-label">Images</label>
-            <input type="file" name="images" class="form-control" accept="image/*" multiple required>
-            <div class="form-text">You can select multiple images at once. Max upload size respected.</div>
+            <input type="file" name="images" class="form-control" accept="image/*" multiple>
+            <div class="form-text">You can select multiple images at once.</div>
           </div>
           <div class="mb-3">
-            <label class="form-label">Caption (applied to all new images)</label>
+            <label class="form-label">Videos</label>
+            <input type="file" name="videos" class="form-control" accept="video/*" multiple>
+            <div class="form-text">Supported: MP4, WebM, OGG, MOV.</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Caption (applied to all new items)</label>
             <input type="text" name="caption" class="form-control" maxlength="200">
           </div>
           <div class="form-check mb-3">
@@ -43,11 +48,11 @@
     <div class="dash-card">
       <div class="table-responsive">
         <table class="dash-table">
-          <thead><tr><th>Image</th><th>Caption</th><th>Order</th><th>Status</th><th class="text-end">Actions</th></tr></thead>
+          <thead><tr><th>Media</th><th>Caption</th><th>Order</th><th>Status</th><th class="text-end">Actions</th></tr></thead>
           <tbody>
             {% for img in images %}
               <tr>
-                <td><img src="{{ img.url }}" alt="" class="thumb"></td>
+                <td>{% if img.is_video %}<video controls src="{{ img.video_url }}" class="thumb" style="max-height:56px; width:auto;"></video>{% else %}<img src="{{ img.url }}" alt="" class="thumb">{% endif %}</td>
                 <td>{{ img.caption|default:"—" }}<div class="text-muted small">Alt: {{ img.effective_alt|default:"—" }}</div></td>
                 <td>{{ img.display_order }}</td>
                 <td>{% if img.is_published %}<span class="pill pill-active">Published</span>{% else %}<span class="pill pill-inactive">Hidden</span>{% endif %}</td>
@@ -59,7 +64,7 @@
                 </td>
               </tr>
             {% empty %}
-              <tr><td colspan="5" class="text-center text-muted py-4">No images uploaded yet. Upload your first images using the form.</td></tr>
+              <tr><td colspan="5" class="text-center text-muted py-4">No media uploaded yet. Upload your first images or videos using the form.</td></tr>
             {% endfor %}
           </tbody>
         </table>

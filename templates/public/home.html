@@ -143,7 +143,9 @@
         <a class="btn btn-brand mt-4" href="{% url 'core:about' %}">Learn more about us</a>
       </div>
       <div class="reveal reveal-right">
-        {% if school.home_welcome_image %}
+        {% if school.home_welcome_video %}
+        <video autoplay loop muted playsinline class="img-fluid" src="{{ school.home_welcome_video.url }}" alt="{{ school.school_name }}"></video>
+        {% elif school.home_welcome_image %}
         <img src="{{ school.home_welcome_image.url }}" alt="{{ school.school_name }}">
         {% else %}
         <img src="{% static 'images/placeholder.svg' %}" alt="School photograph placeholder">

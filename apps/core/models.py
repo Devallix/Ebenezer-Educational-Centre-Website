@@ -4,6 +4,8 @@ from django.conf import settings
 from django.core.cache import cache
 from django.db import models
 
+from apps.core.validators import VideoValidator
+
 
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -110,11 +112,25 @@ class SchoolSettings(SingletonModel):
         null=True,
         help_text="Photo shown in the Welcome section of the homepage.",
     )
+    home_welcome_video = models.FileField(
+        upload_to="branding/videos/",
+        blank=True,
+        null=True,
+        validators=[VideoValidator()],
+        help_text="Optional video shown in the Welcome section of the homepage (takes priority over the image if both are set).",
+    )
     about_story_image = models.ImageField(
         upload_to="branding/",
         blank=True,
         null=True,
         help_text="Photo shown in the Our Story section of the About page.",
+    )
+    about_story_video = models.FileField(
+        upload_to="branding/videos/",
+        blank=True,
+        null=True,
+        validators=[VideoValidator()],
+        help_text="Optional video shown in the Our Story section of the About page (takes priority over the image if both are set).",
     )
 
     map_url = models.URLField(
@@ -152,6 +168,42 @@ class SchoolSettings(SingletonModel):
     def full_address(self) -> str:
         parts = [self.address, self.town, self.region, self.country]
         return ", ".join(part for part in parts if part)
+
+    @property
+    def home_welcome_media_url(self) -> str:
+        if self.home_welcome_video:
+            try:
+                return self.home_welcome_video.url
+            except ValueError:
+                pass
+        if self.home_welcome_image:
+            try:
+                return self.home_welcome_image.url
+            except ValueError:
+                pass
+        return ""
+
+    @property
+    def about_story_media_url(self) -> str:
+        if self.about_story_video:
+            try:
+                return self.about_story_video.url
+            except ValueError:
+                pass
+        if self.about_story_image:
+            try:
+                return self.about_story_image.url
+            except ValueError:
+                pass
+        return ""
+
+    @property
+    def home_welcome_is_video(self) -> bool:
+        return bool(self.home_welcome_video)
+
+    @property
+    def about_story_is_video(self) -> bool:
+        return bool(self.about_story_video)
 
     @property
     def social_links(self) -> list[dict]:

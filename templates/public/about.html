@@ -20,16 +20,18 @@
     <div class="media-split about-our-story">
       <div class="reveal">
         <span class="eyebrow">Our Story</span>
-        <h2>Nurturing young learners in Jukwa</h2>
+        <h2>Nurturing Young Learners</h2>
         <p class="text-muted-ec">
-          {{ school.full_description|default:"Ebenezer Educational Centre is a preschool and primary school located in Jukwa, Cape Coast. We welcome children from Creche through to Primary 3, providing a warm, safe and stimulating environment where every child is known, valued and encouraged to learn at their own pace." }}
+          {{ school.full_description|default:"Ebenezer Educational Centre is a pre-school and primary school located in Jukwa, Cape Coast. We welcome children from Creche through to Primary 3, providing a warm, safe and stimulating environment where every child is known, valued and encouraged to learn at their own pace." }}
         </p>
         <p class="text-muted-ec">
           Our approach combines caring teaching with play, exploration and structured learning, so that children build strong foundations in literacy, numeracy and social skills while enjoying their early years.
         </p>
       </div>
       <div class="reveal">
-        {% if school.about_story_image %}
+        {% if school.about_story_video %}
+          <video autoplay loop muted playsinline class="img-fluid" src="{{ school.about_story_video.url }}" alt="{{ school.school_name }}"></video>
+        {% elif school.about_story_image %}
           <img src="{{ school.about_story_image.url }}" alt="{{ school.school_name }}">
         {% elif school.default_image %}
           <img src="{{ school.default_image.url }}" alt="{{ school.school_name }}">

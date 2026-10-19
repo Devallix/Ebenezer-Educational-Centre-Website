@@ -16,16 +16,31 @@
   </div>
 </section>
 
+{% if album.cover_video %}
+<section class="section mb-4">
+  <div class="container-ec">
+    <video controls class="img-fluid rounded-3" width="100%" poster="{{ album.cover_url }}">
+      <source src="{{ album.video_url }}">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</section>
+{% endif %}
+
 <section class="section">
   <div class="container-ec">
     <div class="gallery-grid">
       {% for img in images %}
         <figure class="gallery-item m-0" data-lightbox>
-          <img src="{{ img.url }}" alt="{{ img.effective_alt }}" loading="lazy" data-caption="{{ img.caption }}">
+          {% if img.is_video %}
+            <video controls src="{{ img.media_url }}" alt="{{ img.effective_alt }}" loading="lazy" data-caption="{{ img.caption }}"></video>
+          {% else %}
+            <img src="{{ img.media_url }}" alt="{{ img.effective_alt }}" loading="lazy" data-caption="{{ img.caption }}">
+          {% endif %}
           {% if img.caption %}<figcaption>{{ img.caption }}</figcaption>{% endif %}
         </figure>
       {% empty %}
-        <div class="col-12"><div class="empty-state"><i class="bi bi-images"></i><p>No photographs have been published in this album yet.</p></div></div>
+        <div class="col-12"><div class="empty-state"><i class="bi bi-images"></i><p>No media have been published in this album yet.</p></div></div>
       {% endfor %}
     </div>
     <div class="mt-4"><a class="btn btn-outline-brand" href="{% url 'gallery:album_list' %}"><i class="bi bi-arrow-left"></i> Back to gallery</a></div>

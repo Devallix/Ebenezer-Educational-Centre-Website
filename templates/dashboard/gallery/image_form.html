@@ -21,8 +21,10 @@
     <div class="dash-card">
       <div class="dash-card-head"><h2 class="h6 mb-0">Current image</h2></div>
       <div class="dash-card-body text-center">
-        {% if image.image %}<img src="{{ image.url }}" alt="" class="img-fluid rounded-3">
-        {% else %}<p class="text-muted mb-0">No image file present.</p>{% endif %}
+        {% if image.is_video %}
+          <video controls class="img-fluid rounded-3" style="max-height:260px; width:auto;" src="{{ image.video_url }}"></video>
+        {% elif image.image %}<img src="{{ image.url }}" alt="" class="img-fluid rounded-3">
+        {% else %}<p class="text-muted mb-0">No media file present.</p>{% endif %}
       </div>
     </div>
   </div>

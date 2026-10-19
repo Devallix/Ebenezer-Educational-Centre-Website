@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 from apps.core.models import TimeStampedModel
-from apps.core.validators import ImageValidator
+from apps.core.validators import ImageValidator, VideoValidator
 
 
 class GalleryAlbum(TimeStampedModel):
@@ -27,6 +27,9 @@ class GalleryAlbum(TimeStampedModel):
     )
     cover_image = models.ImageField(
         upload_to="gallery/covers/", blank=True, null=True, validators=[ImageValidator()]
+    )
+    cover_video = models.FileField(
+        upload_to="gallery/videos/", blank=True, null=True, validators=[VideoValidator()]
     )
     display_order = models.PositiveIntegerField(default=0, db_index=True)
     is_published = models.BooleanField(default=False, db_index=True)
@@ -77,6 +80,15 @@ class GalleryAlbum(TimeStampedModel):
         return ""
 
     @property
+    def video_url(self) -> str:
+        if self.cover_video:
+            try:
+                return self.cover_video.url
+            except ValueError:
+                pass
+        return ""
+
+    @property
     def can_publish(self) -> bool:
         return self.image_count >= 2
 
@@ -86,7 +98,10 @@ class GalleryImage(TimeStampedModel):
         GalleryAlbum, on_delete=models.CASCADE, related_name="images"
     )
     image = models.ImageField(
-        upload_to="gallery/images/", validators=[ImageValidator()]
+        upload_to="gallery/images/", blank=True, null=True, validators=[ImageValidator()]
+    )
+    video = models.FileField(
+        upload_to="gallery/videos/", blank=True, null=True, validators=[VideoValidator()]
     )
     caption = models.CharField(max_length=200, blank=True)
     alt_text = models.CharField(
@@ -116,3 +131,20 @@ class GalleryImage(TimeStampedModel):
             return self.image.url
         except ValueError:
             return ""
+
+    @property
+    def video_url(self) -> str:
+        if self.video:
+            try:
+                return self.video.url
+            except ValueError:
+                pass
+        return ""
+
+    @property
+    def is_video(self) -> bool:
+        return bool(self.video)
+
+    @property
+    def media_url(self) -> str:
+        return self.video_url if self.is_video else self.url

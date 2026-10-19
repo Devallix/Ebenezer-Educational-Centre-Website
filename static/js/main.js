@@ -276,33 +276,61 @@
 
   /* Gallery lightbox */
   function initLightbox() {
-    var items = Array.prototype.slice.call(document.querySelectorAll("[data-lightbox] img"));
+    var items = Array.prototype.slice.call(document.querySelectorAll("[data-lightbox] img, [data-lightbox] video"));
     if (!items.length) return;
     var overlay = document.createElement("div");
     overlay.className = "lightbox";
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
-    overlay.setAttribute("aria-label", "Image viewer");
+    overlay.setAttribute("aria-label", "Media viewer");
     overlay.innerHTML =
       '<button class="lb-close" aria-label="Close">&times;</button>' +
-      '<button class="lb-prev" aria-label="Previous image">&#8249;</button>' +
-      '<button class="lb-next" aria-label="Next image">&#8250;</button>' +
-      '<figure class="m-0 text-center"><img alt=""><figcaption class="lb-caption"></figcaption></figure>';
+      '<button class="lb-prev" aria-label="Previous media">&#8249;</button>' +
+      '<button class="lb-next" aria-label="Next media">&#8250;</button>' +
+      '<figure class="m-0 text-center"><img alt=""><video controls alt="" style="display:none;"></video><figcaption class="lb-caption"></figcaption></figure>';
     document.body.appendChild(overlay);
 
-    var img = overlay.querySelector("img");
+    var mediaImg = overlay.querySelector("img");
+    var mediaVideo = overlay.querySelector("video");
     var caption = overlay.querySelector(".lb-caption");
     var current = 0;
+
+    function stopCurrentMedia() {
+      if (mediaVideo) mediaVideo.pause();
+      mediaImg.style.display = "none";
+      mediaVideo.style.display = "none";
+      mediaImg.src = "";
+      mediaVideo.src = "";
+      mediaImg.removeAttribute("poster");
+      mediaVideo.removeAttribute("poster");
+    }
 
     function render(i) {
       current = (i + items.length) % items.length;
       var source = items[current];
-      img.src = source.src;
-      img.alt = source.alt || "";
+      stopCurrentMedia();
       caption.textContent = source.dataset.caption || source.alt || "";
+      if (source.tagName.toLowerCase() === "video") {
+        mediaVideo.src = source.src;
+        mediaVideo.poster = source.poster || "";
+        mediaVideo.style.display = "block";
+        mediaVideo.load();
+        mediaVideo.play().catch(function () { /* autoplay may be blocked by browser; user can press play */ });
+      } else {
+        mediaImg.src = source.src;
+        mediaImg.alt = source.alt || "";
+        mediaImg.style.display = "block";
+      }
     }
-    function open(i) { render(i); overlay.classList.add("open"); document.body.style.overflow = "hidden"; overlay.querySelector(".lb-close").focus(); }
-    function close() { overlay.classList.remove("open"); document.body.style.overflow = ""; }
+    function open(i) {
+      // Pause any background videos on the page to prevent echo
+      document.querySelectorAll("video").forEach(function (v) { v.pause(); });
+      render(i);
+      overlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+      overlay.querySelector(".lb-close").focus();
+    }
+    function close() { stopCurrentMedia(); overlay.classList.remove("open"); document.body.style.overflow = ""; }
 
     items.forEach(function (source, i) {
       source.parentElement.addEventListener("click", function () { open(i); });

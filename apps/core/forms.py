@@ -47,7 +47,9 @@ class SchoolSettingsForm(forms.ModelForm):
             "logo_light",
             "favicon",
             "home_welcome_image",
+            "home_welcome_video",
             "about_story_image",
+            "about_story_video",
             "map_url",
             "directions_url",
         ]
@@ -57,6 +59,8 @@ class SchoolSettingsForm(forms.ModelForm):
             "vision": forms.Textarea(attrs={"rows": 3}),
             "mission": forms.Textarea(attrs={"rows": 3}),
             "proprietress_message": forms.Textarea(attrs={"rows": 5}),
+            "home_welcome_video": forms.ClearableFileInput(attrs={"accept": "video/*"}),
+            "about_story_video": forms.ClearableFileInput(attrs={"accept": "video/*"}),
         }
 
     def __init__(self, *args, **kwargs):

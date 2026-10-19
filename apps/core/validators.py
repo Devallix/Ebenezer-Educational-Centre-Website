@@ -15,6 +15,7 @@ except ImportError:  # pragma: no cover
 ALLOWED_RASTER = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 ALLOWED_VECTOR = {".svg"}
 ALLOWED_ICON = {".ico"}
+ALLOWED_VIDEO = {".mp4", ".webm", ".ogg", ".mov"}
 
 # Guard against decompression-bomb style images.
 MAX_IMAGE_PIXELS = 40_000_000
@@ -98,8 +99,35 @@ class ImageValidator:
                 raise ValidationError("This SVG contains unsupported script content.")
 
 
+@deconstructible
+class VideoValidator:
+    """Validate an uploaded file is really a video of an allowed type/size."""
+
+    def __init__(self, max_size: int | None = None):
+        self.max_size = max_size or getattr(settings, "MAX_UPLOAD_SIZE", 5 * 1024 * 1024)
+
+    def __call__(self, file):
+        name = getattr(file, "name", "") or ""
+        ext = os.path.splitext(name)[1].lower()
+        if ext not in ALLOWED_VIDEO:
+            raise ValidationError(
+                f"Unsupported file type '{ext or name}'. "
+                f"Allowed: {', '.join(sorted(ALLOWED_VIDEO))}."
+            )
+        size = getattr(file, "size", None)
+        if size is not None and size > self.max_size:
+            raise ValidationError(
+                f"File too large ({size // 1024} KB). "
+                f"Maximum allowed is {self.max_size // 1024} KB."
+            )
+
+
 def validate_image(value):
     ImageValidator()(value)
+
+
+def validate_video(value):
+    VideoValidator()(value)
 
 
 def validate_logo(value):

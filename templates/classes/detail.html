@@ -128,7 +128,11 @@
     <div class="gallery-grid">
       {% for img in gallery_images %}
         <figure class="gallery-item m-0" data-lightbox>
-          <img src="{{ img.url }}" alt="{{ img.effective_alt }}" loading="lazy" data-caption="{{ img.caption }}">
+          {% if img.is_video %}
+            <video controls src="{{ img.media_url }}" alt="{{ img.effective_alt }}" loading="lazy" data-caption="{{ img.caption }}"></video>
+          {% else %}
+            <img src="{{ img.media_url }}" alt="{{ img.effective_alt }}" loading="lazy" data-caption="{{ img.caption }}">
+          {% endif %}
           {% if img.caption %}<figcaption>{{ img.caption }}</figcaption>{% endif %}
         </figure>
       {% endfor %}

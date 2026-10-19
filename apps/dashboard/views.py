@@ -625,22 +625,24 @@ def album_images(request, album_pk):
 def image_upload(request, album_pk):
     album = get_object_or_404(GalleryAlbum, pk=album_pk)
     if request.method == "POST":
-        files = request.FILES.getlist("images")
+        image_files = request.FILES.getlist("images")
+        video_files = request.FILES.getlist("videos")
         caption = request.POST.get("caption", "")
         is_published = request.POST.get("is_published") == "on"
-        if not files:
-            messages.error(request, "Choose at least one image to upload.")
+        if not image_files and not video_files:
+            messages.error(request, "Choose at least one image or video to upload.")
             return redirect("dashboard:album_images", album_pk=album.pk)
-        from apps.core.validators import ImageValidator
+        from apps.core.validators import ImageValidator, VideoValidator
         from django.core.exceptions import ValidationError
 
-        validator = ImageValidator()
+        image_validator = ImageValidator()
+        video_validator = VideoValidator()
         order = album.images.count()
         uploaded = 0
         errors = []
-        for f in files:
+        for f in image_files:
             try:
-                validator(f)
+                image_validator(f)
             except ValidationError as exc:
                 errors.append(f"{f.name}: {' '.join(exc.messages)}")
                 continue
@@ -653,9 +655,24 @@ def image_upload(request, album_pk):
             )
             order += 1
             uploaded += 1
+        for f in video_files:
+            try:
+                video_validator(f)
+            except ValidationError as exc:
+                errors.append(f"{f.name}: {' '.join(exc.messages)}")
+                continue
+            GalleryImage.objects.create(
+                album=album,
+                video=f,
+                caption=caption,
+                display_order=order,
+                is_published=is_published,
+            )
+            order += 1
+            uploaded += 1
         if uploaded:
-            log_action(request, "create", album, f"Uploaded {uploaded} image(s) to '{album.title}'")
-            messages.success(request, f"{uploaded} image(s) uploaded.")
+            log_action(request, "create", album, f"Uploaded {uploaded} item(s) to '{album.title}'")
+            messages.success(request, f"{uploaded} item(s) uploaded.")
         for err in errors:
             messages.error(request, err)
     return redirect("dashboard:album_images", album_pk=album.pk)

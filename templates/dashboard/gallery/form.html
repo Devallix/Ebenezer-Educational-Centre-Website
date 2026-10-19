@@ -27,6 +27,21 @@
         <div class="mt-3"><a class="dash-btn dash-btn-light" href="{% url 'dashboard:album_images' album.pk %}"><i class="bi bi-images"></i> Manage images</a></div>
       </div>
     </div>
+
+    <div class="dash-card mt-3">
+      <div class="dash-card-head"><h2 class="h6 mb-0">Cover video</h2></div>
+      <div class="dash-card-body text-center">
+        {% if album.cover_video %}
+          <video controls class="img-fluid rounded-3" style="max-height:260px; width:auto;">
+            <source src="{{ album.video_url }}">
+            Your browser does not support the video tag.
+          </video>
+          <div class="mt-2"><a class="dash-btn dash-btn-light dash-btn-sm" href="{{ album.video_url }}" download><i class="bi bi-download"></i> Download video</a></div>
+        {% else %}
+          <p class="text-muted mb-0">No cover video uploaded. Supported: MP4, WebM, OGG, MOV.</p>
+        {% endif %}
+      </div>
+    </div>
     {% else %}
     <div class="dash-card">
       <div class="dash-card-body">
