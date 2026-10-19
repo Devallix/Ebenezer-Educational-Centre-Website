@@ -58,7 +58,6 @@ class PageSEO(models.Model):
     KEY_HOME = "home"
     KEY_ABOUT = "about"
     KEY_CLASSES = "classes"
-    KEY_PROGRAMMES = "programmes"
     KEY_GALLERY = "gallery"
     KEY_CONTACT = "contact"
     KEY_ADMISSION = "admission"
@@ -66,7 +65,6 @@ class PageSEO(models.Model):
         (KEY_HOME, "Home"),
         (KEY_ABOUT, "About"),
         (KEY_CLASSES, "Classes"),
-        (KEY_PROGRAMMES, "Programmes"),
         (KEY_GALLERY, "Gallery"),
         (KEY_CONTACT, "Contact Us"),
         (KEY_ADMISSION, "Admission"),

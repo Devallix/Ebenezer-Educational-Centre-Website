@@ -83,28 +83,6 @@
   </div>
 </section>
 
-<!-- Learning areas -->
-{% if programmes %}
-<section class="section bg-tint">
-  <div class="container-ec">
-    <div class="ec-card reveal h-100">
-      <div class="ec-card-body">
-        <span class="eyebrow text-center text-md-start">Learning areas</span>
-        <h2 class="text-center text-md-start">What children learn in {{ class_level.name }}</h2>
-        <ul class="list-unstyled row g-2">
-          {% for link in programmes %}
-            <li class="col-sm-6 d-flex gap-2 justify-content-center text-center text-md-start">
-              <i class="bi {{ link.learning_area.icon|default:'bi-book' }}" style="color:var(--ec-primary)"></i>
-              <span>{{ link.learning_area.name }}{% if link.notes %} &mdash; <span class="text-muted-ec">{{ link.notes }}</span>{% endif %}</span>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-{% endif %}
-
 <!-- Enquire callout -->
 <section class="section bg-surface">
   <div class="container-ec">

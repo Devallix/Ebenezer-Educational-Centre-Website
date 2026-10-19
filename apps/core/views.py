@@ -4,7 +4,7 @@ from itertools import islice
 
 from django.shortcuts import render
 
-from apps.academics.models import ClassLevel, LearningArea, Teacher
+from apps.academics.models import ClassLevel, Teacher
 from apps.gallery.models import GalleryAlbum
 from apps.school.models import HeroSlide, SchoolBenefit
 
@@ -25,7 +25,6 @@ def home(request):
         "slides": slides,
         "benefits": SchoolBenefit.objects.filter(is_published=True)[:6],
         "classes": ClassLevel.objects.filter(is_published=True).order_by("display_order", "name"),
-        "learning_areas": LearningArea.objects.filter(is_published=True)[:6],
         "teachers": teachers_qs,
         "teacher_chunks": list(_chunked(teachers_qs, 2)),
         "albums": GalleryAlbum.objects.filter(is_published=True)[:3],
@@ -36,7 +35,6 @@ def home(request):
 def about(request):
     context = {
         "classes": ClassLevel.objects.filter(is_published=True),
-        "learning_areas": LearningArea.objects.filter(is_published=True),
         "teachers": Teacher.objects.filter(is_active=True),
     }
     return render(request, "public/about.html", context)

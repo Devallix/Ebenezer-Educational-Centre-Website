@@ -17,11 +17,10 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
-from apps.academics.forms import ClassLevelForm, LearningAreaForm, TeacherForm
+from apps.academics.forms import ClassLevelForm, TeacherForm
 from apps.academics.models import (
     ClassLevel,
     ClassTeacherAssignment,
-    LearningArea,
     Teacher,
 )
 from apps.accounts.forms import AdminUserForm
@@ -423,65 +422,6 @@ def teacher_delete(request, pk):
         "dashboard/confirm_delete.html",
         {"object": obj, "cancel_url": reverse("dashboard:teacher_list"),
          "page_title": "Delete teacher", "active": "teachers"},
-    )
-
-
-# ---------------------------------------------------------------------------
-# Programmes / learning areas
-# ---------------------------------------------------------------------------
-@capability_required("content_manage")
-def programme_list(request):
-    areas = LearningArea.objects.all().order_by("display_order", "name")
-    return render(
-        request,
-        "dashboard/programmes/list.html",
-        {"areas": areas, "page_title": "Programmes & Curriculum", "active": "programmes"},
-    )
-
-
-@capability_required("content_manage")
-def programme_create(request):
-    form = LearningAreaForm(request.POST or None, request.FILES or None)
-    if request.method == "POST" and form.is_valid():
-        obj = form.save()
-        log_action(request, "create", obj, f"Created learning area '{obj.name}'")
-        messages.success(request, "Learning area created.")
-        return redirect("dashboard:programme_list")
-    return render(
-        request,
-        "dashboard/programmes/form.html",
-        {"form": form, "page_title": "Add learning area", "active": "programmes"},
-    )
-
-
-@capability_required("content_manage")
-def programme_update(request, pk):
-    obj = get_object_or_404(LearningArea, pk=pk)
-    form = LearningAreaForm(request.POST or None, request.FILES or None, instance=obj)
-    if request.method == "POST" and form.is_valid():
-        obj = form.save()
-        log_action(request, "update", obj, f"Updated learning area '{obj.name}'")
-        messages.success(request, "Learning area updated.")
-        return redirect("dashboard:programme_list")
-    return render(
-        request,
-        "dashboard/programmes/form.html",
-        {"form": form, "area": obj, "page_title": "Edit learning area",
-         "active": "programmes"},
-    )
-
-
-@capability_required("content_manage")
-def programme_delete(request, pk):
-    obj = get_object_or_404(LearningArea, pk=pk)
-    result = _delete(request, obj, "content_manage", "Learning area")
-    if result is None:
-        return redirect("dashboard:programme_list")
-    return render(
-        request,
-        "dashboard/confirm_delete.html",
-        {"object": obj, "cancel_url": reverse("dashboard:programme_list"),
-         "page_title": "Delete learning area", "active": "programmes"},
     )
 
 

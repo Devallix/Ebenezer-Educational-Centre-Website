@@ -68,13 +68,6 @@ PAGE_HERO_DEFAULTS = {
             "and age-appropriate programme at every level."
         ),
     },
-    "programmes": {
-        "title": "Programmes & Curriculum",
-        "subtitle": (
-            "Our learning areas help children build strong foundations through play, "
-            "exploration and guided teaching."
-        ),
-    },
     "gallery": {
         "title": "Photo Gallery",
         "subtitle": (
@@ -106,7 +99,6 @@ class PageHero(TimeStampedModel):
     PAGE_CHOICES = [
         ("about", "About Us"),
         ("classes", "Classes"),
-        ("programmes", "Programmes"),
         ("gallery", "Gallery"),
         ("contact", "Contact Us"),
         ("admission", "Admission Enquiries"),

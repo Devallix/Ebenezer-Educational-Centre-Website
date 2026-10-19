@@ -206,38 +206,6 @@
   </div>
 </section>
 
-<!-- Programmes preview -->
-{% if learning_areas %}
-<section class="section bg-tint">
-  <div class="container-ec">
-    <div class="section-head center">
-      <span class="eyebrow">Programmes</span>
-      <h2>Learning areas that build strong foundations</h2>
-      <p class="text-muted-ec">Children learn through play, exploration and guided activities across a broad range of
-        areas.</p>
-    </div>
-    <div class="row g-4">
-      {% for area in learning_areas %}
-      <div class="col-md-6 col-lg-4">
-        <div class="ec-card reveal h-100">
-          <div class="ec-card-body">
-            <div class="icon-badge" style="background:var(--ec-accent-tint);color:var(--ec-accent)">
-              <i class="bi {{ area.icon|default:'bi-book' }}"></i>
-            </div>
-            <h3 class="h5">{{ area.name }}</h3>
-            <p class="text-muted-ec mb-0">{{ area.description|truncatewords:18 }}</p>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-    <div class="text-center mt-4">
-      <a class="btn btn-brand" href="{% url 'academics:programme_list' %}">View all programmes</a>
-    </div>
-  </div>
-</section>
-{% endif %}
-
 <!-- Teachers preview -->
 {% if teachers %}
 <section class="section">

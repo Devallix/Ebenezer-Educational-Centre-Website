@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from django.shortcuts import get_object_or_404, render
 
-from .models import ClassLevel, ClassTeacherAssignment, LearningArea
+from .models import ClassLevel, ClassTeacherAssignment
 
 
 def class_list(request):
@@ -44,32 +44,3 @@ def class_detail(request, slug):
         "related_classes": related,
     }
     return render(request, "classes/detail.html", context)
-
-
-def programme_list(request):
-    learning_areas = LearningArea.objects.filter(is_published=True)
-    return render(
-        request, "programmes/list.html", {"learning_areas": learning_areas}
-    )
-
-
-def programme_detail(request, slug):
-    area = get_object_or_404(LearningArea, slug=slug, is_published=True)
-    classes = (
-        ClassLevel.objects.filter(
-            is_published=True, programme_links__learning_area=area
-        )
-        .order_by("display_order")
-        .distinct()
-    )
-    others = (
-        LearningArea.objects.filter(is_published=True)
-        .exclude(pk=area.pk)
-        .order_by("display_order")[:6]
-    )
-    request.seo = {"title": f"{area.name} | Programme"}
-    return render(
-        request,
-        "programmes/detail.html",
-        {"area": area, "classes": classes, "other_areas": others},
-    )

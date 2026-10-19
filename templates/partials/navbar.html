@@ -24,7 +24,6 @@
         <li class="nav-item"><a class="nav-link {% if ns == 'core' and url_name == 'about' %}active{% endif %}" href="{% url 'core:about' %}">About</a></li>
         <li class="nav-item"><a class="nav-link {% if ns == 'academics' and url_name == 'class_list' or url_name == 'class_detail' %}active{% endif %}" href="{% url 'academics:class_list' %}">Classes</a></li>
         <li class="nav-item"><a class="nav-link {% if ns == 'gallery' %}active{% endif %}" href="{% url 'gallery:album_list' %}">Gallery</a></li>
-        <li class="nav-item"><a class="nav-link {% if ns == 'academics' and url_name == 'programme_list' or url_name == 'programme_detail' %}active{% endif %}" href="{% url 'academics:programme_list' %}">Programmes</a></li>
         <li class="nav-item"><a class="nav-link {% if ns == 'admissions' and url_name == 'contact' %}active{% endif %}" href="{% url 'admissions:contact' %}">Contact Us</a></li>
         <li class="nav-item nav-cta">
           <a class="btn btn-accent" href="{% url 'admissions:admission' %}">

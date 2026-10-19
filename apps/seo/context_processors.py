@@ -8,7 +8,6 @@ URL_NAME_MAP = {
     "core:home": PageSEO.KEY_HOME,
     "core:about": PageSEO.KEY_ABOUT,
     "academics:class_list": PageSEO.KEY_CLASSES,
-    "academics:programme_list": PageSEO.KEY_PROGRAMMES,
     "gallery:album_list": PageSEO.KEY_GALLERY,
     "admissions:contact": PageSEO.KEY_CONTACT,
     "admissions:admission": PageSEO.KEY_ADMISSION,

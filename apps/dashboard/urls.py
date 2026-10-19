@@ -39,12 +39,6 @@ urlpatterns = [
     path("teachers/<int:pk>/edit/", views.teacher_update, name="teacher_update"),
     path("teachers/<int:pk>/delete/", views.teacher_delete, name="teacher_delete"),
 
-    # Programmes / learning areas
-    path("programmes/", views.programme_list, name="programme_list"),
-    path("programmes/add/", views.programme_create, name="programme_create"),
-    path("programmes/<int:pk>/edit/", views.programme_update, name="programme_update"),
-    path("programmes/<int:pk>/delete/", views.programme_delete, name="programme_delete"),
-
     # Gallery
     path("gallery/", views.album_list, name="album_list"),
     path("gallery/add/", views.album_create, name="album_create"),

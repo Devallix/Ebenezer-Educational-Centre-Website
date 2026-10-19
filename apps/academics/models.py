@@ -185,9 +185,6 @@ class LearningArea(TimeStampedModel):
     def __str__(self) -> str:
         return self.name
 
-    def get_absolute_url(self) -> str:
-        return reverse("academics:programme_detail", kwargs={"slug": self.slug})
-
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
