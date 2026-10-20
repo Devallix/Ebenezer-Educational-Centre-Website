@@ -21,10 +21,6 @@ def about(request):
     return render(request, "public/about.html")
 
 
-def privacy(request):
-    return render(request, "public/privacy.html")
-
-
 def error_404(request, exception=None):
     return render(request, "errors/404.html", status=404)
 

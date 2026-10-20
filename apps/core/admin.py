@@ -23,7 +23,7 @@ class ThemeSettingsAdmin(admin.ModelAdmin):
 
 @admin.register(NotificationSettings)
 class NotificationSettingsAdmin(admin.ModelAdmin):
-    list_display = ("sender_name", "notify_admissions", "notify_contact")
+    list_display = ("sender_name", "notify_contact")
 
 
 @admin.register(NotificationLog)

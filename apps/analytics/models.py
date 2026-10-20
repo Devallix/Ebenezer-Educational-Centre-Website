@@ -5,11 +5,9 @@ from django.db import models
 
 class SiteAnalyticsEvent(models.Model):
     EVENT_PAGEVIEW = "pageview"
-    EVENT_ADMISSION = "admission_submit"
     EVENT_CONTACT = "contact_submit"
     EVENT_CHOICES = [
         (EVENT_PAGEVIEW, "Page view"),
-        (EVENT_ADMISSION, "Admission enquiry submitted"),
         (EVENT_CONTACT, "Contact message submitted"),
     ]
 

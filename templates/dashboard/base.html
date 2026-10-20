@@ -44,7 +44,6 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width:280px">
           <li class="dropdown-header">Notifications</li>
-          {% if unread_admissions %}<li><a class="dropdown-item" href="{% url 'dashboard:admission_list' %}"><i class="bi bi-journal-check me-2"></i>{{ unread_admissions }} new admission enquiry(ies)</a></li>{% endif %}
           {% if unread_messages %}<li><a class="dropdown-item" href="{% url 'dashboard:message_list' %}"><i class="bi bi-envelope me-2"></i>{{ unread_messages }} unread message(s)</a></li>{% endif %}
           {% if not unread_total %}<li><span class="dropdown-item-text text-muted">You are all caught up.</span></li>{% endif %}
         </ul>

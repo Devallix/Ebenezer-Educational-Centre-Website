@@ -151,10 +151,6 @@ class SchoolSettings(SingletonModel):
     linkedin_url = models.URLField(blank=True)
     whatsapp_number = models.CharField(max_length=40, blank=True)
 
-    privacy_policy = models.TextField(
-        blank=True, help_text="Privacy policy content shown on the privacy page."
-    )
-
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -280,20 +276,12 @@ class NotificationSettings(SingletonModel):
         blank=True,
         help_text="Comma-separated list of staff addresses that receive alerts.",
     )
-    notify_admissions = models.BooleanField(default=True)
     notify_contact = models.BooleanField(default=True)
-    send_parent_confirmation = models.BooleanField(
-        default=False,
-        help_text="Send an acknowledgement email to the parent after an enquiry.",
-    )
     sender_name = models.CharField(
         max_length=150, blank=True, default="Ebenezer Educational Centre"
     )
     sender_email = models.EmailField(
         blank=True, help_text="Leave blank to use the DEFAULT_FROM_EMAIL setting."
-    )
-    admission_subject = models.CharField(
-        max_length=200, blank=True, default="New admission enquiry"
     )
     contact_subject = models.CharField(
         max_length=200, blank=True, default="New website message"

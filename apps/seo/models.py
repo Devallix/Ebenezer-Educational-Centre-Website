@@ -60,14 +60,12 @@ class PageSEO(models.Model):
     KEY_CLASSES = "classes"
     KEY_GALLERY = "gallery"
     KEY_CONTACT = "contact"
-    KEY_ADMISSION = "admission"
     KEY_CHOICES = [
         (KEY_HOME, "Home"),
         (KEY_ABOUT, "About"),
         (KEY_CLASSES, "Classes"),
         (KEY_GALLERY, "Gallery"),
         (KEY_CONTACT, "Contact Us"),
-        (KEY_ADMISSION, "Admission"),
     ]
 
     key = models.CharField(max_length=40, choices=KEY_CHOICES, unique=True)

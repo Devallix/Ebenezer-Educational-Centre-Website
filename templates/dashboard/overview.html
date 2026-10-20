@@ -35,10 +35,10 @@
   <div class="col-sm-6 col-xl-3">
     <div class="stat-card-modern">
       <div class="stat-body">
-        <div class="stat-icon icon-accent"><i class="bi bi-journal-check"></i></div>
+        <div class="stat-icon icon-accent"><i class="bi bi-envelope"></i></div>
         <div class="stat-data">
-          <div class="stat-value">{{ enquiry_new }}</div>
-          <div class="stat-label">New enquiries</div>
+          <div class="stat-value">{{ message_new }}</div>
+          <div class="stat-label">New messages</div>
         </div>
       </div>
       <div class="stat-trend"><span class="trend-up"><i class="bi bi-trend-up"></i> +24%</span></div>
@@ -59,25 +59,25 @@
 </div>
 
 <div class="dash-section-head">
-  <h2>Recent admission enquiries</h2>
-  {% if request.user|can:"admissions_manage" %}<a href="{% url 'dashboard:admission_list' %}" class="view-all">View all enquiries</a>{% endif %}
+  <h2>Recent messages</h2>
+  {% if request.user|can:"messages_manage" %}<a href="{% url 'dashboard:message_list' %}" class="view-all">View all messages</a>{% endif %}
 </div>
 <div class="dash-card-modern">
   <div class="dash-card-body">
     <div class="table-responsive">
       <table class="dash-table-modern">
-        <thead><tr><th>Parent</th><th>Child</th><th>Class</th><th>Status</th><th>Received</th></tr></thead>
+        <thead><tr><th>Name</th><th>Subject</th><th>Category</th><th>Status</th><th>Received</th></tr></thead>
         <tbody>
-          {% for e in recent_enquiries %}
+          {% for m in recent_messages %}
             <tr>
-              <td>{% if request.user|can:"admissions_manage" %}<a href="{% url 'dashboard:admission_detail' e.pk %}">{{ e.parent_name }}</a>{% else %}{{ e.parent_name }}{% endif %}</td>
-              <td>{{ e.child_first_name }}</td>
-              <td>{{ e.preferred_class.name|default:"—" }}</td>
-              <td><span class="pill-modern pill-modern-{{ e.status }}">{{ e.get_status_display }}</span></td>
-              <td>{{ e.created_at|date:"d M Y" }}</td>
+              <td>{% if request.user|can:"messages_manage" %}<a href="{% url 'dashboard:message_detail' m.pk %}">{{ m.name }}</a>{% else %}{{ m.name }}{% endif %}</td>
+              <td>{{ m.subject }}</td>
+              <td>{{ m.get_category_display }}</td>
+              <td><span class="pill-modern pill-modern-{{ m.status|default:'new' }}">{% if m.is_read %}Read{% else %}New{% endif %}</span></td>
+              <td>{{ m.created_at|date:"d M Y" }}</td>
             </tr>
           {% empty %}
-            <tr><td colspan="5" class="text-center text-muted py-5">No enquiries yet.</td></tr>
+            <tr><td colspan="5" class="text-center text-muted py-5">No messages yet.</td></tr>
           {% endfor %}
         </tbody>
       </table>
@@ -92,8 +92,8 @@
       <div class="dash-card-body">
         <div class="d-flex justify-content-between py-2"><span class="text-muted">Classes</span><strong>{{ classes_count }}</strong></div>
         <div class="d-flex justify-content-between py-2"><span class="text-muted">Gallery albums</span><strong>{{ albums_count }}</strong></div>
-        <div class="d-flex justify-content-between py-2"><span class="text-muted">Total enquiries</span><strong>{{ enquiry_total }}</strong></div>
-        <div class="d-flex justify-content-between py-2"><span class="text-muted">Follow-ups due</span><strong>{{ enquiry_follow_up }}</strong></div>
+        <div class="d-flex justify-content-between py-2"><span class="text-muted">Total messages</span><strong>{{ message_total }}</strong></div>
+        <div class="d-flex justify-content-between py-2"><span class="text-muted">Unread messages</span><strong>{{ unread_messages }}</strong></div>
       </div>
     </div>
   </div>

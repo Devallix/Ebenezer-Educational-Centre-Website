@@ -113,7 +113,6 @@ def _path_count(start, end, prefixes):
 def section_totals(start, end) -> dict[str, int]:
     return {
         "gallery": _path_count(start, end, ["/gallery/"]),
-        "admission": _path_count(start, end, ["/admission/"]),
         "contact": _path_count(start, end, ["/contact/"]),
     }
 
@@ -149,6 +148,5 @@ def conversion_counts(start, end) -> dict[str, int]:
     )
     mapping = {r["event_type"]: r["total"] for r in rows}
     return {
-        "admission_submits": mapping.get(SiteAnalyticsEvent.EVENT_ADMISSION, 0),
         "contact_submits": mapping.get(SiteAnalyticsEvent.EVENT_CONTACT, 0),
     }

@@ -81,17 +81,6 @@ PAGE_HERO_DEFAULTS = {
             "respond as soon as possible."
         ),
     },
-    "admission": {
-        "title": "Admission Enquiries",
-        "subtitle": (
-            "Interested in a place for your child? Send us an enquiry and our team "
-            "will guide you through availability and the next steps."
-        ),
-    },
-    "privacy": {
-        "title": "Privacy Policy",
-        "subtitle": "How we handle the information you share with us.",
-    },
 }
 
 
@@ -101,8 +90,6 @@ class PageHero(TimeStampedModel):
         ("classes", "Classes"),
         ("gallery", "Gallery"),
         ("contact", "Contact Us"),
-        ("admission", "Admission Enquiries"),
-        ("privacy", "Privacy Policy"),
     ]
 
     key = models.CharField(max_length=40, unique=True, choices=PAGE_CHOICES)

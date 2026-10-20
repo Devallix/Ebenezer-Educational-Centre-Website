@@ -8,8 +8,8 @@
     </svg>
   </div>
   <div class="container-ec">
-    <div class="row g-4">
-      <div class="col-lg-4 col-md-6">
+    <div class="row g-4 g-lg-5">
+      <div class="col-lg-4 col-md-12 footer-section footer-about">
         <div class="footer-brand">
           <span class="brand-mark" style="width:30px;height:30px;background:rgba(255,255,255,.15)">
             {% if school.logo_light %}<img src="{{ school.logo_light.url }}" alt="{{ school.school_name }} logo">
@@ -29,29 +29,17 @@
         {% endif %}
       </div>
 
-      <div class="col-lg-2 col-6">
+      <div class="col-lg-4 col-md-6 footer-section footer-quick-links">
         <h5 style="color:#D5720A">Quick Links</h5>
         <ul>
           <li><a href="{% url 'core:home' %}">Home</a></li>
           <li><a href="{% url 'core:about' %}">About Us</a></li>
           <li><a href="{% url 'gallery:album_list' %}">Gallery</a></li>
-          <li><a href="{% url 'admissions:admission' %}">Admission</a></li>
           <li><a href="{% url 'admissions:contact' %}">Contact Us</a></li>
         </ul>
       </div>
 
-      <div class="col-lg-3 col-6">
-        <h5 style="color:#D5720A">Our Classes</h5>
-        <ul>
-          {% for class in nav_classes %}
-            <li><a href="{% url 'core:home' %}#classes">{{ class.name }}</a></li>
-          {% empty %}
-            <li><span>Classes are being updated.</span></li>
-          {% endfor %}
-        </ul>
-      </div>
-
-      <div class="col-lg-3 col-md-6 footer-get-in-touch">
+      <div class="col-lg-4 col-md-6 footer-section footer-get-in-touch">
         <h5 style="color:#D5720A">Get in Touch</h5>
         <ul>
           {% if school.full_address %}
@@ -82,8 +70,6 @@
         {% else %}&copy; {{ current_year }} {{ school.school_name|default:"Ebenezer Educational Centre" }}. All rights reserved.{% endif %}
       </span>
       <span>
-        <a href="{% url 'core:privacy' %}">Privacy Policy</a>
-        <span class="mx-2" style="color:rgba(255,255,255,0.5)">&middot;</span>
         <span class="footer-devallix" style="color:rgba(255,255,255,0.82)">Developed by Devallix</span>
       </span>
     </div>

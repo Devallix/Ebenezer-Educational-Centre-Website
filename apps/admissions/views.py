@@ -10,8 +10,8 @@ from apps.analytics.models import SiteAnalyticsEvent
 from apps.analytics.services import record_event
 from apps.core.models import SchoolSettings
 
-from .forms import AdmissionEnquiryForm, ContactForm
-from .services import notify_new_admission, notify_new_contact
+from .forms import ContactForm
+from .services import notify_new_contact
 
 logger = logging.getLogger("apps.admissions")
 
@@ -65,35 +65,3 @@ def contact(request):
         "admissions/contact.html",
         {"form": form, "school": SchoolSettings.get_solo()},
     )
-
-
-def admission(request):
-    if request.method == "POST":
-        if _rate_limited(request, "admission"):
-            messages.error(
-                request, "Too many submissions. Please wait a few minutes and try again."
-            )
-            return redirect("admissions:admission")
-        form = AdmissionEnquiryForm(request.POST)
-        if form.is_valid():
-            enquiry = form.save(commit=False)
-            enquiry.source_ip = _client_ip(request) or None
-            enquiry.save()
-            notify_new_admission(enquiry)
-            record_event(request, SiteAnalyticsEvent.EVENT_ADMISSION)
-            messages.success(
-                request,
-                "Thank you. Your admission enquiry has been received. "
-                "Our team will contact you soon.",
-            )
-            return redirect("admissions:admission")
-        messages.error(request, "Please correct the highlighted fields and try again.")
-    else:
-        initial = {}
-        prefill_class = request.GET.get("class", "").strip()
-        if prefill_class.isdigit():
-            initial["preferred_class"] = prefill_class
-        form = AdmissionEnquiryForm(initial=initial)
-
-    request.seo = {"title": "Admission Enquiries | Ebenezer Educational Centre"}
-    return render(request, "admissions/admission.html", {"form": form})

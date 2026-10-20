@@ -27,7 +27,7 @@
         <a class="btn btn-accent btn-lg" href="{{ slide.primary_button_url|default:'#classes' }}">{{ slide.primary_button_label }}</a>
         {% endif %}
         {% if slide.secondary_button_label %}
-        <a class="btn btn-ghost-light btn-lg" href="{{ slide.secondary_button_url|default:'/admission/' }}">{{ slide.secondary_button_label }}</a>
+        <a class="btn btn-ghost-light btn-lg" href="{{ slide.secondary_button_url|default:'/contact/' }}">{{ slide.secondary_button_label }}</a>
         {% endif %}
       </div>
     </div>
@@ -39,7 +39,7 @@
       <p>{{ school.full_description|default:"A welcoming place where young learners explore, discover, grow and build the foundations for lifelong learning." }}</p>
       <div class="hero-actions">
         <a class="btn btn-accent btn-lg" href="#classes">Explore Our Classes</a>
-        <a class="btn btn-ghost-light btn-lg" href="{% url 'admissions:admission' %}">Enquire About Admission</a>
+        <a class="btn btn-ghost-light btn-lg" href="{% url 'admissions:contact' %}">Contact Us</a>
       </div>
     </div>
     {% endif %}
@@ -130,7 +130,7 @@
           <div class="col-6 col-sm-4">
             <div class="stat-badge" style="background:var(--ec-accent)">
               <div class="stat-value">Creche</div>
-              <div class="stat-label">to Primary 3</div>
+              <div class="stat-label">to Primary</div>
             </div>
           </div>
           <div class="col-12 col-sm-4">
@@ -164,7 +164,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2 home-classes-header">
       <div class="section-head mb-0">
         <span class="eyebrow">Our Classes</span>
-        <h2>From Creche to Primary 3</h2>
+        <h2>From Creche to Primary</h2>
       </div>
     </div>
     <div class="row g-4">
@@ -214,7 +214,7 @@
 </section>
 {% endif %}
 
-<!-- Admission CTA -->
+<!-- Contact CTA -->
 <section class="section">
   <div class="container-ec">
     <div class="field-card reveal reveal-zoom"
@@ -223,12 +223,12 @@
         <div class="col-lg-8">
           <h2 style="color:#fff">Ready to give your child a bright beginning?</h2>
           <p class="mb-0" style="color:rgba(255,255,255,.9)">
-            Send us an admission enquiry and our team will guide you through class availability and the next steps.
+            Get in touch with our team and we will guide you through class availability and the next steps.
           </p>
         </div>
         <div class="col-lg-4 text-lg-end">
-          <a class="btn btn-accent btn-lg" href="{% url 'admissions:admission' %}"><i class="bi bi-journal-check"></i>
-            Enquire about admission</a>
+          <a class="btn btn-accent btn-lg" href="{% url 'admissions:contact' %}"><i class="bi bi-envelope-fill"></i>
+            Contact Us</a>
         </div>
       </div>
     </div>

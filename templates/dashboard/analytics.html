@@ -18,8 +18,7 @@
 <div class="row g-3 mb-4">
   <div class="col-sm-6 col-xl-3"><div class="stat-card"><div class="stat-icon"><i class="bi bi-eye"></i></div><div><div class="stat-value">{{ total_views }}</div><div class="stat-label">Page views</div></div></div></div>
   <div class="col-sm-6 col-xl-3"><div class="stat-card plain"><div class="stat-icon"><i class="bi bi-people"></i></div><div><div class="stat-value">{{ unique_visitors }}</div><div class="stat-label">Unique visitors</div></div></div></div>
-  <div class="col-sm-6 col-xl-3"><div class="stat-card accent"><div class="stat-icon"><i class="bi bi-journal-check"></i></div><div><div class="stat-value">{{ conversions.admission_submits }}</div><div class="stat-label">Admission submissions</div></div></div></div>
-  <div class="col-sm-6 col-xl-3"><div class="stat-card"><div class="stat-icon"><i class="bi bi-envelope"></i></div><div><div class="stat-value">{{ conversions.contact_submits }}</div><div class="stat-label">Contact submissions</div></div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="stat-card accent"><div class="stat-icon"><i class="bi bi-envelope"></i></div><div><div class="stat-value">{{ conversions.contact_submits }}</div><div class="stat-label">Contact submissions</div></div></div></div>
 </div>
 
 <div class="row g-3 mb-3">
@@ -49,7 +48,7 @@
         {% for key, value in section_totals.items %}
           <div class="d-flex justify-content-between py-1 border-bottom"><span class="text-capitalize text-muted">{{ key }}</span><strong>{{ value }}</strong></div>
         {% endfor %}
-        <div class="d-flex justify-content-between py-1"><span class="text-muted">Enquiries in period</span><strong>{{ enquiries_in_range }}</strong></div>
+        <div class="d-flex justify-content-between py-1"><span class="text-muted">Messages in period</span><strong>{{ messages_in_range }}</strong></div>
       </div>
     </div>
   </div>

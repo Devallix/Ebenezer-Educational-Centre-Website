@@ -8,5 +8,4 @@ app_name = "admissions"
 
 urlpatterns = [
     path("contact/", views.contact, name="contact"),
-    path("admission/", views.admission, name="admission"),
 ]

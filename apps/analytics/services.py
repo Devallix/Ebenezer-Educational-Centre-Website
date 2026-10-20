@@ -105,7 +105,7 @@ def record_pageview(request, path: str | None = None) -> None:
 
 
 def record_event(request, event_type: str, path: str | None = None) -> None:
-    """Record a conversion-style event (admission/contact submission)."""
+    """Record a conversion-style event (e.g. a contact submission)."""
     path = path or request.path
     SiteAnalyticsEvent.objects.create(
         path=path[:255],

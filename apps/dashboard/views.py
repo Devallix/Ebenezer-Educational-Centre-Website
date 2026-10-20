@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import csv
 import json
 import logging
 
@@ -11,7 +10,7 @@ from django.contrib.auth.models import Group
 from django.core.mail import EmailMessage
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -26,7 +25,7 @@ from apps.accounts.permissions import (
     get_user_roles,
     user_can,
 )
-from apps.admissions.models import AdmissionEnquiry, ContactMessage
+from apps.admissions.models import ContactMessage
 from apps.analytics.models import SiteAnalyticsEvent
 from apps.analytics import reports
 from apps.analytics.services import purge_old_events
@@ -78,23 +77,19 @@ def _delete(request, obj, capability, label):
 @capability_required("dashboard_access")
 def overview(request):
     start, end, label, days = reports.parse_range(request)
-    enquiry_qs = AdmissionEnquiry.objects.all()
-    recent_enquiries = enquiry_qs.select_related("preferred_class")[:6]
+    message_qs = ContactMessage.objects.all()
     context = {
         "page_title": "Dashboard",
         "active": "overview",
         "range_label": label,
         "total_views": reports.total_pageviews(start, end),
         "unique_visitors": reports.unique_visitors(start, end),
-        "enquiry_total": enquiry_qs.count(),
-        "enquiry_new": enquiry_qs.filter(status=AdmissionEnquiry.STATUS_NEW).count(),
-        "enquiry_follow_up": enquiry_qs.filter(
-            status=AdmissionEnquiry.STATUS_FOLLOW_UP
-        ).count(),
-        "unread_messages": ContactMessage.objects.filter(is_read=False, is_archived=False).count(),
+        "message_total": message_qs.count(),
+        "message_new": message_qs.filter(is_read=False, is_archived=False).count(),
+        "unread_messages": message_qs.filter(is_read=False, is_archived=False).count(),
         "classes_count": ClassLevel.objects.count(),
         "albums_count": GalleryAlbum.objects.count(),
-        "recent_enquiries": recent_enquiries,
+        "recent_messages": message_qs.order_by("-created_at")[:6],
         "top_pages": reports.top_pages(start, end, limit=6),
         "recent_activity": request.user.audit_entries.select_related("user")[:8]
         if hasattr(request.user, "audit_entries")
@@ -126,7 +121,7 @@ def analytics(request):
         "top_pages": reports.top_pages(start, end, limit=15),
         "section_totals": reports.section_totals(start, end),
         "conversions": reports.conversion_counts(start, end),
-        "enquiries_in_range": AdmissionEnquiry.objects.filter(
+        "messages_in_range": ContactMessage.objects.filter(
             created_at__gte=start, created_at__lte=end
         ).count(),
         "chart_labels": json.dumps([d.strftime("%d %b") for d in dates]),
@@ -806,158 +801,9 @@ def analytics_purge(request):
 
 
 # ---------------------------------------------------------------------------
-# Admission enquiries
-# ---------------------------------------------------------------------------
-@capability_required("admissions_manage")
-def admission_list(request):
-    qs = AdmissionEnquiry.objects.select_related("preferred_class", "assigned_to")
-    query = (request.GET.get("q") or "").strip()
-    status = (request.GET.get("status") or "").strip()
-    class_id = (request.GET.get("class") or "").strip()
-    date_from = (request.GET.get("from") or "").strip()
-    date_to = (request.GET.get("to") or "").strip()
-    if query:
-        qs = qs.filter(
-            Q(parent_name__icontains=query)
-            | Q(phone__icontains=query)
-            | Q(email__icontains=query)
-            | Q(child_first_name__icontains=query)
-        )
-    if status in dict(AdmissionEnquiry.STATUS_CHOICES):
-        qs = qs.filter(status=status)
-    if class_id.isdigit():
-        qs = qs.filter(preferred_class_id=class_id)
-    if date_from:
-        qs = qs.filter(created_at__date__gte=date_from)
-    if date_to:
-        qs = qs.filter(created_at__date__lte=date_to)
-    page = _page(request, qs, per_page=20)
-    return render(
-        request,
-        "dashboard/admissions/list.html",
-        {
-            "page": page,
-            "statuses": AdmissionEnquiry.STATUS_CHOICES,
-            "classes": ClassLevel.objects.all(),
-            "query": query,
-            "current_status": status,
-            "current_class": class_id,
-            "date_from": date_from,
-            "date_to": date_to,
-            "page_title": "Admissions & Enquiries",
-            "active": "admissions",
-        },
-    )
-
-
-@capability_required("admissions_manage")
-def admission_detail(request, pk):
-    enquiry = get_object_or_404(
-        AdmissionEnquiry.objects.select_related("preferred_class", "assigned_to"), pk=pk
-    )
-    if not enquiry.is_read:
-        enquiry.is_read = True
-        enquiry.save(update_fields=["is_read", "updated_at"])
-    if request.method == "POST":
-        enquiry.internal_notes = request.POST.get("internal_notes", "")
-        status = request.POST.get("status")
-        if status in dict(AdmissionEnquiry.STATUS_CHOICES):
-            enquiry.status = status
-        assigned = request.POST.get("assigned_to")
-        enquiry.assigned_to = User.objects.filter(pk=assigned).first() if assigned else None
-        follow_up = request.POST.get("follow_up_date") or None
-        enquiry.follow_up_date = follow_up
-        enquiry.save()
-        log_action(request, "update", enquiry, f"Updated enquiry status to {enquiry.status}")
-        messages.success(request, "Enquiry updated.")
-        return redirect("dashboard:admission_detail", pk=enquiry.pk)
-    return render(
-        request,
-        "dashboard/admissions/detail.html",
-        {
-            "enquiry": enquiry,
-            "statuses": AdmissionEnquiry.STATUS_CHOICES,
-            "staff": User.objects.filter(is_active=True),
-            "page_title": f"Enquiry: {enquiry.parent_name}",
-            "active": "admissions",
-        },
-    )
-
-
-@capability_required("admissions_manage")
-@require_POST
-def admission_reply(request, pk):
-    enquiry = get_object_or_404(AdmissionEnquiry, pk=pk)
-    body = (request.POST.get("body") or "").strip()
-    subject = (request.POST.get("subject") or f"Re: Admission enquiry - {enquiry.child_first_name}").strip()
-    if not body:
-        messages.error(request, "Please enter a reply message.")
-        return redirect("dashboard:admission_detail", pk=pk)
-    notif = NotificationSettings.get_solo()
-    from_email = f"{notif.sender_name or 'Ebenezer Educational Centre'} <{notif.sender_email}>" if notif.sender_email else settings.DEFAULT_FROM_EMAIL
-    try:
-        email = EmailMessage(
-            subject=subject,
-            body=body,
-            from_email=from_email,
-            to=[enquiry.email],
-            reply_to=[settings.DEFAULT_FROM_EMAIL],
-        )
-        email.send(fail_silently=False)
-        enquiry.is_read = True
-        enquiry.save(update_fields=["is_read", "updated_at"])
-        log_action(request, "other", model_name="AdmissionEnquiry", description=f"Replied to admission enquiry {enquiry.pk}")
-        messages.success(request, f"Reply sent to {enquiry.email}.")
-    except Exception as exc:
-        logger.warning("Admission reply email failed: %s", exc)
-        messages.error(request, f"Failed to send reply: {exc}")
-    return redirect("dashboard:admission_detail", pk=pk)
-
-
-@capability_required("admissions_manage")
-@require_POST
-def admission_status(request, pk):
-    enquiry = get_object_or_404(AdmissionEnquiry, pk=pk)
-    status = request.POST.get("status")
-    if status in dict(AdmissionEnquiry.STATUS_CHOICES):
-        enquiry.status = status
-        enquiry.is_read = True
-        enquiry.save()
-        log_action(request, "update", enquiry, f"Set status to {status}")
-        messages.success(request, "Status updated.")
-    return redirect(request.META.get("HTTP_REFERER") or "dashboard:admission_list")
-
-
-@capability_required("admissions_manage")
-def admission_export(request):
-    response = HttpResponse(content_type="text/csv")
-    response["Content-Disposition"] = 'attachment; filename="admission-enquiries.csv"'
-    writer = csv.writer(response)
-    writer.writerow(
-        ["Created", "Parent", "Child", "Preferred class", "Phone", "Email", "Period", "Status"]
-    )
-    qs = AdmissionEnquiry.objects.select_related("preferred_class").order_by("-created_at")
-    for e in qs.iterator():
-        writer.writerow(
-            [
-                e.created_at.strftime("%Y-%m-%d %H:%M"),
-                e.parent_name,
-                e.child_first_name,
-                e.preferred_class.name if e.preferred_class else "",
-                e.phone,
-                e.email,
-                e.preferred_period,
-                e.get_status_display(),
-            ]
-        )
-    log_action(request, "other", description="Exported admission enquiries to CSV")
-    return response
-
-
-# ---------------------------------------------------------------------------
 # Contact messages
 # ---------------------------------------------------------------------------
-@capability_required("admissions_manage")
+@capability_required("messages_manage")
 def message_list(request):
     qs = ContactMessage.objects.all()
     query = (request.GET.get("q") or "").strip()
@@ -991,7 +837,7 @@ def message_list(request):
     )
 
 
-@capability_required("admissions_manage")
+@capability_required("messages_manage")
 def message_detail(request, pk):
     message = get_object_or_404(ContactMessage, pk=pk)
     if request.method == "POST":
@@ -1018,7 +864,7 @@ def message_detail(request, pk):
     )
 
 
-@capability_required("admissions_manage")
+@capability_required("messages_manage")
 @require_POST
 def message_reply(request, pk):
     message = get_object_or_404(ContactMessage, pk=pk)

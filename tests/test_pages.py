@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from apps.academics.models import ClassLevel, LearningArea
-from apps.admissions.models import AdmissionEnquiry, ContactMessage
+from apps.admissions.models import ContactMessage
 from apps.gallery.models import GalleryAlbum, GalleryImage
 from apps.school.models import HeroSlide, PAGE_HERO_DEFAULTS, PageHero
 
@@ -23,10 +23,8 @@ class PublicPagesTests(TestCase):
         urls = [
             reverse("core:home"),
             reverse("core:about"),
-            reverse("core:privacy"),
             reverse("gallery:album_list"),
             reverse("admissions:contact"),
-            reverse("admissions:admission"),
         ]
         for url in urls:
             with self.subTest(url=url):
@@ -34,6 +32,11 @@ class PublicPagesTests(TestCase):
 
     def test_removed_class_pages_return_404(self):
         for url in ["/classes/", f"/classes/{self.school_class.slug}/"]:
+            with self.subTest(url=url):
+                self.assertEqual(self.client.get(url).status_code, 404)
+
+    def test_removed_pages_return_404(self):
+        for url in ["/admission/", "/privacy/"]:
             with self.subTest(url=url):
                 self.assertEqual(self.client.get(url).status_code, 404)
 
@@ -75,9 +78,6 @@ class DashboardPagesTests(TestCase):
         cls.image = GalleryImage.objects.create(
             album=cls.album, image="gallery/opening.jpg", caption="Arrival"
         )
-        cls.enquiry = AdmissionEnquiry.objects.create(
-            parent_name="Kofi Mensah", child_first_name="Esi", phone="0240000000"
-        )
         cls.message = ContactMessage.objects.create(
             name="Yaw", email="yaw@example.com", subject="Hello", message="Hi there"
         )
@@ -114,19 +114,12 @@ class DashboardPagesTests(TestCase):
             reverse("dashboard:notification_settings"),
             reverse("dashboard:system_settings"),
             reverse("dashboard:audit_log"),
-            reverse("dashboard:admission_list"),
-            reverse("dashboard:admission_detail", args=[self.enquiry.pk]),
             reverse("dashboard:message_list"),
             reverse("dashboard:message_detail", args=[self.message.pk]),
         ]
         for url in urls:
             with self.subTest(url=url):
                 self.assertEqual(self.client.get(url).status_code, 200)
-
-    def test_admission_export_csv(self):
-        response = self.client.get(reverse("dashboard:admission_export"))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response["Content-Type"], "text/csv")
 
 
 class PageHeroTests(TestCase):

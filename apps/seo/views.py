@@ -19,7 +19,6 @@ def robots_txt(request):
         lines.append("Disallow: /accounts/")
         lines.append("Disallow: /admin/")
         lines.append("Disallow: /contact/")
-        lines.append("Disallow: /admission/")
         if cfg.enable_sitemap:
             lines.append("")
             lines.append(f"Sitemap: {cfg.canonical_base()}/sitemap.xml")

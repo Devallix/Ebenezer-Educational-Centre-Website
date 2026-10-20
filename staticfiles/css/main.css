@@ -309,7 +309,7 @@ p { color: var(--ec-text); }
 .ec-nav .nav-link.active { color: var(--ec-primary); font-weight: 600; }
 .ec-nav .nav-cta { margin-left: 0.75rem; }
 .ec-nav .navbar-toggler {
-  border: 3px solid #9E0719;
+  border: 3px solid #722F37;
   border-radius: 12px;
   padding: 0.4rem 0.6rem;
   background: var(--ec-surface);
@@ -325,7 +325,7 @@ p { color: var(--ec-text); }
   .ec-nav .brand-mark { width: 40px; height: 40px; font-size: 1rem; }
   .ec-nav .brand-name { font-size: 0.95rem; }
   .ec-nav .brand-sub { font-size: 0.65rem; }
-  .ec-nav .navbar-toggler { padding: 0.35rem 0.5rem; }
+  .ec-nav .navbar-toggler { padding: 0.35rem 0.5rem; border-color: #722F37; }
   .ec-nav .navbar-toggler i { font-size: 1rem; }
 
   .ec-nav .navbar-collapse {
@@ -824,6 +824,20 @@ p { color: var(--ec-text); }
 .ec-footer a:hover { color: #D5720A; }
 .ec-footer ul { list-style: none; padding: 0; margin: 0; }
 .ec-footer li { margin-bottom: 0.5rem; }
+
+/* Footer sections: even spacing between the three columns and inside them */
+.ec-footer .row { row-gap: 2.25rem; }
+.ec-footer .footer-section { display: flex; flex-direction: column; }
+.ec-footer .footer-section h5 {
+  display: inline-block;
+  align-self: flex-start;
+  padding-bottom: 0.4rem;
+  margin-bottom: 1.15rem;
+  border-bottom: 2px solid rgba(213, 114, 10, 0.55);
+}
+.ec-footer .footer-section > p { margin-bottom: 1.25rem; }
+.ec-footer .footer-section ul { margin-bottom: 0.5rem; }
+.ec-footer .footer-section li { margin-bottom: 0.65rem; }
 .ec-footer .footer-brand { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 1rem; }
 .ec-footer .brand-mark img { width: 100%; height: 100%; object-fit: cover; }
 .ec-footer .social-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
@@ -1064,7 +1078,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
   /* Floating shapes - hide on small mobile */
   .floating-shapes { display: none; }
 
-  /* Admission CTA - center on mobile */
+  /* Contact CTA - center on mobile */
   .section .row > .col-lg-8,
   .section .row > .col-lg-4 { text-align: center; }
 
@@ -1266,6 +1280,11 @@ html.js .reveal.in { opacity: 1; transform: none; }
   /* Footer "Send a message" button: centre it within its column on every footer */
   .ec-footer .footer-get-in-touch {
     text-align: center;
+  }
+
+  /* Footer section headings: keep the rule centred with the centred copy */
+  .ec-footer .footer-section h5 {
+    align-self: center;
   }
 
   /* About page: centre vision / mission / our approach titles + text on mobile & tablet */

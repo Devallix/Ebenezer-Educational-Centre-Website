@@ -16,19 +16,19 @@ Built with **Django 5.2**, **Bootstrap 5**, **Crispy Forms** and **Chart.js**.
 - About page (vision, mission, proprietress' message)
 - Classes and Programmes (curriculum) listing and detail pages
 - Gallery with albums and a keyboard-accessible lightbox
-- Contact and Admission enquiry forms (honeypot spam protection, rate limiting)
-- Privacy policy, 404/500 pages, `robots.txt` and dynamic `sitemap.xml`
+- Contact page with location, phone, email and map (the message form is
+  switched off in `templates/admissions/contact.html` for now)
+- 404/500 pages, `robots.txt` and dynamic `sitemap.xml`
 - Responsive, accessible, SEO-aware templates with Open Graph / Twitter cards
 - Colour theme driven entirely by the dashboard (no code edits needed)
 
 **Staff dashboard** (`/dashboard/`)
-- Role-based access control (Super Admin, Website Admin, Admissions Officer, Content Editor)
+- Role-based access control (Super Admin, Website Admin, Enquiries Officer, Content Editor)
 - Overview metrics and a full analytics module (views, visitors, devices, referrers, conversions)
 - Full CRUD for slides, classes, teachers, programmes, gallery and benefits
 - School profile, footer/social links and brand asset management
 - Website appearance: 11 configurable brand colours with live preview and reset
 - SEO settings (global + per-page overrides)
-- Admissions enquiry pipeline with statuses, assignment, follow-ups and CSV export
 - Contact message inbox with archive/restore
 - Email notification settings + delivery log
 - User & role management, system maintenance and an audit log
@@ -108,7 +108,7 @@ every view enforce these capabilities (superusers always have full access).
 | --- | --- | --- |
 | Super Administrator | Super Administrators | Everything, including users and system settings |
 | Website Administrator | Website Administrators | Content, appearance, SEO, settings, notifications |
-| Admissions Officer | Admissions Officers | Admission enquiries and contact messages |
+| Enquiries Officer | Enquiries Officers | Contact messages |
 | Content Editor | Content Editors | Slideshow, classes, teachers, programmes, gallery |
 
 ---
@@ -122,7 +122,7 @@ apps/
   accounts/        Login, password reset, roles & capability helpers
   school/          Homepage slideshow + school benefits
   academics/       Classes, teachers, learning areas, class programmes
-  admissions/      Admission enquiries + contact messages
+  admissions/      Contact messages (public contact form)
   gallery/         Albums and images
   dashboard/       All /dashboard/ views and URLs
   analytics/       Privacy-friendly pageview tracking + reporting

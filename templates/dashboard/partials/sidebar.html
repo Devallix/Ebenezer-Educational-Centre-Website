@@ -19,12 +19,8 @@
       <a href="{% url 'dashboard:analytics' %}" class="{% if active == 'analytics' %}active{% endif %}"><i class="bi bi-graph-up-arrow"></i> Analytics</a>
     {% endif %}
 
-    {% if request.user|can:"admissions_manage" %}
+    {% if request.user|can:"messages_manage" %}
       <div class="group-label">Enquiries</div>
-      <a href="{% url 'dashboard:admission_list' %}" class="{% if active == 'admissions' %}active{% endif %}">
-        <i class="bi bi-journal-check"></i> Admissions
-        {% if unread_admissions %}<span class="nav-badge">{{ unread_admissions }}</span>{% endif %}
-      </a>
       <a href="{% url 'dashboard:message_list' %}" class="{% if active == 'messages' %}active{% endif %}">
         <i class="bi bi-envelope"></i> Messages
         {% if unread_messages %}<span class="nav-badge">{{ unread_messages }}</span>{% endif %}

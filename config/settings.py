@@ -287,12 +287,12 @@ ALLOWED_IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".ico", ".
 # Roles
 ROLE_SUPER_ADMIN = "superadmin"
 ROLE_WEBSITE_ADMIN = "webadmin"
-ROLE_ADMISSIONS_OFFICER = "admissions"
+ROLE_ENQUIRIES_OFFICER = "enquiries"
 ROLE_CONTENT_EDITOR = "editor"
 ROLE_CHOICES = [
     (ROLE_SUPER_ADMIN, "Super Administrator"),
     (ROLE_WEBSITE_ADMIN, "Website Administrator"),
-    (ROLE_ADMISSIONS_OFFICER, "Admissions Officer"),
+    (ROLE_ENQUIRIES_OFFICER, "Enquiries Officer"),
     (ROLE_CONTENT_EDITOR, "Content Editor"),
 ]
 

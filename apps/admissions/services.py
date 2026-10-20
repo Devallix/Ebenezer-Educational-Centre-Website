@@ -63,48 +63,6 @@ def _contact_line(obj) -> str:
     return "\n".join(parts)
 
 
-def notify_new_admission(enquiry) -> None:
-    notif = NotificationSettings.get_solo()
-    if not notif.notify_admissions:
-        return
-    site = settings.SITE_URL
-    body = (
-        "A new admission enquiry has been submitted.\n\n"
-        f"Parent/guardian: {enquiry.parent_name}\n"
-        f"Child's first name: {enquiry.child_first_name}\n"
-        f"Preferred class: {enquiry.preferred_class or 'Not specified'}\n"
-        f"Preferred period: {enquiry.preferred_period or 'Not specified'}\n"
-        f"{_contact_line(enquiry)}\n\n"
-        f"Message:\n{enquiry.message or '(none)'}\n\n"
-        f"View in dashboard: {site}/dashboard/admissions/{enquiry.pk}/\n"
-    )
-    _send(
-        NotificationLog.KIND_STAFF,
-        f"{notif.admission_subject or 'New admission enquiry'}: {enquiry.parent_name}",
-        body,
-        notif.recipients,
-        enquiry,
-        reply_to=enquiry.email or None,
-    )
-    if notif.send_parent_confirmation and enquiry.email:
-        parent_body = (
-            f"Dear {enquiry.parent_name},\n\n"
-            "Thank you for your interest in Ebenezer Educational Centre. "
-            "We have received your admission enquiry and a member of our team "
-            "will contact you shortly.\n\n"
-            f"Child's name: {enquiry.child_first_name}\n"
-            f"Preferred class: {enquiry.preferred_class or 'Not specified'}\n\n"
-            "Warm regards,\nEbenezer Educational Centre"
-        )
-        _send(
-            NotificationLog.KIND_PARENT,
-            "We received your admission enquiry",
-            parent_body,
-            [enquiry.email],
-            enquiry,
-        )
-
-
 def notify_new_contact(message) -> None:
     notif = NotificationSettings.get_solo()
     if not notif.notify_contact:

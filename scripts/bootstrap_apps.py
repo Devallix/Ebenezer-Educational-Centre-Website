@@ -6,7 +6,7 @@ VERBOSE = {
     "accounts": "Accounts",
     "school": "School",
     "academics": "Academics",
-    "admissions": "Admissions",
+    "admissions": "Enquiries",
     "gallery": "Gallery",
     "dashboard": "Dashboard",
     "analytics": "Analytics",

@@ -37,7 +37,7 @@ class HeroSlideForm(forms.ModelForm):
             else:
                 field.widget.attrs["class"] = (existing + " form-control").strip()
         self.fields["primary_button_url"].help_text = (
-            "Relative path such as /admission/ or /#classes, or a full URL."
+            "Relative path such as /contact/ or /#classes, or a full URL."
         )
 
     def clean_primary_button_url(self):
@@ -50,7 +50,7 @@ class HeroSlideForm(forms.ModelForm):
         cleaned = super().clean()
         primary_label = cleaned.get("primary_button_label")
         if primary_label and not cleaned.get("primary_button_url"):
-            cleaned["primary_button_url"] = "/admission/"
+            cleaned["primary_button_url"] = "/contact/"
         return cleaned
 
 

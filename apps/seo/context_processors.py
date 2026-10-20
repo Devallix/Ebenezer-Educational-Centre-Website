@@ -9,7 +9,6 @@ URL_NAME_MAP = {
     "core:about": PageSEO.KEY_ABOUT,
     "gallery:album_list": PageSEO.KEY_GALLERY,
     "admissions:contact": PageSEO.KEY_CONTACT,
-    "admissions:admission": PageSEO.KEY_ADMISSION,
 }
 
 

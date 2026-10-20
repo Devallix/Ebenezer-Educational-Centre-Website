@@ -90,11 +90,9 @@ class FooterSettingsForm(forms.ModelForm):
             "youtube_url",
             "linkedin_url",
             "whatsapp_number",
-            "privacy_policy",
         ]
         widgets = {
             "footer_intro": forms.Textarea(attrs={"rows": 3}),
-            "privacy_policy": forms.Textarea(attrs={"rows": 12}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -146,12 +144,9 @@ class NotificationSettingsForm(forms.ModelForm):
         model = NotificationSettings
         fields = [
             "recipient_emails",
-            "notify_admissions",
             "notify_contact",
-            "send_parent_confirmation",
             "sender_name",
             "sender_email",
-            "admission_subject",
             "contact_subject",
         ]
         widgets = {

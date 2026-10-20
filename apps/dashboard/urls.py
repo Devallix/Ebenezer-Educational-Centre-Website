@@ -66,13 +66,6 @@ urlpatterns = [
     path("system/audit/", views.audit_log, name="audit_log"),
     path("system/analytics/purge/", views.analytics_purge, name="analytics_purge"),
 
-    # Admission enquiries
-    path("admissions/", views.admission_list, name="admission_list"),
-    path("admissions/export/", views.admission_export, name="admission_export"),
-    path("admissions/<int:pk>/", views.admission_detail, name="admission_detail"),
-    path("admissions/<int:pk>/status/", views.admission_status, name="admission_status"),
-    path("admissions/<int:pk>/reply/", views.admission_reply, name="admission_reply"),
-
     # Contact messages
     path("messages/", views.message_list, name="message_list"),
     path("messages/<int:pk>/", views.message_detail, name="message_detail"),
