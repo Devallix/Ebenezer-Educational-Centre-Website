@@ -112,7 +112,6 @@ def _path_count(start, end, prefixes):
 
 def section_totals(start, end) -> dict[str, int]:
     return {
-        "classes": _path_count(start, end, ["/classes/"]),
         "gallery": _path_count(start, end, ["/gallery/"]),
         "admission": _path_count(start, end, ["/admission/"]),
         "contact": _path_count(start, end, ["/contact/"]),

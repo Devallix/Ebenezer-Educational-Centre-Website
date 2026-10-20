@@ -94,11 +94,23 @@
     });
   }
 
+  /* Block the browser back/forward cache from restoring the dashboard.
+     A persisted page would bypass the login wall, so force a reload to
+     re-validate the current session before rendering protected content. */
+  function initBackButtonProtection() {
+    window.addEventListener("pageshow", function (event) {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     initSidebar();
     initColourInputs();
     initThemePreview();
     initConfirm();
     initAlerts();
+    initBackButtonProtection();
   });
 })();

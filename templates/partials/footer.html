@@ -44,7 +44,7 @@
         <h5 style="color:#D5720A">Our Classes</h5>
         <ul>
           {% for class in nav_classes %}
-            <li><a href="{{ class.get_absolute_url }}">{{ class.name }}</a></li>
+            <li><a href="{% url 'core:home' %}#classes">{{ class.name }}</a></li>
           {% empty %}
             <li><span>Classes are being updated.</span></li>
           {% endfor %}

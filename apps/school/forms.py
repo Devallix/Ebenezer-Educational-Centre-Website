@@ -36,6 +36,9 @@ class HeroSlideForm(forms.ModelForm):
                 field.widget.attrs["class"] = "form-select"
             else:
                 field.widget.attrs["class"] = (existing + " form-control").strip()
+        self.fields["primary_button_url"].help_text = (
+            "Relative path such as /admission/ or /#classes, or a full URL."
+        )
 
     def clean_primary_button_url(self):
         return (self.cleaned_data.get("primary_button_url") or "").strip()

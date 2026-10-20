@@ -212,21 +212,6 @@ p { color: var(--ec-text); }
 .btn-lg { padding: 0.9rem 2rem; font-size: 1.02rem; }
 .btn-sm { padding: 0.45rem 1rem; font-size: 0.85rem; }
 
-/* class card "View Class Details" button: branded with an accent hover */
-.btn-class-view {
-  background-color: var(--ec-primary, #9e0719);
-  color: #fff;
-  border-color: transparent;
-  box-shadow: var(--ec-shadow-sm);
-}
-.btn-class-view:hover,
-.btn-class-view:focus-visible {
-  background-color: var(--ec-accent, #d5720a);
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: var(--ec-shadow);
-}
-
 /* --------------------------------------------------------------- navbar */
 /* Site header (topbar + navbar) - fixed to top of page on all devices */
 .ec-site-header {
@@ -570,9 +555,18 @@ p { color: var(--ec-text); }
   }
   .hero-controls { padding: 0 0.75rem; }
   .hero-controls button { width: 40px; height: 40px; }
-  .hero-dots { bottom: calc(var(--ec-wave-h) + 0.6rem); gap: 0.4rem; }
+  /* Indicators sit lower so the call-to-action buttons never overlap them */
+  .hero-dots { bottom: calc(var(--ec-wave-h) + 0.2rem); gap: 0.4rem; }
   .hero-dots button { width: 30px; }
   .hero-dots button.active { width: 42px; }
+
+  /* Keep the wave's true curve on narrow screens. The 1440-unit path is
+     squeezed into a small viewport, which flattens it into a solid band
+     that reads as a straight border under the hero. */
+  .hero-wave svg,
+  .footer-wave svg {
+    width: max(100%, calc(var(--ec-wave-h) * 8));
+  }
 }
 
 @media (min-width: 992px) {
@@ -729,7 +723,6 @@ p { color: var(--ec-text); }
 }
 
 /* --------------------------------------------------------------- teachers */
-.teacher-card { text-align: center; }
 .teacher-photo {
   width: 132px;
   height: 132px;
@@ -739,60 +732,6 @@ p { color: var(--ec-text); }
   border: 4px solid var(--ec-surface);
   box-shadow: none !important;
   background: none !important;
-}
-
-/* Teacher carousel on home page */
-#teachersCarousel .teacher-photo {
-  box-shadow: none !important;
-  background: none !important;
-}
-
-/* Teacher carousel on home page */
-#teachersCarousel .carousel-inner {
-  overflow: hidden;
-}
-#teachersCarousel .carousel-item {
-  display: none;
-  width: 100%;
-  transition: transform 0.6s ease;
-}
-#teachersCarousel .carousel-item.active,
-#teachersCarousel .carousel-item-next,
-#teachersCarousel .carousel-item-prev {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-#teachersCarousel .carousel-item > div {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-#teachersCarousel .carousel-control-prev-icon,
-#teachersCarousel .carousel-control-next-icon {
-  background-color: var(--ec-primary);
-  border-radius: 50%;
-  width: 44px;
-  height: 44px;
-}
-#teachersCarousel .carousel-control-prev,
-#teachersCarousel .carousel-control-next {
-  width: auto;
-  opacity: 0.85;
-}
-#teachersCarousel .carousel-control-prev:hover,
-#teachersCarousel .carousel-control-next:hover {
-  opacity: 1;
-}
-#teachersCarousel .carousel-indicators button {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.45);
-  margin: 0 6px;
-}
-#teachersCarousel .carousel-indicators button.active {
-  background: var(--ec-primary);
 }
 
 /* --------------------------------------------------------------- gallery */
@@ -950,6 +889,9 @@ p { color: var(--ec-text); }
 }
 
 .page-hero {
+  /* Overlay in front of the page-hero background image. Lower alpha = more of
+     the photo shows through. Used by every page hero via var(--page-hero-overlay). */
+  --page-hero-overlay: linear-gradient(120deg, rgba(74, 2, 9, 0.62), rgba(158, 7, 25, 0.42));
   background: linear-gradient(120deg, #4a0209, var(--ec-primary));
   color: #fff;
   padding-block: clamp(2.5rem, 6vw, 4.5rem);
@@ -969,6 +911,15 @@ p { color: var(--ec-text); }
 .page-hero p { color: rgba(255, 255, 255, 0.86); margin-bottom: 0; max-width: 640px; }
 .breadcrumb-ec { font-size: 0.85rem; color: rgba(255, 255, 255, 0.8); }
 .breadcrumb-ec a { color: rgba(255, 255, 255, 0.9); }
+
+/* Keep the hero copy readable now that the overlay is more transparent */
+.page-hero h1,
+.page-hero p,
+.page-hero .hero-label,
+.page-hero .breadcrumb-ec,
+.page-hero .breadcrumb-ec a {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+}
 
 .alert-ec { border-radius: var(--ec-radius); border: 1px solid var(--ec-border); }
 
@@ -1059,7 +1010,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
   /* Hero */
   .hero { min-height: min(55vh, 480px); align-items: flex-start !important; }
   .hero-content {
-    padding-block: 0.5rem calc(var(--ec-wave-h) + 0.4rem);
+    padding-block: 0.5rem calc(var(--ec-wave-h) + 0.6rem);
     text-align: center;
   }
   .hero-content h1 { font-size: clamp(1.5rem, 8vw, 2.1rem); margin-bottom: 0.75rem; }
@@ -1076,7 +1027,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
   }
   .hero-controls { bottom: calc(var(--ec-wave-h) + 0.4rem); right: 0.75rem; }
   .hero-controls button { width: 40px; height: 40px; }
-  .hero-dots { bottom: calc(var(--ec-wave-h) + 0.5rem); gap: 0.4rem; }
+  .hero-dots { bottom: calc(var(--ec-wave-h) + 0.1rem); gap: 0.4rem; }
 
   /* Sections */
   .section { padding-block: clamp(2rem, 6vw, var(--ec-space-6)); }
@@ -1096,10 +1047,6 @@ html.js .reveal.in { opacity: 1; transform: none; }
     flex: 0 0 auto;
     width: 50%;
   }
-
-  /* Teachers carousel */
-  #teachersCarousel .teacher-card { min-width: 130px; max-width: 150px; }
-  #teachersCarousel .carousel-item > div { gap: 1.5rem; }
 
   /* Feature items */
   .feature-item { gap: 0.5rem; }
@@ -1130,7 +1077,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
 @media (min-width: 576px) and (max-width: 767.98px) {
   .hero { min-height: min(60vh, 520px); align-items: center !important; }
   .hero-content {
-    padding-block: 0.5rem calc(var(--ec-wave-h) + 0.5rem);
+    padding-block: 0.5rem calc(var(--ec-wave-h) + 0.7rem);
     text-align: center;
   }
   .hero-content h1 { font-size: clamp(1.8rem, 5vw, 2.4rem); }
@@ -1193,8 +1140,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
   .btn-brand:hover,
   .btn-ghost-light:hover,
   .btn-programme:hover,
-  .btn-outline-brand:hover,
-  .btn-class-view:hover { transform: none !important; }
+  .btn-outline-brand:hover { transform: none !important; }
   .nav-link:hover::after,
   .nav-link.active::after { transform: none !important; }
 }
@@ -1222,7 +1168,6 @@ html.js .reveal.in { opacity: 1; transform: none; }
   /* Cards: full width */
   .ec-card,
   .field-card,
-  .teacher-card,
   .stat-badge {
     width: 100% !important;
     max-width: 100% !important;
@@ -1237,12 +1182,6 @@ html.js .reveal.in { opacity: 1; transform: none; }
   /* Comfortable inner padding on cards */
   .ec-card-body {
     padding: 1rem !important;
-  }
-
-  /* Teacher cards: remove fixed inline width constraints (min-width/max-width) */
-  .teacher-card {
-    min-width: unset !important;
-    max-width: none !important;
   }
 
   /* Fix card image distortion: ensure media images cover their container without stretching */
@@ -1337,6 +1276,14 @@ html.js .reveal.in { opacity: 1; transform: none; }
   .card-mission p,
   .card-approach p {
     text-align: center;
+  }
+
+  /* Class detail "Overview" section: centre the eyebrow, title and text on mobile & tablet */
+  .class-overview .ec-card-body { text-align: center; }
+  .class-overview .eyebrow {
+    display: flex;
+    width: fit-content;
+    margin-inline: auto;
   }
 
   /* Footer bottom: single centered line at the bottom of the footer on mobile & tablet */

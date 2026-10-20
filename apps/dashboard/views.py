@@ -17,12 +17,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
-from apps.academics.forms import ClassLevelForm, TeacherForm
-from apps.academics.models import (
-    ClassLevel,
-    ClassTeacherAssignment,
-    Teacher,
-)
+from apps.academics.forms import ClassLevelForm
+from apps.academics.models import ClassLevel
 from apps.accounts.forms import AdminUserForm
 from apps.accounts.permissions import (
     ROLE_GROUPS,
@@ -97,7 +93,6 @@ def overview(request):
         ).count(),
         "unread_messages": ContactMessage.objects.filter(is_read=False, is_archived=False).count(),
         "classes_count": ClassLevel.objects.count(),
-        "teachers_count": Teacher.objects.count(),
         "albums_count": GalleryAlbum.objects.count(),
         "recent_enquiries": recent_enquiries,
         "top_pages": reports.top_pages(start, end, limit=6),
@@ -346,9 +341,7 @@ def class_update(request, pk):
         request,
         "dashboard/classes/form.html",
         {"form": form, "class_level": obj, "page_title": "Edit class",
-         "active": "classes",
-         "assignments": obj.teacher_assignments.select_related("teacher"),
-         "programme_links": obj.programme_links.select_related("learning_area")},
+         "active": "classes"},
     )
 
 
@@ -363,65 +356,6 @@ def class_delete(request, pk):
         "dashboard/confirm_delete.html",
         {"object": obj, "cancel_url": reverse("dashboard:class_list"),
          "page_title": "Delete class", "active": "classes"},
-    )
-
-
-# ---------------------------------------------------------------------------
-# Teachers
-# ---------------------------------------------------------------------------
-@capability_required("content_manage")
-def teacher_list(request):
-    teachers = Teacher.objects.all().order_by("display_order", "full_name")
-    return render(
-        request,
-        "dashboard/teachers/list.html",
-        {"teachers": teachers, "page_title": "Teachers", "active": "teachers"},
-    )
-
-
-@capability_required("content_manage")
-def teacher_create(request):
-    form = TeacherForm(request.POST or None, request.FILES or None)
-    if request.method == "POST" and form.is_valid():
-        obj = form.save()
-        log_action(request, "create", obj, f"Created teacher '{obj.full_name}'")
-        messages.success(request, "Teacher profile created.")
-        return redirect("dashboard:teacher_list")
-    return render(
-        request,
-        "dashboard/teachers/form.html",
-        {"form": form, "page_title": "Add teacher", "active": "teachers"},
-    )
-
-
-@capability_required("content_manage")
-def teacher_update(request, pk):
-    obj = get_object_or_404(Teacher, pk=pk)
-    form = TeacherForm(request.POST or None, request.FILES or None, instance=obj)
-    if request.method == "POST" and form.is_valid():
-        obj = form.save()
-        log_action(request, "update", obj, f"Updated teacher '{obj.full_name}'")
-        messages.success(request, "Teacher profile updated.")
-        return redirect("dashboard:teacher_list")
-    return render(
-        request,
-        "dashboard/teachers/form.html",
-        {"form": form, "teacher": obj, "page_title": "Edit teacher",
-         "active": "teachers"},
-    )
-
-
-@capability_required("content_manage")
-def teacher_delete(request, pk):
-    obj = get_object_or_404(Teacher, pk=pk)
-    result = _delete(request, obj, "content_manage", "Teacher")
-    if result is None:
-        return redirect("dashboard:teacher_list")
-    return render(
-        request,
-        "dashboard/confirm_delete.html",
-        {"object": obj, "cancel_url": reverse("dashboard:teacher_list"),
-         "page_title": "Delete teacher", "active": "teachers"},
     )
 
 

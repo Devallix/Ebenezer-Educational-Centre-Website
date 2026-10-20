@@ -4,7 +4,7 @@
 
 {% block content %}
 {% get_page_hero "about" as hero %}
-<section class="page-hero"{% if hero.image %} style="background:linear-gradient(120deg,rgba(74,2,9,.85),rgba(158,7,25,.75)),url('{{ hero.image.url }}') center/cover"{% endif %}>
+<section class="page-hero"{% if hero.image %} style="background:var(--page-hero-overlay),url('{{ hero.image.url }}') center/cover"{% endif %}>
   <div class="container-ec">
     <nav class="breadcrumb-ec mb-2" aria-label="Breadcrumb">
       <a href="{% url 'core:home' %}">Home</a> <span class="mx-1">/</span> About
@@ -64,61 +64,7 @@
   </div>
 </section>
 
-<section class="section bg-tint">
-  <div class="container-ec">
-    <div class="section-head center">
-      <span class="eyebrow">Why Choose Us</span>
-      <h2>Why Parents Choose Ebenezer Educational Centre</h2>
-    </div>
-    <div class="row g-4">
-      <div class="col-md-4 col-sm-6 reveal"><div class="ec-card h-100 card-feature"><div class="ec-card-body text-center">
-        <div class="icon-badge"><i class="bi bi-tree-fill"></i></div>
-        <h3 class="h5">Serene Environment</h3>
-        <p class="text-muted-ec mb-0">A calm, safe and nurturing setting where children can learn and grow with confidence.</p>
-      </div></div></div>
-      <div class="col-md-4 col-sm-6 reveal"><div class="ec-card h-100 card-feature"><div class="ec-card-body text-center">
-        <div class="icon-badge"><i class="bi bi-person-badge"></i></div>
-        <h3 class="h5">Qualified Teachers</h3>
-        <p class="text-muted-ec mb-0">Dedicated, trained and caring educators who bring out the best in every child.</p>
-      </div></div></div>
-      <div class="col-md-4 col-sm-6 reveal"><div class="ec-card h-100 card-feature"><div class="ec-card-body text-center">
-        <div class="icon-badge"><i class="bi bi-play-btn"></i></div>
-        <h3 class="h5">Interactive Learning</h3>
-        <p class="text-muted-ec mb-0">Hands-on, engaging lessons that make learning fun, meaningful and memorable.</p>
-      </div></div></div>
-      <div class="col-md-4 col-sm-6 reveal"><div class="ec-card h-100 card-feature"><div class="ec-card-body text-center">
-        <div class="icon-badge"><i class="bi bi-cup-straw"></i></div>
-        <h3 class="h5">Nutritious Meals</h3>
-        <p class="text-muted-ec mb-0">Healthy, balanced meals served daily to support children's growth and wellbeing.</p>
-      </div></div></div>
-      <div class="col-md-4 col-sm-6 reveal"><div class="ec-card h-100 card-feature"><div class="ec-card-body text-center">
-        <div class="icon-badge"><i class="bi bi-camera"></i></div>
-        <h3 class="h5">Modern Classrooms with CCTV</h3>
-        <p class="text-muted-ec mb-0">Well-equipped classrooms monitored with CCTV cameras for safety and peace of mind.</p>
-      </div></div></div>
-      <div class="col-md-4 col-sm-6 reveal"><div class="ec-card h-100 card-feature"><div class="ec-card-body text-center">
-        <div class="icon-badge"><i class="bi bi-book"></i></div>
-        <h3 class="h5">Modern Teaching Resources</h3>
-        <p class="text-muted-ec mb-0">Up-to-date teaching and learning materials that support modern education.</p>
-      </div></div></div>
-      <div class="col-md-4 col-sm-6 reveal"><div class="ec-card h-100 card-feature"><div class="ec-card-body text-center">
-        <div class="icon-badge"><i class="bi bi-bus-front"></i></div>
-        <h3 class="h5">School Bus Service</h3>
-        <p class="text-muted-ec mb-0">Reliable transportation service to and from school for our pupils.</p>
-      </div></div></div>
-      <div class="col-md-4 col-sm-6 reveal"><div class="ec-card h-100 card-feature"><div class="ec-card-body text-center">
-        <div class="icon-badge"><i class="bi bi-chat-square-text"></i></div>
-        <h3 class="h5">Interactive Teaching</h3>
-        <p class="text-muted-ec mb-0">Teachers actively engage children in discussions, activities and collaborative learning.</p>
-      </div></div></div>
-      <div class="col-md-4 col-sm-6 reveal"><div class="ec-card h-100 card-feature"><div class="ec-card-body text-center">
-        <div class="icon-badge"><i class="bi bi-heart"></i></div>
-        <h3 class="h5">Best Care</h3>
-        <p class="text-muted-ec mb-0">Every child receives individual attention, love and care in a supportive environment.</p>
-      </div></div></div>
-    </div>
-  </div>
-</section>
+{% include "partials/why_choose_us.html" %}
 
 {% if school.proprietress_message %}
 <section class="section">
@@ -166,53 +112,6 @@
         <h3 class="h5">Steady progression</h3>
         <p class="text-muted-ec mb-0">Children progress from Creche to Primary 3 along a clear pathway, building skills step by step at a pace that suits them.</p>
       </div></div></div>
-    </div>
-  </div>
-</section>
-
-{% if teachers %}
-<section class="section">
-  <div class="container-ec">
-    <div class="section-head center">
-      <span class="eyebrow">Our Team</span>
-      <h2>Meet our teachers</h2>
-    </div>
-    <div class="row g-4 justify-content-center">
-      {% for teacher in teachers %}
-        <div class="col-6 col-md-4 col-lg-3">
-          <div class="ec-card teacher-card reveal h-100"><div class="ec-card-body">
-            {% if teacher.photo %}
-              <img class="teacher-photo" src="{{ teacher.photo.url }}" alt="{{ teacher.full_name }}" loading="lazy">
-            {% else %}
-              <div class="teacher-photo d-grid" style="place-items:center"><i class="bi bi-person-fill fs-1 text-muted-ec"></i></div>
-            {% endif %}
-            <h3 class="h6 mb-0">{{ teacher.full_name }}</h3>
-            <p class="text-muted-ec small mb-2">{{ teacher.role }}</p>
-            {% if teacher.qualifications %}<p class="small text-muted-ec mb-1"><i class="bi bi-patch-check"></i> {{ teacher.qualifications }}</p>{% endif %}
-            {% if teacher.biography %}<p class="small mb-0">{{ teacher.biography|truncatewords:20 }}</p>{% endif %}
-          </div></div>
-        </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
-
-<section class="section bg-surface">
-  <div class="container-ec">
-    <div class="section-head center">
-      <span class="eyebrow">Classes</span>
-      <h2>Our class levels</h2>
-    </div>
-    <div class="row g-4">
-      {% for class in classes %}
-        {% if forloop.counter <= 4 %}
-        <div class="col-sm-6 col-lg-3">{% include "partials/class_card.html" with class=class %}</div>
-        {% endif %}
-      {% endfor %}
-    </div>
-    <div class="text-center mt-4">
-      <a class="btn btn-brand" href="{% url 'academics:class_list' %}">Browse all classes</a>
     </div>
   </div>
 </section>

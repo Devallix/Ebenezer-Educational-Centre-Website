@@ -17,32 +17,5 @@
       </div>
     </div>
   </div>
-  {% if class_level %}
-  <div class="col-lg-5">
-    <div class="dash-card mb-3">
-      <div class="dash-card-head"><h2 class="h6 mb-0">Assigned teachers</h2></div>
-      <div class="dash-card-body">
-        {% for a in assignments %}
-          <div class="d-flex justify-content-between py-1 border-bottom">
-            <span>{{ a.teacher.full_name }}</span>
-            {% if a.is_lead %}<span class="pill pill-contacted">Lead</span>{% endif %}
-          </div>
-        {% empty %}
-          <p class="text-muted mb-0 small">No teachers assigned. Assign a lead teacher from the Teachers section.</p>
-        {% endfor %}
-      </div>
-    </div>
-    <div class="dash-card">
-      <div class="dash-card-head"><h2 class="h6 mb-0">Programmes linked</h2></div>
-      <div class="dash-card-body">
-        {% for link in programme_links %}
-          <div class="py-1 border-bottom">{{ link.learning_area.name }}</div>
-        {% empty %}
-          <p class="text-muted mb-0 small">No learning areas linked to this class yet.</p>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-  {% endif %}
 </div>
 {% endblock %}

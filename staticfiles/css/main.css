@@ -66,7 +66,7 @@ body {
   line-height: 1.65;
   margin: 0;
   overflow-x: hidden;
-  padding-top: 80px;
+  padding-top: 79px;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -212,21 +212,6 @@ p { color: var(--ec-text); }
 .btn-lg { padding: 0.9rem 2rem; font-size: 1.02rem; }
 .btn-sm { padding: 0.45rem 1rem; font-size: 0.85rem; }
 
-/* class card "View Class Details" button: branded with an accent hover */
-.btn-class-view {
-  background-color: var(--ec-primary, #9e0719);
-  color: #fff;
-  border-color: transparent;
-  box-shadow: var(--ec-shadow-sm);
-}
-.btn-class-view:hover,
-.btn-class-view:focus-visible {
-  background-color: var(--ec-accent, #d5720a);
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: var(--ec-shadow);
-}
-
 /* --------------------------------------------------------------- navbar */
 /* Site header (topbar + navbar) - fixed to top of page on all devices */
 .ec-site-header {
@@ -235,13 +220,12 @@ p { color: var(--ec-text); }
   left: 0 !important;
   right: 0 !important;
   width: 100% !important;
-  margin: 0 !important;
   z-index: 1050 !important;
 }
 
 .ec-topbar {
-  margin: 0 !important;
   padding: 0 !important;
+  margin: 0 !important;
   background: var(--ec-primary);
   color: rgba(255, 255, 255, 0.9);
   font-size: 0.82rem;
@@ -325,7 +309,7 @@ p { color: var(--ec-text); }
 .ec-nav .nav-link.active { color: var(--ec-primary); font-weight: 600; }
 .ec-nav .nav-cta { margin-left: 0.75rem; }
 .ec-nav .navbar-toggler {
-  border: 1px solid var(--ec-border);
+  border: 3px solid #9E0719;
   border-radius: 12px;
   padding: 0.4rem 0.6rem;
   background: var(--ec-surface);
@@ -571,9 +555,18 @@ p { color: var(--ec-text); }
   }
   .hero-controls { padding: 0 0.75rem; }
   .hero-controls button { width: 40px; height: 40px; }
-  .hero-dots { bottom: calc(var(--ec-wave-h) + 0.6rem); gap: 0.4rem; }
+  /* Indicators sit lower so the call-to-action buttons never overlap them */
+  .hero-dots { bottom: calc(var(--ec-wave-h) + 0.2rem); gap: 0.4rem; }
   .hero-dots button { width: 30px; }
   .hero-dots button.active { width: 42px; }
+
+  /* Keep the wave's true curve on narrow screens. The 1440-unit path is
+     squeezed into a small viewport, which flattens it into a solid band
+     that reads as a straight border under the hero. */
+  .hero-wave svg,
+  .footer-wave svg {
+    width: max(100%, calc(var(--ec-wave-h) * 8));
+  }
 }
 
 @media (min-width: 992px) {
@@ -730,7 +723,6 @@ p { color: var(--ec-text); }
 }
 
 /* --------------------------------------------------------------- teachers */
-.teacher-card { text-align: center; }
 .teacher-photo {
   width: 132px;
   height: 132px;
@@ -740,60 +732,6 @@ p { color: var(--ec-text); }
   border: 4px solid var(--ec-surface);
   box-shadow: none !important;
   background: none !important;
-}
-
-/* Teacher carousel on home page */
-#teachersCarousel .teacher-photo {
-  box-shadow: none !important;
-  background: none !important;
-}
-
-/* Teacher carousel on home page */
-#teachersCarousel .carousel-inner {
-  overflow: hidden;
-}
-#teachersCarousel .carousel-item {
-  display: none;
-  width: 100%;
-  transition: transform 0.6s ease;
-}
-#teachersCarousel .carousel-item.active,
-#teachersCarousel .carousel-item-next,
-#teachersCarousel .carousel-item-prev {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-#teachersCarousel .carousel-item > div {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-#teachersCarousel .carousel-control-prev-icon,
-#teachersCarousel .carousel-control-next-icon {
-  background-color: var(--ec-primary);
-  border-radius: 50%;
-  width: 44px;
-  height: 44px;
-}
-#teachersCarousel .carousel-control-prev,
-#teachersCarousel .carousel-control-next {
-  width: auto;
-  opacity: 0.85;
-}
-#teachersCarousel .carousel-control-prev:hover,
-#teachersCarousel .carousel-control-next:hover {
-  opacity: 1;
-}
-#teachersCarousel .carousel-indicators button {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.45);
-  margin: 0 6px;
-}
-#teachersCarousel .carousel-indicators button.active {
-  background: var(--ec-primary);
 }
 
 /* --------------------------------------------------------------- gallery */
@@ -951,6 +889,9 @@ p { color: var(--ec-text); }
 }
 
 .page-hero {
+  /* Overlay in front of the page-hero background image. Lower alpha = more of
+     the photo shows through. Used by every page hero via var(--page-hero-overlay). */
+  --page-hero-overlay: linear-gradient(120deg, rgba(74, 2, 9, 0.62), rgba(158, 7, 25, 0.42));
   background: linear-gradient(120deg, #4a0209, var(--ec-primary));
   color: #fff;
   padding-block: clamp(2.5rem, 6vw, 4.5rem);
@@ -970,6 +911,15 @@ p { color: var(--ec-text); }
 .page-hero p { color: rgba(255, 255, 255, 0.86); margin-bottom: 0; max-width: 640px; }
 .breadcrumb-ec { font-size: 0.85rem; color: rgba(255, 255, 255, 0.8); }
 .breadcrumb-ec a { color: rgba(255, 255, 255, 0.9); }
+
+/* Keep the hero copy readable now that the overlay is more transparent */
+.page-hero h1,
+.page-hero p,
+.page-hero .hero-label,
+.page-hero .breadcrumb-ec,
+.page-hero .breadcrumb-ec a {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+}
 
 .alert-ec { border-radius: var(--ec-radius); border: 1px solid var(--ec-border); }
 
@@ -1060,7 +1010,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
   /* Hero */
   .hero { min-height: min(55vh, 480px); align-items: flex-start !important; }
   .hero-content {
-    padding-block: 0.5rem calc(var(--ec-wave-h) + 0.4rem);
+    padding-block: 0.5rem calc(var(--ec-wave-h) + 0.6rem);
     text-align: center;
   }
   .hero-content h1 { font-size: clamp(1.5rem, 8vw, 2.1rem); margin-bottom: 0.75rem; }
@@ -1077,7 +1027,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
   }
   .hero-controls { bottom: calc(var(--ec-wave-h) + 0.4rem); right: 0.75rem; }
   .hero-controls button { width: 40px; height: 40px; }
-  .hero-dots { bottom: calc(var(--ec-wave-h) + 0.5rem); gap: 0.4rem; }
+  .hero-dots { bottom: calc(var(--ec-wave-h) + 0.1rem); gap: 0.4rem; }
 
   /* Sections */
   .section { padding-block: clamp(2rem, 6vw, var(--ec-space-6)); }
@@ -1097,10 +1047,6 @@ html.js .reveal.in { opacity: 1; transform: none; }
     flex: 0 0 auto;
     width: 50%;
   }
-
-  /* Teachers carousel */
-  #teachersCarousel .teacher-card { min-width: 130px; max-width: 150px; }
-  #teachersCarousel .carousel-item > div { gap: 1.5rem; }
 
   /* Feature items */
   .feature-item { gap: 0.5rem; }
@@ -1131,7 +1077,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
 @media (min-width: 576px) and (max-width: 767.98px) {
   .hero { min-height: min(60vh, 520px); align-items: center !important; }
   .hero-content {
-    padding-block: 0.5rem calc(var(--ec-wave-h) + 0.5rem);
+    padding-block: 0.5rem calc(var(--ec-wave-h) + 0.7rem);
     text-align: center;
   }
   .hero-content h1 { font-size: clamp(1.8rem, 5vw, 2.4rem); }
@@ -1156,8 +1102,6 @@ html.js .reveal.in { opacity: 1; transform: none; }
 @media (min-width: 768px) and (max-width: 991.98px) {
   .hero { min-height: min(65vh, 560px); align-items: center !important; }
   .hero-content { padding-block: 2rem calc(var(--ec-wave-h) + 1rem); }
-
-  .media-split { grid-template-columns: 1fr; gap: clamp(1.5rem, 4vw, 3rem); }
 
   .classes-preview .col-sm-6 { flex: 0 0 auto; width: 50%; }
   .programmes-preview .col-md-6 { flex: 0 0 auto; width: 50%; }
@@ -1196,8 +1140,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
   .btn-brand:hover,
   .btn-ghost-light:hover,
   .btn-programme:hover,
-  .btn-outline-brand:hover,
-  .btn-class-view:hover { transform: none !important; }
+  .btn-outline-brand:hover { transform: none !important; }
   .nav-link:hover::after,
   .nav-link.active::after { transform: none !important; }
 }
@@ -1225,7 +1168,6 @@ html.js .reveal.in { opacity: 1; transform: none; }
   /* Cards: full width */
   .ec-card,
   .field-card,
-  .teacher-card,
   .stat-badge {
     width: 100% !important;
     max-width: 100% !important;
@@ -1242,12 +1184,6 @@ html.js .reveal.in { opacity: 1; transform: none; }
     padding: 1rem !important;
   }
 
-  /* Teacher cards: remove fixed inline width constraints (min-width/max-width) */
-  .teacher-card {
-    min-width: unset !important;
-    max-width: none !important;
-  }
-
   /* Fix card image distortion: ensure media images cover their container without stretching */
   .ec-card-media img {
     width: 100% !important;
@@ -1261,8 +1197,6 @@ html.js .reveal.in { opacity: 1; transform: none; }
   .field-card {
     height: auto !important;
   }
-
-  /* About page programmes: stack icon + text vertically on narrow screens */
   .row > .col-md-6 > .ec-card > .ec-card-body.d-flex.gap-3,
   .row > .col-lg-4 > .ec-card > .ec-card-body.d-flex.gap-3 {
     flex-direction: column !important;
@@ -1300,9 +1234,127 @@ html.js .reveal.in { opacity: 1; transform: none; }
   .ec-footer ul li a { display: block; }
 
   .ec-footer .btn-send-message { display: inline-block; }
+}
 
-  .ec-footer .footer-bottom { flex-direction: column; gap: 0.75rem; text-align: center; }
+/* ------------------------------------------- Mobile & tablet (max 991px): centred icons + sticky nav + centred footer CTA */
+/* These rules only apply up to 991px. Desktop (>= 992px) is untouched and keeps its default alignment. */
+@media (max-width: 991.98px) {
+  /* Keep the navbar fixed on mobile and tablet */
+  .field-card > .d-flex.gap-3 {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 0.75rem !important;
+  }
+  .field-card > .d-flex.gap-3 .icon-badge {
+    margin-inline: auto !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Block-layout cards: centre only the icon badge; text stays left-aligned.
+     Covers home "Why Choose Us" & "Programmes", about "Mission"/"Vision"/"Our Approach",
+     and programmes-list cards. Flex card bodies (e.g. about "Programmes") are excluded. */
+  .ec-card-body:not(.d-flex) > .icon-badge {
+    margin-inline: auto;
+  }
+
+  /* Programmes detail page: icon above "About this learning area" */
+  .learning-area-icon {
+    margin-inline: auto;
+  }
+
+  /* Footer "Send a message" button: centre it within its column on every footer */
+  .ec-footer .footer-get-in-touch {
+    text-align: center;
+  }
+
+  /* About page: centre vision / mission / our approach titles + text on mobile & tablet */
+  .card-vision h2,
+  .card-mission h2,
+  .card-approach h3,
+  .card-vision p,
+  .card-mission p,
+  .card-approach p {
+    text-align: center;
+  }
+
+  /* Class detail "Overview" section: centre the eyebrow, title and text on mobile & tablet */
+  .class-overview .ec-card-body { text-align: center; }
+  .class-overview .eyebrow {
+    display: flex;
+    width: fit-content;
+    margin-inline: auto;
+  }
+
+  /* Footer bottom: single centered line at the bottom of the footer on mobile & tablet */
+  .ec-footer .footer-bottom { flex-direction: column; gap: 0.75rem; text-align: center; align-items: center; }
   .ec-footer .footer-bottom .mx-2 { display: none; }
+
+  /* Classes cards: centre all contents on mobile & tablet (home, about, classes pages) */
+  .classes-card .ec-card-body { text-align: center; }
+  .classes-card .ec-card-body > .d-flex { flex-direction: column !important; align-items: center !important; justify-content: center !important; gap: 0.5rem !important; }
+  .classes-card .ec-card-body .badge-soft { margin-top: 0.5rem; }
+  .classes-card .ec-card-body .btn { margin-inline: auto; }
+
+  /* Home welcome section: center all content on mobile & tablet */
+  .home-welcome { text-align: center; }
+  .home-welcome .eyebrow,
+  .home-welcome h2,
+  .home-welcome p { text-align: center; }
+  .home-welcome .stat-badge { margin: 0 auto; }
+  .home-welcome .btn { margin-inline: auto; }
+  .home-welcome img { display: block; margin: 0 auto; }
+
+  /* Home classes section header: center title + all classes button */
+  .home-classes-header { flex-direction: column !important; align-items: center !important; gap: 1rem !important; text-align: center; }
+  .home-classes-header .section-head { text-align: center; }
+
+  /* Home gallery section header: center title + visit gallery button */
+  .home-gallery-header { flex-direction: column !important; align-items: center !important; gap: 1rem !important; text-align: center; }
+  .home-gallery-header .section-head { text-align: center; }
+
+  /* Home visit us section: center all content */
+  .home-visit-us { text-align: center; }
+  .home-visit-us .eyebrow,
+  .home-visit-us h2,
+  .home-visit-us p { text-align: center; }
+  .home-visit-us .btn { margin-inline: auto; }
+  .home-visit-us .d-flex { justify-content: center !important; gap: 0.5rem !important; }
+
+  /* About our story section: center all content */
+  .about-our-story { text-align: center; }
+  .about-our-story .eyebrow,
+  .about-our-story h2,
+  .about-our-story p { text-align: center; }
+  .about-our-story img { display: block; margin: 0 auto; }
+
+  /* About proprietress message: center text */
+  .about-proprietress-text { text-align: center; }
+  .about-proprietress-text blockquote { text-align: center; }
+
+  /* About location section: center all content */
+  .about-location { text-align: center; }
+  .about-location .eyebrow,
+  .about-location h2,
+  .about-location p { text-align: center; }
+  .about-location .btn { margin-inline: auto; }
+
+  /* Contact get in touch: center text */
+  .contact-get-in-touch h2,
+  .contact-get-in-touch p { text-align: center; }
+
+  /* Footer: Developed by Devallix on new line at bottom */
+  .footer-devallix { display: block; width: 100%; text-align: center; margin-top: 0.5rem; }
+
+  /* Home Highlights section (right below hero): reduce icon + text size on mobile & tablet */
+  .section-highlights .icon-badge {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 1.1rem !important;
+  }
+  .section-highlights .feature-item h3 {
+    font-size: 1rem !important;
+  }
 }
 
 .group-label { color: #D5720A; }

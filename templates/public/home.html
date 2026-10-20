@@ -24,7 +24,7 @@
       {% if slide.subtitle %}<p>{{ slide.subtitle }}</p>{% endif %}
       <div class="hero-actions">
         {% if slide.primary_button_label %}
-        <a class="btn btn-accent btn-lg" href="{{ slide.primary_button_url|default:'/classes/' }}">{{ slide.primary_button_label }}</a>
+        <a class="btn btn-accent btn-lg" href="{{ slide.primary_button_url|default:'#classes' }}">{{ slide.primary_button_label }}</a>
         {% endif %}
         {% if slide.secondary_button_label %}
         <a class="btn btn-ghost-light btn-lg" href="{{ slide.secondary_button_url|default:'/admission/' }}">{{ slide.secondary_button_label }}</a>
@@ -38,7 +38,7 @@
       <h1 data-typewriter>A Bright Beginning for a Brighter Future</h1>
       <p>{{ school.full_description|default:"A welcoming place where young learners explore, discover, grow and build the foundations for lifelong learning." }}</p>
       <div class="hero-actions">
-        <a class="btn btn-accent btn-lg" href="{% url 'academics:class_list' %}">Explore Our Classes</a>
+        <a class="btn btn-accent btn-lg" href="#classes">Explore Our Classes</a>
         <a class="btn btn-ghost-light btn-lg" href="{% url 'admissions:admission' %}">Enquire About Admission</a>
       </div>
     </div>
@@ -155,46 +155,21 @@
   </div>
 </section>
 
-<!-- Benefits -->
-{% if benefits %}
-<section class="section bg-surface">
-  <div class="container-ec">
-    <div class="section-head center">
-      <span class="eyebrow">Why Choose Us</span>
-      <h2>We're committed to your child’s success</h2>
-    </div>
-    <div class="row g-4">
-      {% for benefit in benefits %}
-      <div class="col-md-6 col-lg-4">
-        <div class="ec-card reveal h-100">
-          <div class="ec-card-body">
-            <div class="icon-badge"><i class="bi {{ benefit.icon|default:'bi-star' }}"></i></div>
-            <h3 class="h5">{{ benefit.title }}</h3>
-            <p class="text-muted-ec mb-0">{{ benefit.description }}</p>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
+<!-- Why choose us -->
+{% include "partials/why_choose_us.html" %}
 
 <!-- Classes preview -->
-<section class="section">
+<section class="section" id="classes">
   <div class="container-ec">
     <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2 home-classes-header">
       <div class="section-head mb-0">
         <span class="eyebrow">Our Classes</span>
         <h2>From Creche to Primary 3</h2>
       </div>
-      <a class="btn btn-outline-brand" href="{% url 'academics:class_list' %}">All classes</a>
     </div>
     <div class="row g-4">
       {% for class in classes %}
-        {% if forloop.counter <= 4 %}
-      <div class="col-sm-6 col-lg-3">{% include "partials/class_card.html" with class=class %}</div>
-        {% endif %}
+        <div class="col-sm-6 col-lg-3">{% include "partials/class_card.html" with class=class %}</div>
       {% empty %}
       <div class="col-12">
         <div class="empty-state"><i class="bi bi-journal-x"></i>
@@ -205,48 +180,6 @@
     </div>
   </div>
 </section>
-
-<!-- Teachers preview -->
-{% if teachers %}
-<section class="section">
-  <div class="container-ec">
-    <div class="section-head center">
-      <span class="eyebrow">Our Teachers</span>
-      <h2>Talented minds nurturing future leaders</h2>
-    </div>
-    <div class="carousel slide" id="teachersCarousel">
-      <div class="carousel-inner">
-        {% for chunk in teacher_chunks %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-          <div class="d-flex justify-content-center gap-4 gap-md-3">
-            {% for teacher in chunk %}
-            <div class="teacher-card text-center" style="min-width: 150px; max-width: 170px;">
-              {% if teacher.photo %}
-              <img class="teacher-photo" src="{{ teacher.photo.url }}" alt="{{ teacher.full_name }}" loading="lazy">
-              {% else %}
-              <div class="teacher-photo d-grid" style="place-items:center"><i
-                  class="bi bi-person-fill fs-1 text-muted-ec"></i></div>
-              {% endif %}
-              <h3 class="h6 mb-1">{{ teacher.full_name }}</h3>
-              <p class="text-muted-ec small mb-0">{{ teacher.role }}</p>
-            </div>
-            {% endfor %}
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#teachersCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#teachersCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-    </div>
-  </div>
-</section>
-{% endif %}
 
 <!-- Gallery preview -->
 {% if albums %}

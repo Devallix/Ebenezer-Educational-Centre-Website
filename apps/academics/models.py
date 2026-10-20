@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from django.db import models
-from django.urls import reverse
 from django.utils.text import slugify
 
 from apps.core.models import TimeStampedModel
@@ -29,6 +28,11 @@ class ClassLevel(TimeStampedModel):
     )
     image = models.ImageField(
         upload_to="classes/", blank=True, null=True, validators=[ImageValidator()]
+    )
+    image_alt = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Describe the image for screen readers.",
     )
     hero_image = models.ImageField(
         upload_to="classes/", blank=True, null=True, validators=[ImageValidator()]
@@ -64,22 +68,9 @@ class ClassLevel(TimeStampedModel):
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
-    def get_absolute_url(self) -> str:
-        return reverse("academics:class_detail", kwargs={"slug": self.slug})
-
     @property
     def published_age_range(self) -> str:
         return self.age_range if self.show_age_range else ""
-
-    @property
-    def lead_teacher(self):
-        assignment = (
-            self.teacher_assignments.select_related("teacher")
-            .filter(teacher__is_active=True, is_lead=True)
-            .order_by("display_order")
-            .first()
-        )
-        return assignment.teacher if assignment else None
 
     @property
     def programmes(self):
@@ -88,74 +79,6 @@ class ClassLevel(TimeStampedModel):
             .filter(learning_area__is_published=True)
             .order_by("display_order", "learning_area__display_order")
         )
-
-
-class Teacher(TimeStampedModel):
-    full_name = models.CharField(max_length=150)
-    role = models.CharField(
-        max_length=120, blank=True, help_text="Job title, e.g. Kindergarten Teacher."
-    )
-    biography = models.TextField(
-        blank=True, help_text="Describe the teacher's role and approach."
-    )
-    photo = models.ImageField(
-        upload_to="teachers/", blank=True, null=True, validators=[ImageValidator()]
-    )
-    qualifications = models.CharField(
-        max_length=255,
-        blank=True,
-        help_text="Only add qualifications that the school has provided.",
-    )
-    email = models.EmailField(blank=True)
-    display_order = models.PositiveIntegerField(default=0, db_index=True)
-    is_active = models.BooleanField(
-        default=True, db_index=True, help_text="Inactive teachers are hidden publicly."
-    )
-    is_featured = models.BooleanField(
-        default=False, db_index=True, help_text="Show this profile on the homepage."
-    )
-
-    class Meta:
-        ordering = ["display_order", "full_name"]
-        verbose_name = "Teacher"
-        verbose_name_plural = "Teachers"
-
-    def __str__(self) -> str:
-        return self.full_name
-
-    @property
-    def classes(self):
-        return (
-            ClassLevel.objects.filter(
-                teacher_assignments__teacher=self, is_published=True
-            )
-            .order_by("display_order")
-            .distinct()
-        )
-
-
-class ClassTeacherAssignment(models.Model):
-    class_level = models.ForeignKey(
-        ClassLevel, on_delete=models.CASCADE, related_name="teacher_assignments"
-    )
-    teacher = models.ForeignKey(
-        Teacher, on_delete=models.CASCADE, related_name="class_assignments"
-    )
-    is_lead = models.BooleanField(default=False)
-    display_order = models.PositiveIntegerField(default=0)
-
-    class Meta:
-        ordering = ["-is_lead", "display_order", "id"]
-        constraints = [
-            models.UniqueConstraint(
-                fields=["class_level", "teacher"], name="unique_class_teacher"
-            )
-        ]
-        verbose_name = "Class teacher assignment"
-        verbose_name_plural = "Class teacher assignments"
-
-    def __str__(self) -> str:
-        return f"{self.teacher} - {self.class_level}"
 
 
 class LearningArea(TimeStampedModel):

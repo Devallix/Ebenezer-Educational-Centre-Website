@@ -5,7 +5,7 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 
-from apps.academics.models import ClassLevel, LearningArea, Teacher
+from apps.academics.models import ClassLevel, LearningArea
 from apps.admissions.models import AdmissionEnquiry, ContactMessage
 from apps.gallery.models import GalleryAlbum, GalleryImage
 from apps.school.models import HeroSlide, PAGE_HERO_DEFAULTS, PageHero
@@ -24,8 +24,6 @@ class PublicPagesTests(TestCase):
             reverse("core:home"),
             reverse("core:about"),
             reverse("core:privacy"),
-            reverse("academics:class_list"),
-            reverse("academics:class_detail", args=[self.school_class.slug]),
             reverse("gallery:album_list"),
             reverse("admissions:contact"),
             reverse("admissions:admission"),
@@ -33,6 +31,11 @@ class PublicPagesTests(TestCase):
         for url in urls:
             with self.subTest(url=url):
                 self.assertEqual(self.client.get(url).status_code, 200)
+
+    def test_removed_class_pages_return_404(self):
+        for url in ["/classes/", f"/classes/{self.school_class.slug}/"]:
+            with self.subTest(url=url):
+                self.assertEqual(self.client.get(url).status_code, 404)
 
     def test_robots_and_sitemap(self):
         self.assertEqual(self.client.get("/robots.txt").status_code, 200)
@@ -66,7 +69,6 @@ class DashboardPagesTests(TestCase):
             username="smokeadmin", email="smoke@example.com", password="pass12345!"
         )
         cls.school_class = ClassLevel.objects.create(name="KG 1", is_published=True)
-        cls.teacher = Teacher.objects.create(full_name="Ama Teacher")
         cls.area = LearningArea.objects.create(name="Numeracy", is_published=True)
         cls.slide = HeroSlide.objects.create(title="Welcome")
         cls.album = GalleryAlbum.objects.create(title="Opening Day")
@@ -97,9 +99,6 @@ class DashboardPagesTests(TestCase):
             reverse("dashboard:class_list"),
             reverse("dashboard:class_create"),
             reverse("dashboard:class_update", args=[self.school_class.pk]),
-            reverse("dashboard:teacher_list"),
-            reverse("dashboard:teacher_create"),
-            reverse("dashboard:teacher_update", args=[self.teacher.pk]),
             reverse("dashboard:album_list"),
             reverse("dashboard:album_create"),
             reverse("dashboard:album_update", args=[self.album.pk]),
