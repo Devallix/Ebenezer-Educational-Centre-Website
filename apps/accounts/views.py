@@ -155,9 +155,20 @@ class CustomPasswordSetView(FormView):
     success_url = reverse_lazy("accounts:password_reset_done")
 
     def dispatch(self, request, *args, **kwargs):
-        if "password_reset_email" not in request.session:
+        email = request.session.get("password_reset_email")
+        if not email:
+            return redirect("accounts:password_reset")
+        if not User.objects.filter(email__iexact=email).exists():
+            messages.error(request, "No account found with this email address.")
             return redirect("accounts:password_reset")
         return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        email = self.request.session.get("password_reset_email")
+        if email:
+            kwargs["user"] = User.objects.filter(email__iexact=email).first()
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
