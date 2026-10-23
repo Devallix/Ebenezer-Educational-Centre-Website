@@ -8,6 +8,7 @@ from django.urls import include, path
 
 from apps.seo.sitemaps import SITEMAPS
 from apps.seo.views import robots_txt
+from apps.core import views as core_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -23,6 +24,7 @@ urlpatterns = [
     path("", include("apps.core.urls")),
     path("gallery/", include("apps.gallery.urls")),
     path("", include("apps.admissions.urls")),
+    path("llms.txt", core_views.llms_txt, name="llms_txt"),
 ]
 
 if settings.DEBUG:

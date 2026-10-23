@@ -21,6 +21,16 @@ def robots_txt(request):
         lines.append("Disallow: /dashboard/")
         lines.append("Disallow: /accounts/")
         lines.append("Disallow: /admin/")
+
+        # Explicitly welcome known AI crawlers to public educational content.
+        lines.append("")
+        lines.append("User-agent: GPTBot")
+        lines.append("Allow: /")
+        lines.append("User-agent: ClaudeBot")
+        lines.append("Allow: /")
+        lines.append("User-agent: PerplexityBot")
+        lines.append("Allow: /")
+
         if cfg.enable_sitemap:
             lines.append("")
             lines.append(f"Sitemap: {cfg.canonical_base()}/sitemap.xml")

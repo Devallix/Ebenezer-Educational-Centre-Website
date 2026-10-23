@@ -3,6 +3,10 @@
 {% block title %}{{ seo.title }}{% endblock %}
 {% block body_class %}page-home{% endblock %}
 
+{% block json_ld %}
+<script type="application/ld+json">{{ json_ld|safe }}</script>
+{% endblock %}
+
 {% block content %}
 <!-- Hero slideshow -->
 <section class="hero {% if not slides %}hero-fallback{% endif %}" data-hero data-interval="6500"
