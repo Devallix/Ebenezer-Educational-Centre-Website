@@ -19,14 +19,6 @@
       <a href="{% url 'dashboard:analytics' %}" class="{% if active == 'analytics' %}active{% endif %}"><i class="bi bi-graph-up-arrow"></i> Analytics</a>
     {% endif %}
 
-    {% if request.user|can:"messages_manage" %}
-      <div class="group-label">Enquiries</div>
-      <a href="{% url 'dashboard:message_list' %}" class="{% if active == 'messages' %}active{% endif %}">
-        <i class="bi bi-envelope"></i> Messages
-        {% if unread_messages %}<span class="nav-badge">{{ unread_messages }}</span>{% endif %}
-      </a>
-    {% endif %}
-
     {% if request.user|can:"content_manage" %}
       <div class="group-label">Website content</div>
       <a href="{% url 'dashboard:slide_list' %}" class="{% if active == 'slides' %}active{% endif %}"><i class="bi bi-images"></i> Homepage slideshow</a>
@@ -50,9 +42,6 @@
 
     {% if request.user|can:"notifications_manage" or request.user|can:"users_manage" or request.user|can:"system_manage" %}
       <div class="group-label">Administration</div>
-      {% if request.user|can:"notifications_manage" %}
-        <a href="{% url 'dashboard:notification_settings' %}" class="{% if active == 'notifications' %}active{% endif %}"><i class="bi bi-bell"></i> Notifications</a>
-      {% endif %}
       {% if request.user|can:"users_manage" %}
         <a href="{% url 'dashboard:user_list' %}" class="{% if active == 'users' %}active{% endif %}"><i class="bi bi-people"></i> Users &amp; roles</a>
       {% endif %}

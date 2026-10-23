@@ -126,5 +126,11 @@ def purge_old_events() -> int:
     return deleted
 
 
+def purge_all_events() -> int:
+    """Delete all analytics events (full reset of analytics data)."""
+    deleted, _ = SiteAnalyticsEvent.objects.all().delete()
+    return deleted
+
+
 def clear_cache_keys():
     cache.delete("analytics:overview")

@@ -41,7 +41,10 @@ class SingletonModel(models.Model):
         obj = cache.get(key)
         if obj is None:
             obj, _ = cls.objects.get_or_create(pk=1)
-            cache.set(key, obj, None)
+            # Cache for a short window so stale data self-expires in
+            # multi-worker production setups where clear_cache() only
+            # invalidates the current process's cache.
+            cache.set(key, obj, 60)
         return obj
 
     @classmethod

@@ -2,6 +2,15 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C6JPH70X01"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-C6JPH70X01');
+  </script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
@@ -37,17 +46,6 @@
         {% block page_sub %}{% endblock %}
       </div>
       <a class="dash-icon-btn" href="{% url 'core:home' %}" target="_blank" rel="noopener" title="View website" aria-label="View website"><i class="bi bi-globe2"></i></a>
-      <div class="dropdown">
-        <button class="dash-icon-btn" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
-          <i class="bi bi-bell"></i>
-          {% if unread_total %}<span class="dot"></span>{% endif %}
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width:280px">
-          <li class="dropdown-header">Notifications</li>
-          {% if unread_messages %}<li><a class="dropdown-item" href="{% url 'dashboard:message_list' %}"><i class="bi bi-envelope me-2"></i>{{ unread_messages }} unread message(s)</a></li>{% endif %}
-          {% if not unread_total %}<li><span class="dropdown-item-text text-muted">You are all caught up.</span></li>{% endif %}
-        </ul>
-      </div>
       <div class="dropdown">
         <button class="dash-icon-btn" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account menu"><i class="bi bi-person-circle"></i></button>
         <ul class="dropdown-menu dropdown-menu-end shadow">

@@ -15,10 +15,12 @@ def robots_txt(request):
         lines.append("Disallow: /")
     else:
         lines.append("User-agent: *")
+        lines.append("Allow: /gallery/")
+        lines.append("Allow: /about/")
+        lines.append("Allow: /contact/")
         lines.append("Disallow: /dashboard/")
         lines.append("Disallow: /accounts/")
         lines.append("Disallow: /admin/")
-        lines.append("Disallow: /contact/")
         if cfg.enable_sitemap:
             lines.append("")
             lines.append(f"Sitemap: {cfg.canonical_base()}/sitemap.xml")

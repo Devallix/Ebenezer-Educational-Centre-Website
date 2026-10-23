@@ -16,11 +16,11 @@
       <div class="dash-card-head"><h2 class="h6 mb-0">Maintenance</h2></div>
       <div class="dash-card-body">
         <a href="{% url 'dashboard:audit_log' %}" class="dash-btn dash-btn-light w-100 text-start mb-2"><i class="bi bi-clock-history"></i> View full audit log</a>
-        <form method="post" action="{% url 'dashboard:analytics_purge' %}" data-confirm="Purge analytics events older than the retention window?">
+        <form method="post" action="{% url 'dashboard:analytics_purge' %}" data-confirm="Reset all analytics data? This will remove every analytics event.">
           {% csrf_token %}
-          <button class="dash-btn dash-btn-danger w-100 text-start"><i class="bi bi-trash3"></i> Purge old analytics events</button>
+          <button class="dash-btn dash-btn-danger w-100 text-start"><i class="bi bi-trash3"></i> Reset analytics data</button>
         </form>
-        <p class="text-muted small mt-3 mb-0">This action cannot be undone. Only analytics data is removed.</p>
+        <p class="text-muted small mt-3 mb-0">This action cannot be undone. All analytics data will be removed and the analytics page will be empty.</p>
       </div>
     </div>
   </div>

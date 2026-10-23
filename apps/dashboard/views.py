@@ -28,7 +28,7 @@ from apps.accounts.permissions import (
 from apps.admissions.models import ContactMessage
 from apps.analytics.models import SiteAnalyticsEvent
 from apps.analytics import reports
-from apps.analytics.services import purge_old_events
+from apps.analytics.services import purge_all_events
 from apps.core.forms import (
     FooterSettingsForm,
     NotificationSettingsForm,
@@ -794,9 +794,9 @@ def _audit_qs():
 @capability_required("system_manage")
 @require_POST
 def analytics_purge(request):
-    deleted = purge_old_events()
-    log_action(request, "other", description=f"Purged {deleted} old analytics events")
-    messages.success(request, f"Purged {deleted} analytics event(s).")
+    deleted = purge_all_events()
+    log_action(request, "other", description=f"Purged {deleted} analytics event(s) (full reset)")
+    messages.success(request, f"Purged {deleted} analytics event(s). All analytics data has been reset.")
     return redirect("dashboard:system_settings")
 
 

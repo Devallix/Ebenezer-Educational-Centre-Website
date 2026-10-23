@@ -58,33 +58,6 @@
   </div>
 </div>
 
-<div class="dash-section-head">
-  <h2>Recent messages</h2>
-  {% if request.user|can:"messages_manage" %}<a href="{% url 'dashboard:message_list' %}" class="view-all">View all messages</a>{% endif %}
-</div>
-<div class="dash-card-modern">
-  <div class="dash-card-body">
-    <div class="table-responsive">
-      <table class="dash-table-modern">
-        <thead><tr><th>Name</th><th>Subject</th><th>Category</th><th>Status</th><th>Received</th></tr></thead>
-        <tbody>
-          {% for m in recent_messages %}
-            <tr>
-              <td>{% if request.user|can:"messages_manage" %}<a href="{% url 'dashboard:message_detail' m.pk %}">{{ m.name }}</a>{% else %}{{ m.name }}{% endif %}</td>
-              <td>{{ m.subject }}</td>
-              <td>{{ m.get_category_display }}</td>
-              <td><span class="pill-modern pill-modern-{{ m.status|default:'new' }}">{% if m.is_read %}Read{% else %}New{% endif %}</span></td>
-              <td>{{ m.created_at|date:"d M Y" }}</td>
-            </tr>
-          {% empty %}
-            <tr><td colspan="5" class="text-center text-muted py-5">No messages yet.</td></tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
 <div class="row g-3">
   <div class="col-lg-8">
     <div class="dash-card-modern h-100">
